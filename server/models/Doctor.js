@@ -2,133 +2,87 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// --- NEW: Sub-schema for break times ---
+// Sub-schema for break times
 const breakTimeSchema = new mongoose.Schema({
-  breakStart: { // e.g., "12:00"
-    type: String,
-    required: true,
-    match: [/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid break start time format (HH:MM)']
-  },
-  breakEnd: { // e.g., "13:00"
-    type: String,
-    required: true,
-    match: [/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid break end time format (HH:MM)']
-  }
-}, {_id: false}); // _id: false for subdocuments if not needed as standalone entities
-
-// --- NEW: Sub-schema for daily availability ---
-const dailyAvailabilitySchema = new mongoose.Schema({
-  dayOfWeek: { // e.g., "Monday", "Tuesday", etc.
-    type: String,
-    required: true,
-    enum: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  },
-  isAvailable: {
-    type: Boolean,
-    default: false
-  },
-  startTime: { // e.g., "09:00"
-    type: String,
-    // Required only if isAvailable is true
-    validate: {
-        validator: function(v) {
-            // this.isAvailable refers to the parent document (dailyAvailabilitySchema instance)
-            return !this.isAvailable || (this.isAvailable && v && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v));
-        },
-        message: props => `Start time is required and must be HH:MM format if available on ${props.path.replace('.startTime', '')}`
-    }
-  },
-  endTime: { // e.g., "17:00"
-    type: String,
-    validate: {
-        validator: function(v) {
-            return !this.isAvailable || (this.isAvailable && v && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v) && (!this.startTime || v > this.startTime));
-        },
-        message: props => `End time is required, must be HH:MM format, and after start time if available on ${props.path.replace('.endTime', '')}`
-    }
-  },
-  slotDurationMinutes: { // e.g., 30 for 30-minute slots
-    type: Number,
-    validate: {
-        validator: function(v) {
-            return !this.isAvailable || (this.isAvailable && v && v > 0);
-        },
-        message: props => `Slot duration is required and must be positive if available on ${props.path.replace('.slotDurationMinutes', '')}`
-    }
-  },
-  breakTimes: [breakTimeSchema] // Array of break periods
+  breakStart: { type: String, required: true, match: [/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid break start time format (HH:MM)'] },
+  breakEnd: { type: String, required: true, match: [/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid break end time format (HH:MM)'] }
 }, {_id: false});
+
+// Sub-schema for weekly daily availability
+const dailyAvailabilitySchema = new mongoose.Schema({
+  dayOfWeek: { type: String, required: true, enum: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']},
+  isAvailable: { type: Boolean, default: false },
+  startTime: { type: String, validate: { validator: function(v) { return !this.isAvailable || (this.isAvailable && v && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v)); }, message: 'Start time required if available (HH:MM)'}},
+  endTime: { type: String, validate: { validator: function(v) { return !this.isAvailable || (this.isAvailable && v && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v) && (!this.startTime || v > this.startTime)); }, message: 'End time required if available & after start (HH:MM)'}},
+  slotDurationMinutes: { type: Number, validate: { validator: function(v) { return !this.isAvailable || (this.isAvailable && v && v > 0); }, message: 'Slot duration required if available'}},
+  breakTimes: [breakTimeSchema]
+}, {_id: false});
+
+// --- NEW: Sub-schema for Date-Specific Availability Overrides ---
+const dateOverrideSchema = new mongoose.Schema({
+    date: { // Specific date for the override
+        type: Date,
+        required: true
+    },
+    isAvailable: { // Is the doctor available or explicitly unavailable on this date?
+        type: Boolean,
+        required: true
+    },
+    // The following fields are only relevant if isAvailable is true for this specific date
+    startTime: { 
+        type: String, 
+        validate: { validator: function(v) { return !this.isAvailable || (this.isAvailable && v && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v)); }, message: 'Start time required if available on this date (HH:MM)'}
+    },
+    endTime: { 
+        type: String, 
+        validate: { validator: function(v) { return !this.isAvailable || (this.isAvailable && v && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v) && (!this.startTime || v > this.startTime)); }, message: 'End time required if available & after start on this date (HH:MM)'}
+    },
+    slotDurationMinutes: { 
+        type: Number,
+        validate: { validator: function(v) { return !this.isAvailable || (this.isAvailable && v && v > 0); }, message: 'Slot duration required if available on this date'}
+    },
+    breakTimes: [breakTimeSchema]
+}, {_id: false }); // Consider if you want _id for overrides, usually not necessary if managed as part of doctor doc
 
 
 const doctorSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Doctor name is required'],
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    lowercase: true,
-    trim: true,
-    match: [
-      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-      'Please fill a valid email address',
-    ],
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at least 6 characters long'],
-    select: false,
-  },
-  specialization: {
-    type: String,
-    required: [true, 'Specialization is required'],
-    trim: true,
-  },
-  phone: {
-    type: String,
-    trim: true,
-  },
-  // availabilityNotes: { // You can choose to keep this for general notes or remove it
-  //   type: String,
-  //   trim: true,
-  //   default: 'Availability not specified. Please contact for details.',
-  // },
-  role: { // If you adopted the separate Admin model, this might just be 'doctor'
-    type: String,
-    enum: ['doctor', 'admin'], // Or just ['doctor'] if Admin is fully separate
-    default: 'doctor'
-  },
-  // --- NEW: Structured Availability Schedule ---
-  availabilitySchedule: {
+  // ... (name, email, password, specialization, department, phone, role fields as before) ...
+  name: { type: String, required: [true, 'Doctor name is required'], trim: true },
+  email: { type: String, required: [true, 'Email is required'], unique: true, lowercase: true, trim: true, match: [ /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address', ]},
+  password: { type: String, required: [true, 'Password is required'], minlength: [6, 'Password must be at least 6 characters long'], select: false },
+  specialization: { type: String, required: [true, 'Specialization is required'], trim: true },
+  department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
+  phone: { type: String, trim: true },
+  role: { type: String, enum: ['doctor', 'admin'], default: 'doctor' },
+  
+  availabilitySchedule: { // Weekly repeating schedule
     type: [dailyAvailabilitySchema],
-    default: () => { // Default to a full week, all marked as unavailable initially
+    default: () => {
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         return days.map(day => ({ dayOfWeek: day, isAvailable: false }));
     }
-    // You could add a validator to ensure there are 7 unique days if needed
   },
-  isAdminControlled: { // We had this before, ensure it's still relevant
-    type: Boolean,
-    default: true,
-  },
-  // createdAt and updatedAt are handled by timestamps: true
-}, { timestamps: true }); // { timestamps: true } automatically manages createdAt and updatedAt
 
-// Pre-save middleware to hash password (KEEP THIS)
+  // --- NEW: Date-Specific Availability Overrides ---
+  availabilityOverrides: {
+    type: [dateOverrideSchema],
+    default: [] // Default to an empty array
+  },
+  // --- END NEW FIELD ---
+
+  photoUrl: { type: String, trim: true },
+  publicBio: { type: String, trim: true, maxlength: [1000, 'Public bio cannot exceed 1000 characters.'] },
+  isFeatured: { type: Boolean, default: false },
+  isAdminControlled: { type: Boolean, default: true },
+}, { timestamps: true });
+
+// ... (pre-save password hashing and comparePassword method remain the same) ...
 doctorSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
+  if (!this.isModified('password')) { return next(); }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
-
-// Method to compare password (KEEP THIS)
 doctorSchema.methods.comparePassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

@@ -1,5 +1,7 @@
 // controllers/doctorController.js
 const Doctor = require('../models/Doctor'); // Import the Doctor model
+const Appointment = require('../models/Appointment');
+const mongoose = require('mongoose');
 
 // @desc    Register/Create a new doctor
 // @route   POST /api/doctors
@@ -201,40 +203,57 @@ exports.getDoctorAvailability = async (req, res) => {
 exports.updateDoctorAvailability = async (req, res) => {
   try {
     const doctorId = req.user.id;
-    // Expecting an array of daily availability objects in req.body
-    const newAvailabilitySchedule = req.body.availabilitySchedule;
-
-    if (!Array.isArray(newAvailabilitySchedule)) {
-      return res.status(400).json({ message: 'availabilitySchedule must be an array.' });
-    }
-
-    // Basic validation for the structure (more detailed validation happens at schema level)
-    // Ensure it contains 7 days, or allow partial updates if desired (for now, expect full schedule)
-    if (newAvailabilitySchedule.length !== 7) {
-        // Or you might design this to update specific days instead of the whole week at once
-        // return res.status(400).json({ message: 'Availability schedule must contain entries for all 7 days of the week.' });
-    }
-    // Further validation can be added here if schema validation isn't sufficient or for custom business rules.
-    // For example, checking for overlapping break times, or break times outside working hours.
+    const { availabilitySchedule, availabilityOverrides } = req.body; // Expect both potentially
 
     const doctor = await Doctor.findById(doctorId);
-
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor not found.' });
     }
 
-    doctor.availabilitySchedule = newAvailabilitySchedule;
-    await doctor.save(); // This will trigger Mongoose schema validations for the sub-documents
+    // Update weekly schedule if provided
+    if (availabilitySchedule !== undefined) {
+      if (!Array.isArray(availabilitySchedule)) {
+        return res.status(400).json({ message: 'availabilitySchedule must be an array.' });
+      }
+      // Basic validation (e.g., 7 days) could be done here, but schema handles detailed structure
+      doctor.availabilitySchedule = availabilitySchedule;
+    }
+
+    // Update date-specific overrides if provided
+    if (availabilityOverrides !== undefined) {
+      if (!Array.isArray(availabilityOverrides)) {
+        return res.status(400).json({ message: 'availabilityOverrides must be an array.' });
+      }
+      // Ensure dates in overrides are unique for this doctor to prevent conflicting rules for the same date.
+      // This validation is better handled here or in a pre-save hook for overrides if they become complex.
+      // For now, Mongoose schema validation will handle individual override object structures.
+      // A simple check for date uniqueness within the provided array:
+      if (availabilityOverrides.length > 0) {
+        const overrideDates = availabilityOverrides.map(ov => new Date(ov.date).toISOString().split('T')[0]);
+        const uniqueOverrideDates = new Set(overrideDates);
+        if (overrideDates.length !== uniqueOverrideDates.size) {
+            return res.status(400).json({ message: 'Dates in availabilityOverrides must be unique.' });
+        }
+      }
+      doctor.availabilityOverrides = availabilityOverrides;
+    }
+    
+    // If neither is provided, but the request is made
+    if (availabilitySchedule === undefined && availabilityOverrides === undefined) {
+        return res.status(400).json({ message: 'Please provide availabilitySchedule and/or availabilityOverrides to update.' });
+    }
+
+    await doctor.save(); // This will trigger Mongoose schema validations for all sub-documents
 
     res.status(200).json({
-      message: "Doctor's availability schedule updated successfully.",
+      message: "Doctor's availability updated successfully.",
       availabilitySchedule: doctor.availabilitySchedule,
+      availabilityOverrides: doctor.availabilityOverrides,
     });
 
   } catch (error) {
     console.error("Error updating doctor's availability:", error.message);
     if (error.name === 'ValidationError') {
-      // Mongoose validation errors can be detailed
       const errors = {};
       for (let field in error.errors) {
         errors[field] = error.errors[field].message;
@@ -379,6 +398,31 @@ exports.getDoctorAvailableSlots = async (req, res) => {
 
   } catch (error) {
     console.error("Error fetching doctor's available slots:", error.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// @desc    Doctor gets their own availability schedule and overrides
+// @route   GET /api/doctors/me/availability
+// @access  Private (Doctor)
+exports.getDoctorAvailability = async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.user.id)
+      .select('name availabilitySchedule availabilityOverrides'); // Select both fields
+
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found.' });
+    }
+
+    res.status(200).json({
+      message: "Doctor's availability retrieved successfully.",
+      doctorName: doctor.name, // Optional: good for frontend display
+      availabilitySchedule: doctor.availabilitySchedule,
+      availabilityOverrides: doctor.availabilityOverrides,
+    });
+
+  } catch (error) {
+    console.error("Error fetching doctor's availability:", error.message);
     res.status(500).json({ message: 'Server Error' });
   }
 };

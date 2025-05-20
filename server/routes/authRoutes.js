@@ -1,13 +1,16 @@
 // routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middleware/authMiddleware');
 // --- UPDATE THIS LINE TO INCLUDE loginAdmin ---
-const {
+const { // <--- This destructures the import
   loginDoctor,
   registerPatient,
   loginPatient,
-  loginAdmin // Add loginAdmin here
-} = require('../controllers/authController');
+  loginAdmin,
+  changePassword // 'changePassword' is imported here as a standalone function
+} = require('../controllers/authController'); // All functions are imported from authController
+
 
 // Doctor Login
 router.post('/doctor/login', loginDoctor);
@@ -23,5 +26,7 @@ router.post('/patient/login', loginPatient);
 // @desc    Authenticate admin & get token
 // @access  Public
 router.post('/admin/login', loginAdmin);
+
+router.put('/change-password', protect,changePassword);
 
 module.exports = router;

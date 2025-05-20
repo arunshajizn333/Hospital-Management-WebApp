@@ -42,7 +42,6 @@ router.put('/me/availability', protect, authorize('doctor'), doctorController.up
 router.get('/me/availability', protect, authorize('doctor'), doctorController.getDoctorAvailability);
 router.put('/me/availability', protect, authorize('doctor'), doctorController.updateDoctorAvailability);
 
-router.get('/:doctorId/available-slots', doctorController.getDoctorAvailableSlots); // Ensure this line is present and uncommented
 
 
 // --- NEW: Public route to get a doctor's available slots (for patients) ---

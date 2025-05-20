@@ -164,3 +164,69 @@ exports.loginAdmin = async (req, res) => {
     res.status(500).json({ message: 'Server Error during admin login' });
   }
 };
+
+
+// @desc    Change password for any authenticated user
+// @route   PUT /api/auth/change-password
+// @access  Private (Authenticated User: Admin, Doctor, Patient)
+exports.changePassword = async (req, res, next) => { // Assuming you might use next for errors
+  try {
+    const { currentPassword, newPassword, confirmNewPassword } = req.body;
+    const userId = req.user.id; // From 'protect' middleware
+    const userRole = req.user.role; // From 'protect' middleware
+
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      // Using direct response as per user's preference (no AppError/next)
+      return res.status(400).json({ message: 'Please provide current password, new password, and confirm new password.' });
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ message: 'New password and confirm new password do not match.' });
+    }
+
+    if (newPassword.length < 6) { // Or your defined minlength
+        return res.status(400).json({ message: 'New password must be at least 6 characters long.' });
+    }
+
+    // Fetch the user with their password.
+    // The model type depends on the role identified by the 'protect' middleware.
+    let user;
+    if (userRole === 'admin') {
+      user = await Admin.findById(userId).select('+password');
+    } else if (userRole === 'doctor') {
+      user = await Doctor.findById(userId).select('+password');
+    } else if (userRole === 'patient') {
+      user = await Patient.findById(userId).select('+password');
+    } else {
+      return res.status(401).json({ message: 'User role not recognized for password change.' });
+    }
+
+    if (!user) {
+      // This case should ideally not happen if 'protect' middleware worked correctly
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Check if current password matches
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Incorrect current password.' });
+    }
+
+    // Set new password (pre-save hook in model will hash it)
+    user.password = newPassword;
+    await user.save();
+
+    // Optionally, you might want to log the user out or issue a new token,
+    // but for simplicity, a success message is fine.
+    res.status(200).json({ message: 'Password changed successfully.' });
+
+  } catch (error) {
+    console.error(`Error changing password for user ${req.user.id}:`, error.message);
+    // Handle other potential errors (e.g., validation errors from save if any)
+    if (error.name === 'ValidationError') {
+        const messages = Object.values(error.errors).map(val => val.message);
+        return res.status(400).json({ message: messages.join(', ') });
+    }
+    res.status(500).json({ message: 'Server Error while changing password.' });
+  }
+};

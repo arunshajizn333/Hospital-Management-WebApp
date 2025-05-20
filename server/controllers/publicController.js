@@ -1,6 +1,7 @@
 // controllers/publicController.js
 const Department = require('../models/Department');
-const Doctor = require('../models/Doctor'); // --- ADD THIS LINE ---
+const Doctor = require('../models/Doctor');
+const HospitalInfo = require('../models/HospitalInfo'); // --- ADD THIS LINE ---
 // We'll import other models like CallbackRequest, ContactInquiry later
 
 // @desc    Get all active medical departments
@@ -233,7 +234,7 @@ exports.handleContactInquiry = async (req, res) => {
       message,
       status: 'New' // Default status
     });
-    
+
 
     await newInquiry.save();
 
@@ -262,3 +263,115 @@ exports.handleContactInquiry = async (req, res) => {
 
 
 // We'll add other public controller functions here
+// @desc    Get a list of doctors (public view) with optional filters
+// @route   GET /api/public/doctors
+// @access  Public
+exports.getPublicDoctorsList = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
+
+    const { specialization, name, departmentId } = req.query; // Added departmentId filter
+    const query = {};
+
+    if (specialization) {
+      query.specialization = { $regex: new RegExp(specialization, 'i') };
+    }
+    if (name) {
+      query.name = { $regex: new RegExp(name, 'i') };
+    }
+    if (departmentId) {
+      if (!mongoose.Types.ObjectId.isValid(departmentId)) {
+        return res.status(400).json({ message: 'Invalid Department ID format for filter.' });
+      }
+      query.department = departmentId; // Filter by department ID
+    }
+    
+    // Define public fields, now including the new ones
+    const publicDoctorFields = '_id name specialization photoUrl publicBio department'; // Added department
+
+    const totalDoctors = await Doctor.countDocuments(query);
+    const doctors = await Doctor.find(query)
+      .populate('department', 'name') // Populate department name
+      .select(publicDoctorFields)
+      .sort({ name: 1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      message: 'Doctors retrieved successfully.',
+      count: doctors.length,
+      total: totalDoctors,
+      currentPage: page,
+      totalPages: Math.ceil(totalDoctors / limit),
+      doctors,
+    });
+  } catch (error) {
+    console.error('Error fetching public doctors list:', error.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// @desc    Get a list of featured doctors
+// @route   GET /api/public/doctors/featured
+// @access  Public
+exports.getFeaturedDoctors = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit, 10) || 5;
+    // Define public fields, now including the new ones
+    const publicDoctorFields = '_id name specialization photoUrl publicBio department'; // Added department
+
+    // Now primarily uses the isFeatured flag
+    const doctors = await Doctor.find({ isFeatured: true })
+        .populate('department', 'name') // Populate department name
+        .select(publicDoctorFields)
+        .limit(limit);
+    
+    // Fallback if no featured doctors are found (optional)
+    // if (doctors.length === 0) {
+    //   // Could fetch newest or random doctors as a fallback
+    //   // For now, it will just return an empty list if none are featured
+    // }
+
+    res.status(200).json({
+      message: 'Featured doctors retrieved successfully.',
+      count: doctors.length,
+      doctors,
+    });
+  } catch (error) {
+    console.error('Error fetching featured doctors:', error.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// @desc    Get public details of a specific doctor
+// @route   GET /api/public/doctors/:doctorId
+// @access  Public
+exports.getPublicDoctorProfile = async (req, res) => {
+    try {
+        const { doctorId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(doctorId)) {
+            return res.status(400).json({ message: 'Invalid Doctor ID format.' });
+        }
+
+        // Define public fields, now including the new ones and department
+        const publicDoctorFields = '_id name specialization photoUrl publicBio department';
+        const doctor = await Doctor.findById(doctorId)
+            .populate('department', 'name description') // Populate more department details if needed
+            .select(publicDoctorFields);
+
+        if (!doctor) {
+            return res.status(404).json({ message: 'Doctor not found.' });
+        }
+
+        res.status(200).json({ doctor });
+
+    } catch (error) {
+        console.error('Error fetching public doctor profile:', error.message);
+        if (error.kind === 'ObjectId' && error.name === 'CastError') { // More specific check for CastError
+             return res.status(400).json({ message: 'Invalid Doctor ID format (during query).' });
+        }
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
