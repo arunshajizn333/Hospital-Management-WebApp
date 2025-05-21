@@ -1,0 +1,266 @@
+/* src/app/components/public/home/home.component.css */
+:host {
+  display: block;
+}
+
+.home-page {
+  /* This div is the main container for all sections.
+     It no longer has the full-page background image directly. */
+  width: 100%;
+  padding-top: 0; /* Remove padding if navbar is handled differently or hero has enough */
+  padding-bottom: 40px; /* Space at the very bottom of the page content */
+  background-color: var(--body-bg-color, #f0f2f5); /* A very light overall page background, if desired */
+}
+
+/* Hero Section - NOW WITH THE BACKGROUND IMAGE */
+.hero-section {
+  background-image: url('/images/homebg.png'); /* Path from src/assets/ */
+  background-size: cover;
+  background-position: center center; /* Adjust if a specific part of image needs to be focused */
+  background-repeat: no-repeat;
+  /* background-attachment: fixed; /* Usually not fixed if it's just for the hero */
+  color: var(--white-color, #ffffff);
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+  text-align: center;
+  padding-top: 120px; /* Generous padding, adjust based on navbar and desired spacing */
+  padding-bottom: 120px;
+  min-height: 450px; /* Ensure hero has enough height to show background */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* For potential overlays if needed */
+  /* Remove margin-bottom from the hero section if it's meant to be full-width bleed */
+  /* The sections below will have their own margin-top or the .home-page will have padding */
+}
+
+/* Optional: Add a semi-transparent overlay to the hero section for better text readability */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3); /* Adjust darkness/opacity (e.g., 0.3 for 30% black) */
+  z-index: 1; /* Ensure overlay is behind content */
+}
+
+.hero-section .hero-content { /* Ensure content is above the overlay */
+  position: relative;
+  z-index: 2;
+  /* max-width: 800px; /* Control width of text content */
+  /* margin: 0 auto; /* Centering text content if max-width is used */
+}
+
+.hero-section h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.hero-section p {
+  font-size: 1.4rem;
+  margin-bottom: 35px;
+  line-height: 1.7;
+  max-width: 700px; /* Keep paragraph readable */
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-section .btn-primary {
+  padding: 15px 35px;
+  font-size: 1.15em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  border: none;
+}
+
+/* General Section Styling (for sections other than hero) */
+.home-page section:not(.hero-section) { /* Target all sections EXCEPT hero */
+  padding: 50px 0; /* Vertical padding, container in HTML handles horizontal */
+  margin-top: 40px; /* Space between hero and first content section, and between content sections */
+  background-color: var(--white-color, #ffffff); /* Solid white background for content sections */
+  /* Or use a very light grey like var(--light-bg-color, #f8f9fa); */
+  border-radius: 0; /* Sections could be full-width bands */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06); /* Softer, more modern shadow */
+}
+/* If using .container class inside each section for content width: */
+.home-page section:not(.hero-section) .container {
+  /* Styles for the container within these sections if needed,
+     but global .container style should generally suffice */
+}
+
+
+.home-page section:first-of-type { /* The hero section is first */
+    margin-top: 0; /* Hero section usually doesn't have margin-top if navbar isn't fixed or has space */
+}
+
+.home-page section:last-child {
+  margin-bottom: 0; /* No bottom margin for the very last section on the page */
+}
+
+.home-page h2 { /* Section titles (for non-hero sections) */
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 45px;
+  color: var(--primary-color-darker, #004085);
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 15px;
+}
+.home-page h2::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background-color: var(--primary-color, #007bff);
+  border-radius: 2px;
+}
+
+
+/* Card Styling (Departments & Doctors) - keep as is, they look good */
+.department-list, .doctor-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 20px; /* Space below section H2 */
+}
+
+.department-card, .doctor-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  background-color: var(--white-color, #ffffff);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.department-card:hover, .doctor-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.department-image, .doctor-photo {
+  width: 100%;
+  object-fit: cover;
+}
+.department-image { height: 200px; border-radius: 10px 10px 0 0; /* Image fits card radius */}
+.doctor-photo {
+  height: 150px; /* Adjust if preferred */
+  width: 150px;
+  border-radius: 50%;
+  margin: 20px auto 15px auto;
+  border: 5px solid var(--white-color, #fff);
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* Content within cards */
+.department-card .card-content, .doctor-card .card-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+/* You might need to add <div class="card-content">...</div> inside your .department-card and .doctor-card in HTML */
+
+.department-card h3, .doctor-card h3 { /* Style for titles within cards */
+  margin-top: 0;
+  color: var(--primary-color, #007bff);
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+.doctor-card h3 {
+  color: var(--text-color, #343a40);
+}
+
+/* ... (rest of your .department-card and .doctor-card specific styles for p, specialization, etc.) ... */
+.department-card p.department-description, .doctor-card p.doctor-bio {
+  font-size: 0.95em;
+  color: var(--text-color-muted, #6c757d);
+  margin-bottom: 15px;
+  flex-grow: 1;
+  line-height: 1.6;
+}
+.doctor-card .specialization {
+  font-size: 1.05em;
+  color: var(--primary-color, #007bff);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.doctor-card .department-name {
+  font-size: 0.9em;
+  color: var(--text-color-muted, #6c757d);
+  margin-bottom: 15px;
+}
+.department-card .services-list {
+  padding-left: 0;
+  list-style-position: inside;
+  font-size: 0.9em;
+  color: #555;
+  margin-top: auto;
+  list-style-type: '✓ ';
+}
+.department-card .services-list li {
+  margin-bottom: 5px;
+}
+
+
+/* Hospital Info Snippet & Statistics */
+/* (Keep your existing styles for .hospital-info-content, .key-statistics, .stat-item etc.) */
+/* Ensure they look good on the new section background */
+.hospital-info-snippet {
+  background-color: var(--light-bg-color, #f8f9fa); /* Example distinct background for this section */
+}
+
+
+/* Loading and Error Messages */
+.loading-indicator p,
+.no-data-message,
+.info-not-available {
+  color: var(--text-color-muted, #6c757d);
+  font-size: 1.1em;
+  padding: 30px 0;
+  background-color: transparent; /* Ensure no conflict with section background */
+}
+.error-message {
+  color: var(--danger-color, #dc3545);
+  background-color: #f8d7da;
+  border: 1px solid var(--danger-color, #dc3545);
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px auto; /* Center error message */
+  max-width: 800px; /* Give it a max width */
+}
+
+/* General Responsiveness for Sections & Typography */
+@media (max-width: 767px) {
+  .home-page section:not(.hero-section) { /* Target all sections EXCEPT hero for mobile */
+    padding: 30px 15px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .home-page h2 {
+    font-size: 1.8rem; /* Adjust section titles for mobile */
+    margin-bottom: 30px;
+  }
+  .hero-section {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    min-height: 350px; /* Adjust hero height for mobile */
+  }
+  .hero-section h1 {
+    font-size: 2.2rem;
+  }
+  .hero-section p {
+    font-size: 1.1rem;
+  }
+  .department-list, .doctor-list, .statistics-grid { /* Make grids single column on mobile */
+    grid-template-columns: 1fr;
+  }
+}

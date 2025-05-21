@@ -1,0 +1,35 @@
+/* Basic styles for footer - expand as needed */
+.app-footer {
+  background-color: #343a40; /* Dark background */
+  color: #f8f9fa; /* Light text */
+  padding: 20px 0;
+  text-align: center;
+  border-top: 3px solid #007bff; /* Primary blue accent */
+}
+
+.app-footer .footer-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.app-footer p {
+  margin-bottom: 5px;
+  font-size: 0.9em;
+}
+
+.app-footer .footer-nav a {
+  color: #adb5bd; /* Lighter grey for links */
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 0.9em;
+}
+
+.app-footer .footer-nav a:hover {
+  color: #f8f9fa; /* Light text on hover */
+  text-decoration: underline;
+}
+
+.app-footer .footer-nav span {
+  color: #6c757d; /* Separator color */
+}

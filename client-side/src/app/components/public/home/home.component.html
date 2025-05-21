@@ -1,0 +1,96 @@
+<div class="home-page">
+
+  <section class="hero-section">
+     <div class="hero-content container">
+      <h1>Welcome to Sacred Mission Hospital!</h1>
+      <p>Your health, our priority. Access world-class medical services seamlessly.</p>
+      <button class="btn btn-primary btn-lg" routerLink="/appointments/book">Book an Appointment</button>
+    </div>
+  </section>
+
+  <section class="departments-preview container"> <h2>Our Departments</h2>
+    <div *ngIf="isLoadingDepartments" class="loading-indicator">
+      <p>Loading departments...</p>
+    </div>
+    <div *ngIf="departmentError && !isLoadingDepartments" class="error-message alert alert-danger">
+      <p>{{ departmentError }}</p>
+    </div>
+    <div *ngIf="!isLoadingDepartments && !departmentError && departments.length > 0" class="department-list">
+      <div *ngFor="let dept of departments" class="department-card">
+        <img *ngIf="dept.imageUrl" [src]="dept.imageUrl" [alt]="dept.name" class="department-image">
+        <img *ngIf="!dept.imageUrl" src="https://via.placeholder.com/300x150?text={{dept.name || 'Department'}}" [alt]="dept.name" class="department-image">
+        <h3>{{ dept.name }}</h3>
+        <p class="department-description">{{ dept.description || 'Description not available.' }}</p>
+        <ul *ngIf="dept.servicesOffered && dept.servicesOffered.length > 0" class="services-list">
+          <li *ngFor="let service of dept.servicesOffered">{{ service }}</li>
+        </ul>
+        </div>
+    </div>
+    <p *ngIf="!isLoadingDepartments && !departmentError && departments.length === 0" class="no-data-message">
+      No departments available at the moment. Please check back later.
+    </p>
+  </section>
+
+  <section class="featured-doctors-preview container"> <h2>Meet Our Specialists</h2>
+    <div *ngIf="isLoadingFeaturedDoctors" class="loading-indicator">
+      <p>Loading featured doctors...</p>
+    </div>
+    <div *ngIf="featuredDoctorsError && !isLoadingFeaturedDoctors" class="error-message alert alert-danger">
+      <p>{{ featuredDoctorsError }}</p>
+    </div>
+    <div *ngIf="!isLoadingFeaturedDoctors && !featuredDoctorsError && featuredDoctors.length > 0" class="doctor-list">
+      <div *ngFor="let doctor of featuredDoctors" class="doctor-card">
+        <img *ngIf="doctor.photoUrl" [src]="doctor.photoUrl" [alt]="doctor.name" class="doctor-photo">
+        <img *ngIf="!doctor.photoUrl" src="" [alt]="doctor.name" class="doctor-photo">
+        <h3>Dr. {{ doctor.name }}</h3>
+        <p class="specialization">{{ doctor.specialization }}</p>
+        <p *ngIf="getDepartmentName(doctor.department)" class="department-name">
+          Department: {{ getDepartmentName(doctor.department) }}
+        </p>
+        <p *ngIf="doctor.publicBio" class="doctor-bio">{{ doctor.publicBio | slice:0:100 }}{{ doctor.publicBio && doctor.publicBio.length > 100 ? '...' : '' }}</p>
+        </div>
+    </div>
+    <p *ngIf="!isLoadingFeaturedDoctors && !featuredDoctorsError && featuredDoctors.length === 0" class="no-data-message">
+      No featured doctors to display at this moment.
+    </p>
+  </section>
+
+  <section class="hospital-info-snippet container"> <h2>About Sacred Mission Hospital</h2>
+    <div *ngIf="isLoadingHospitalInfo" class="loading-indicator">
+      <p>Loading hospital information...</p>
+    </div>
+    <div *ngIf="hospitalInfoError && !isLoadingHospitalInfo" class="error-message alert alert-danger">
+        <p>{{ hospitalInfoError }}</p>
+    </div>
+    <div *ngIf="hospitalInfo && !isLoadingHospitalInfo" class="hospital-info-content">
+        <h3>{{ hospitalInfo.headline }}</h3>
+        <p class="intro-paragraph">{{ hospitalInfo.introductoryParagraph }}</p>
+        <div *ngIf="hospitalInfo.keyStatistics && hospitalInfo.keyStatistics.length > 0" class="key-statistics">
+            <h4>Our Milestones</h4>
+            <div class="statistics-grid">
+                <div *ngFor="let stat of hospitalInfo.keyStatistics" class="stat-item">
+                    <img *ngIf="stat.iconUrl" [src]="stat.iconUrl" [alt]="stat.label" class="stat-icon">
+                    <div *ngIf="!stat.iconUrl" class="stat-icon-placeholder"><span>{{ stat.label.charAt(0) }}</span></div>
+                    <strong>{{ stat.value }}</strong>
+                    <p class="stat-label">{{ stat.label }}</p>
+                    <small class="stat-description">{{ stat.description }}</small>
+                </div>
+            </div>
+        </div>
+        <p class="concluding-statement" *ngIf="hospitalInfo.concludingStatement">{{ hospitalInfo.concludingStatement }}</p>
+    </div>
+    <p *ngIf="!isLoadingHospitalInfo && !hospitalInfoError && !hospitalInfo" class="info-not-available">
+        Hospital information is currently not available.
+    </p>
+  </section>
+
+  <section class="patient-testimonials-section container"> <app-testimonials></app-testimonials>
+  </section>
+  
+  <section class="request-callback-section container"> <app-callback-form></app-callback-form> 
+  </section>
+
+  <section class="contact-info-display-section container"> <app-contact-info></app-contact-info>
+  </section>
+
+</div>

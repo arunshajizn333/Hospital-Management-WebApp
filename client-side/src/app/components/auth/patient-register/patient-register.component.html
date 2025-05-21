@@ -1,0 +1,26 @@
+<div class="register-page-container">
+  <h2>Patient Registration</h2>
+  <p class="register-description">Create your account to manage appointments and access your health records.</p>
+  <form class="register-form">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+    </div>
+     <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Create a password" required>
+    </div>
+     <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+    </div>
+    <button type="submit" class="btn-submit-register">Register</button>
+  </form>
+   <p class="login-link">
+    Already have an account? <a routerLink="/login">Login here</a>
+  </p>
+</div>

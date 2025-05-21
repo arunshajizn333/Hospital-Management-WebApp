@@ -1,0 +1,72 @@
+/* src/app/components/public/testimonials/testimonials.component.css */
+.testimonials-section {
+  padding: 40px 20px;
+  background-color: #ffffff; /* Or a very light contrasting background */
+  text-align: center;
+}
+
+.testimonials-section h2 {
+  margin-bottom: 30px;
+  color: #333;
+  font-weight: bold;
+}
+
+.testimonials-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px; /* Space between testimonial cards */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background-color: #f8f9fa; /* Light background for cards */
+  border: 1px solid #e7e7e7;
+  border-radius: 8px;
+  padding: 25px;
+  width: 300px; /* Adjust as needed, or use flex-basis */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.testimonial-quote {
+  font-style: italic;
+  color: #555;
+  margin-bottom: 15px;
+  font-size: 1em;
+  line-height: 1.5;
+  flex-grow: 1; /* Allows quote to take up available space */
+}
+
+.testimonial-author-info {
+  margin-top: auto; /* Pushes author info and rating to the bottom */
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+}
+
+.testimonial-author-info .author {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.testimonial-author-info .location {
+  font-size: 0.85em;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.star-rating .star {
+  color: #ffc107; /* Gold color for stars */
+  font-size: 1.2em;
+  margin-right: 2px;
+}
+
+.no-testimonials {
+  font-style: italic;
+  color: #777;
+  margin-top: 20px;
+}

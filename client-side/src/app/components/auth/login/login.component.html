@@ -1,0 +1,33 @@
+<div class="login-page-container">
+  <h2>User Login</h2>
+  <p class="login-description">
+    Please enter your credentials to access your account.
+  </p>
+  <form class="login-form">
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Enter your email"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter your password"
+        required
+      />
+    </div>
+    <button type="submit" class="btn-submit-login">Login</button>
+  </form>
+  <p class="register-link">
+    Don't have an account?
+    <a routerLink="/register/patient">Register as a Patient</a>
+  </p>
+</div>

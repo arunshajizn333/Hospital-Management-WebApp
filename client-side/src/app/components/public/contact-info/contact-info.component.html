@@ -1,0 +1,34 @@
+<div class="contact-info-section">
+  <h2>Contact Us & Quick Links</h2>
+  <div class="contact-layout">
+    <div class="contact-details">
+      <h3>Get in Touch</h3>
+      <p>
+        <strong>{{ hospitalName }}</strong><br>
+        {{ address }}
+      </p>
+      <p>
+        <strong>Phone:</strong> <a [href]="generalPhoneLink">{{ generalPhoneNumber }}</a> (General Inquiry)<br>
+        <strong>Emergency:</strong> <a [href]="emergencyPhoneLink">{{ emergencyPhoneNumber }}</a>
+      </p>
+      <p>
+        <strong>Email:</strong> <a [href]="generalEmailLink">{{ generalEmail }}</a>
+      </p>
+      <div class="social-media-links" *ngIf="socialMediaLinks.length > 0">
+        <h4>Connect with Us:</h4>
+        <a *ngFor="let link of socialMediaLinks" [href]="link.url" target="_blank" [attr.aria-label]="link.name">
+          {{ link.displayText }}
+        </a>
+      </div>
+    </div>
+
+    <div class="dedicated-page-links">
+      <h3>Explore More</h3>
+      <ul *ngIf="dedicatedPageLinks.length > 0">
+        <li *ngFor="let link of dedicatedPageLinks">
+          <a [routerLink]="link.routerLink">{{ link.name }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

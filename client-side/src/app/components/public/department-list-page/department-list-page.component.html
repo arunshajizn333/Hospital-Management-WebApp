@@ -1,0 +1,35 @@
+<div class="department-list-page-container">
+  <header class="page-header">
+    <h1>Our Medical Departments</h1>
+    <p>Discover the range of specialized medical services offered at Sacred Mission Hospital.</p>
+  </header>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Loading departments...</p>
+    </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message alert alert-danger">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && allDepartments.length > 0" class="departments-grid">
+    <div *ngFor="let dept of allDepartments" class="department-item-card">
+      <img *ngIf="dept.imageUrl" [src]="dept.imageUrl" [alt]="dept.name" class="department-item-image">
+      <img *ngIf="!dept.imageUrl" src="https://via.placeholder.com/350x200?text={{dept.name || 'Department'}}" [alt]="dept.name" class="department-item-image">
+      <div class="department-item-content">
+        <h3>{{ dept.name }}</h3>
+        <p class="department-description">{{ dept.description || 'Detailed description not available.' }}</p>
+        <div *ngIf="dept.servicesOffered && dept.servicesOffered.length > 0" class="services-list">
+          <strong>Key Services:</strong>
+          <ul>
+            <li *ngFor="let service of dept.servicesOffered">{{ service }}</li>
+          </ul>
+        </div>
+        </div>
+    </div>
+  </div>
+
+  <p *ngIf="!isLoading && !errorMessage && allDepartments.length === 0" class="no-data-message">
+    No departments are currently listed. Please check back soon.
+  </p>
+</div>

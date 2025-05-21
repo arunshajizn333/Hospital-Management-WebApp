@@ -1,0 +1,75 @@
+/* Basic styles for registration page - similar to login, expand as needed */
+.register-page-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.register-page-container h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.register-page-container .register-description {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #666;
+  font-size: 0.95em;
+}
+
+.register-form .form-group {
+  margin-bottom: 20px;
+}
+
+  .register-form label {
+display: block;
+margin-bottom: 8px;
+font-weight: bold;
+color: #555;
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.register-form .btn-submit-register {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745; /* Green for registration */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-form .btn-submit-register:hover {
+  background-color: #218838;
+}
+
+.register-page-container .login-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9em;
+}
+
+.register-page-container .login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register-page-container .login-link a:hover {
+  text-decoration: underline;
+}

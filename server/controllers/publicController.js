@@ -162,7 +162,7 @@ exports.getHospitalInfo = async (req, res) => {
       return res.status(200).json({
         message: 'Hospital information not yet configured. Displaying default information.',
         hospitalInfo: { // Default placeholder data
-            siteName: "Community Health Center",
+            siteName: "Sacred Mission Hospital",
             headline: "Your Health, Our Priority.",
             introductoryParagraph: "Established in 2005, Community Health Center has been dedicated to providing quality healthcare services to our local community with compassion and expertise.",
             keyStatistics: [
@@ -174,7 +174,7 @@ exports.getHospitalInfo = async (req, res) => {
             address: "123 Health St, Wellness City, HC 45678",
             generalPhoneNumber: "555-123-4567",
             emergencyPhoneNumber: "555-911-0000",
-            generalEmail: "info@communityhealth.com"
+            generalEmail: "info@sacredmissionhospital.com"
         }
       });
     }

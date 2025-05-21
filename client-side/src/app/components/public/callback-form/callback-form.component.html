@@ -1,0 +1,53 @@
+<div class="callback-form-container">
+  <h3>Request a Callback</h3>
+  <p>Fill out the form below and we'll get back to you.</p>
+
+  <form [formGroup]="callbackForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" formControlName="name" class="form-control" placeholder="Enter your full name">
+      <div *ngIf="f['name'].touched && f['name'].errors" class="invalid-feedback">
+        <div *ngIf="f['name'].errors?.['required']">Name is required.</div>
+        <div *ngIf="f['name'].errors?.['minlength']">Name must be at least 2 characters.</div>
+        <div *ngIf="f['name'].errors?.['maxlength']">Name cannot exceed 100 characters.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control" placeholder="Enter your phone number">
+      <div *ngIf="f['phoneNumber'].touched && f['phoneNumber'].errors" class="invalid-feedback">
+        <div *ngIf="f['phoneNumber'].errors?.['required']">Phone number is required.</div>
+        <div *ngIf="f['phoneNumber'].errors?.['pattern']">Please enter a valid phone number.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="preferredTime">Preferred Callback Time (Optional):</label>
+      <input type="text" id="preferredTime" formControlName="preferredTime" class="form-control" placeholder="e.g., Morning, Afternoon, 2 PM - 4 PM">
+       <div *ngIf="f['preferredTime'].touched && f['preferredTime'].errors?.['maxlength']" class="invalid-feedback">
+        Preferred time cannot exceed 50 characters.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reason">Reason for Callback (Optional):</label>
+      <textarea id="reason" formControlName="reason" class="form-control" rows="3" placeholder="Briefly tell us why you'd like a callback"></textarea>
+      <div *ngIf="f['reason'].touched && f['reason'].errors?.['maxlength']" class="invalid-feedback">
+        Reason cannot exceed 500 characters.
+      </div>
+    </div>
+
+    <div *ngIf="submitSuccessMessage" class="alert alert-success">
+      {{ submitSuccessMessage }}
+    </div>
+    <div *ngIf="submitErrorMessage" class="alert alert-danger">
+      {{ submitErrorMessage }}
+    </div>
+
+    <button type="submit" [disabled]="isSubmitting || callbackForm.invalid" class="btn btn-primary submit-btn">
+      <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{ isSubmitting ? 'Submitting...' : 'Request Callback' }}
+    </button>
+  </form>
+</div>

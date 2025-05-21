@@ -26,7 +26,10 @@ const app = express();
 
 // Core Middleware Setup
 app.use(helmet()); // Applies various security-related HTTP headers
-app.use(cors());   // Enables Cross-Origin Resource Sharing
+app.use(cors({
+  origin: ['http://localhost:4200', 'http://localhost:4300'], // Angular dev server
+  credentials: true
+}));
 app.use(express.json()); // Parses incoming requests with JSON payloads
 app.use(express.urlencoded({ extended: false })); // Parses incoming requests with URL-encoded payloads
 

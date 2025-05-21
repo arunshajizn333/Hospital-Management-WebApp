@@ -1,0 +1,258 @@
+/* src/app/components/layout/public-navbar/public-navbar.component.css */
+.public-navbar {
+  display: flex;
+  justify-content: space-between; /* Keeps Brand left, (Links+Auth) right */
+  align-items: center;
+  padding: 0.8rem 2rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e7e7e7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.public-navbar .navbar-brand a {
+  font-weight: bold;
+  color: #0056b3;
+  text-decoration: none;
+  font-size: 1.6rem;
+  margin-right: auto; /* Push other items away from brand */
+}
+
+/* This div will now act as a container for both main links and auth links on desktop */
+.navbar-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Align this whole block to the right initially */
+  flex-grow: 1; /* Allows this to take space */
+}
+
+.public-navbar .navbar-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0 auto; /* This will center the links within the available space */
+  padding: 0;
+  position: absolute; /* Position it absolutely to center it in the navbar */
+  left: 50%;
+  transform: translateX(-50%); /* The classic centering trick */
+}
+
+.public-navbar .navbar-links li {
+  margin: 0 1rem;
+}
+
+.public-navbar .navbar-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.2s ease-in-out;
+}
+
+.public-navbar .navbar-links a:hover,
+.public-navbar .navbar-links a.active-link {
+  color: #007bff;
+}
+
+.public-navbar .navbar-links a.active-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #007bff;
+}
+
+.public-navbar .navbar-auth-links {
+  display: flex;
+  align-items: center;
+  /* No margin-left: auto needed here as navbar-collapse handles the right alignment */
+}
+
+.public-navbar .navbar-auth-links a {
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-left: 0.8rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.public-navbar .navbar-auth-links .btn-login {
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.public-navbar .navbar-auth-links .btn-login:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.public-navbar .navbar-auth-links .btn-register {
+  background-color: #28a745;
+  color: white;
+  border: 1px solid #28a745;
+}
+
+.public-navbar .navbar-auth-links .btn-register:hover {
+  background-color: #218838;
+}
+
+.navbar-toggler {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* Responsive Styles for smaller screens - keep these as they were for the hamburger menu */
+@media (max-width: 991px) {
+  .public-navbar .navbar-brand a {
+    margin-right: 0; /* Reset for mobile */
+  }
+
+  .public-navbar .navbar-links {
+    position: static; /* Reset absolute positioning for mobile */
+    transform: none;  /* Reset transform */
+    margin: 0; /* Reset auto margins for mobile stacking */
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .public-navbar .navbar-toggler {
+    display: block;
+  }
+
+  .public-navbar .navbar-collapse {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-top: 1px solid #e7e7e7;
+    padding: 1rem;
+    align-items: flex-start;
+    justify-content: flex-start; /* Reset from space-between/flex-end */
+  }
+
+  .public-navbar .navbar-collapse.active {
+    display: flex;
+  }
+
+  .public-navbar .navbar-links li {
+    margin: 0.5rem 0;
+    width: 100%;
+  }
+  
+  .public-navbar .navbar-links a,
+  .public-navbar .navbar-auth-links a {
+    display: block;
+    text-align: left;
+    padding: 0.8rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .public-navbar .navbar-links a.active-link::after {
+    display: none; 
+  }
+  .public-navbar .navbar-links a.active-link {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+  }
+
+  .public-navbar .navbar-auth-links {
+    flex-direction: column; /* Stack auth links in mobile menu */
+    width: 100%;
+    align-items: flex-start; /* Align them left */
+    margin-top: 1rem; 
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+  }
+
+  .public-navbar .navbar-auth-links a {
+      margin-left: 0;
+      margin-bottom: 0.5rem;
+  }
+  .public-navbar .navbar-auth-links a:last-child {
+      margin-bottom: 0;
+  }
+}
+
+/* Responsive Styles for smaller screens */
+@media (max-width: 991px) { /* Your chosen breakpoint */
+  .public-navbar .navbar-toggler {
+    display: block;
+  }
+
+  .public-navbar .navbar-collapse {
+    display: none; /* Hidden by default on mobile */
+    flex-direction: column; /* Stack items vertically in mobile menu */
+    width: 100%;
+    position: absolute;
+    top: 100%; /* Below the main navbar bar */
+    left: 0;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-top: 1px solid #e7e7e7;
+    padding: 1rem;
+    align-items: flex-start; /* Align items to the start (left) in vertical menu */
+  }
+
+  .public-navbar .navbar-collapse.active {
+    display: flex; /* Show when toggled */
+  }
+
+  .public-navbar .navbar-links,
+  .public-navbar .navbar-auth-links {
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start; /* Align text to left */
+  }
+
+  .public-navbar .navbar-links li {
+    margin: 0.5rem 0;
+    width: 100%;
+  }
+  
+  .public-navbar .navbar-links a,
+  .public-navbar .navbar-auth-links a {
+    display: block;
+    text-align: left;
+    padding: 0.8rem 1rem; /* Uniform padding */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .public-navbar .navbar-links a.active-link::after {
+    display: none; 
+  }
+  .public-navbar .navbar-links a.active-link {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+  }
+
+  .public-navbar .navbar-auth-links {
+    margin-top: 1rem; 
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+  }
+
+  .public-navbar .navbar-auth-links a {
+      margin-left: 0; /* Reset margin for vertical layout */
+      margin-bottom: 0.5rem;
+  }
+  .public-navbar .navbar-auth-links a:last-child {
+      margin-bottom: 0;
+  }
+}
