@@ -1,15 +1,21 @@
 // controllers/publicController.js
 const Department = require('../models/Department');
 const Doctor = require('../models/Doctor');
-const HospitalInfo = require('../models/HospitalInfo'); // --- ADD THIS LINE ---
-// We'll import other models like CallbackRequest, ContactInquiry later
+const HospitalInfo = require('../models/HospitalInfo');
+const CallbackRequest = require('../models/CallbackRequest');
+const ContactInquiry = require('../models/ContactInquiry');
+const mongoose = require('mongoose'); // Used for ObjectId.isValid
 
-// @desc    Get all active medical departments
-// @route   GET /api/public/departments
-// @access  Public
+/**
+ * @desc    Get all active medical departments
+ * @route   GET /api/public/departments
+ * @access  Public
+ */
 exports.getAllDepartments = async (req, res) => {
   try {
-    const departments = await Department.find().sort({ name: 1 });
+    // Fetches all departments, sorted by name. 
+    // Future consideration: Add an 'active' flag to the Department model for filtering.
+    const departments = await Department.find().sort({ name: 1 }); 
     res.status(200).json({
       message: 'Departments retrieved successfully.',
       count: departments.length,
@@ -21,18 +27,18 @@ exports.getAllDepartments = async (req, res) => {
   }
 };
 
-// --- NEW PUBLIC DOCTOR CONTROLLERS ---
-
-// @desc    Get a list of doctors (public view) with optional filters
-// @route   GET /api/public/doctors
-// @access  Public
+/**
+ * @desc    Get a list of doctors for public view, with optional filters and pagination.
+ * @route   GET /api/public/doctors
+ * @access  Public
+ */
 exports.getPublicDoctorsList = async (req, res) => {
   try {
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
 
-    const { specialization, name } = req.query; // Add more filters as needed
+    const { specialization, name, departmentId } = req.query;
     const query = {};
 
     if (specialization) {
@@ -40,21 +46,24 @@ exports.getPublicDoctorsList = async (req, res) => {
       query.specialization = { $regex: new RegExp(specialization, 'i') };
     }
     if (name) {
+      // Case-insensitive search for doctor's name
       query.name = { $regex: new RegExp(name, 'i') };
     }
+    if (departmentId) {
+      if (!mongoose.Types.ObjectId.isValid(departmentId)) {
+        return res.status(400).json({ message: 'Invalid Department ID format for filter.' });
+      }
+      query.department = departmentId; // Filter by department ID
+    }
     
-    // Add a filter for department if you link Doctors to Departments later
-    // if (req.query.departmentId) query.department = req.query.departmentId;
-
-    const publicDoctorFields = 'name specialization'; // Add photoUrl, publicBio when available
-    // For now, you might also want to expose the Doctor's _id so frontend can link to their profile
-    // const publicDoctorFields = '_id name specialization';
-
+    // Defines fields to be exposed publicly for doctors
+    const publicDoctorFields = '_id name specialization photoUrl publicBio department';
 
     const totalDoctors = await Doctor.countDocuments(query);
     const doctors = await Doctor.find(query)
-      .select(publicDoctorFields) // Only select public fields
-      .sort({ name: 1 }) // Sort by name
+      .populate('department', 'name') // Populate department name for display
+      .select(publicDoctorFields)     // Select only designated public fields
+      .sort({ name: 1 })              // Sort by doctor name
       .skip(skip)
       .limit(limit);
 
@@ -68,26 +77,28 @@ exports.getPublicDoctorsList = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching public doctors list:', error.message);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error while fetching doctors list.' });
   }
 };
 
-// @desc    Get a list of featured doctors
-// @route   GET /api/public/doctors/featured
-// @access  Public
+/**
+ * @desc    Get a list of featured doctors.
+ * @route   GET /api/public/doctors/featured
+ * @access  Public
+ */
 exports.getFeaturedDoctors = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit, 10) || 5; // Default to 5 featured doctors
-    const publicDoctorFields = 'name specialization'; // Add _id, photoUrl, publicBio when available
+    const limit = parseInt(req.query.limit, 10) || 5; // Default number of featured doctors
+    const publicDoctorFields = '_id name specialization photoUrl publicBio department';
 
-    // Strategy for "featured":
-    // 1. If you add an `isFeatured: true` field to Doctor model:
-    //    const doctors = await Doctor.find({ isFeatured: true }).select(publicDoctorFields).limit(limit);
-    // 2. For now, let's just take a few, sorted by name (or createdAt for "newest")
-    const doctors = await Doctor.find({})
+    // Fetches doctors marked with 'isFeatured: true' in their profile.
+    const doctors = await Doctor.find({ isFeatured: true })
+        .populate('department', 'name') // Populate department name
         .select(publicDoctorFields)
-        .sort({ createdAt: -1 }) // Example: newest doctors as "featured"
         .limit(limit);
+    
+    // Optional: Fallback logic if no doctors are marked as featured.
+    // Currently, it will return an empty list if none are explicitly featured.
 
     res.status(200).json({
       message: 'Featured doctors retrieved successfully.',
@@ -96,13 +107,15 @@ exports.getFeaturedDoctors = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching featured doctors:', error.message);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error while fetching featured doctors.' });
   }
 };
 
-// @desc    Get public details of a specific doctor
-// @route   GET /api/public/doctors/:doctorId
-// @access  Public
+/**
+ * @desc    Get public details of a specific doctor by their ID.
+ * @route   GET /api/public/doctors/:doctorId
+ * @access  Public
+ */
 exports.getPublicDoctorProfile = async (req, res) => {
     try {
         const { doctorId } = req.params;
@@ -110,11 +123,10 @@ exports.getPublicDoctorProfile = async (req, res) => {
             return res.status(400).json({ message: 'Invalid Doctor ID format.' });
         }
 
-        const publicDoctorFields = 'name specialization'; // Add more fields like publicBio, photoUrl, department name (via populate if linked)
-        const doctor = await Doctor.findById(doctorId).select(publicDoctorFields);
-        // If Doctor model gets a 'department' field:
-        // const doctor = await Doctor.findById(doctorId).select(publicDoctorFields).populate('department', 'name');
-
+        const publicDoctorFields = '_id name specialization photoUrl publicBio department';
+        const doctor = await Doctor.findById(doctorId)
+            .populate('department', 'name description') // Populate linked department details
+            .select(publicDoctorFields);
 
         if (!doctor) {
             return res.status(404).json({ message: 'Doctor not found.' });
@@ -124,40 +136,46 @@ exports.getPublicDoctorProfile = async (req, res) => {
 
     } catch (error) {
         console.error('Error fetching public doctor profile:', error.message);
-        if (error.kind === 'ObjectId') {
-             return res.status(400).json({ message: 'Invalid Doctor ID format (during query).' });
+        // Handle specific CastError for ObjectId during query, though isValid check should catch most format issues
+        if (error.kind === 'ObjectId' && error.name === 'CastError') { 
+             return res.status(400).json({ message: 'Invalid Doctor ID format provided for query.' });
         }
-        res.status(500).json({ message: 'Server Error' });
+        res.status(500).json({ message: 'Server Error while fetching public doctor profile.' });
     }
 };
 
+/**
+ * @desc    Get general hospital information and statistics.
+ * @route   GET /api/public/hospital-info
+ * @access  Public
+ */
 exports.getHospitalInfo = async (req, res) => {
   try {
-    // Assuming there's only one document for hospital info.
-    // We find one. If multiple exist by mistake, it will pick the first one found.
-    // Admins should ideally only create/edit one such document.
+    // Assumes a single document in the HospitalInfo collection holds this data.
+    // If multiple exist (by mistake), it will pick the first one found.
+    // Admin interface should enforce editing/creating only one such document.
     let info = await HospitalInfo.findOne();
 
     if (!info) {
-      // If no info is found in the DB, you can return defaults or an empty object
-      // This indicates it needs to be set up by an Admin.
+      // Fallback to default information if none is configured in the database.
+      // This indicates an admin needs to set up this information via an admin panel.
       return res.status(200).json({
-        message: 'Hospital information not yet configured.',
-        hospitalInfo: {
-  "siteName": "Community Health Center",
-  "headline": "Your Health, Our Priority.",
-  "introductoryParagraph": "Established in 2005, Community Health Center has been dedicated to providing quality healthcare services to our local community with compassion and expertise.",
-  "keyStatistics": [
-    { "label": "Years of Service", "value": "15+", "description": "Serving the community for over fifteen years.", "iconUrl": "/icons/years_service.png" },
-    { "label": "Qualified Doctors", "value": "50+", "description": "A team of experienced and dedicated medical professionals.", "iconUrl": "/icons/doctors.png" },
-    { "label": "Successful Recoveries", "value": "10,000+", "description": "Helping patients get back to their healthy lives.", "iconUrl": "/icons/recoveries.png" }
-  ],
-  "concludingStatement": "We are committed to your well-being. Trust us with your care.",
-  "address": "123 Health St, Wellness City, HC 45678",
-  "generalPhoneNumber": "555-123-4567",
-  "emergencyPhoneNumber": "555-911-0000",
-  "generalEmail": "info@communityhealth.com"
-}
+        message: 'Hospital information not yet configured. Displaying default information.',
+        hospitalInfo: { // Default placeholder data
+            siteName: "Community Health Center",
+            headline: "Your Health, Our Priority.",
+            introductoryParagraph: "Established in 2005, Community Health Center has been dedicated to providing quality healthcare services to our local community with compassion and expertise.",
+            keyStatistics: [
+              { "label": "Years of Service", "value": "15+", "description": "Serving the community for over fifteen years.", "iconUrl": "/icons/years_service.png" },
+              { "label": "Qualified Doctors", "value": "50+", "description": "A team of experienced and dedicated medical professionals.", "iconUrl": "/icons/doctors.png" },
+              { "label": "Successful Recoveries", "value": "10,000+", "description": "Helping patients get back to their healthy lives.", "iconUrl": "/icons/recoveries.png" }
+            ],
+            concludingStatement: "We are committed to your well-being. Trust us with your care.",
+            address: "123 Health St, Wellness City, HC 45678",
+            generalPhoneNumber: "555-123-4567",
+            emergencyPhoneNumber: "555-911-0000",
+            generalEmail: "info@communityhealth.com"
+        }
       });
     }
 
@@ -171,35 +189,39 @@ exports.getHospitalInfo = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Submit a user request for a callback from the hospital.
+ * @route   POST /api/public/callbacks
+ * @access  Public
+ */
 exports.handleCallbackRequest = async (req, res) => {
   try {
     const { name, phoneNumber, preferredTime, reason } = req.body;
 
-    // Basic Validation
+    // Basic validation for required fields
     if (!name || !phoneNumber) {
-      return res.status(400).json({ message: 'Name and phone number are required.' });
+      return res.status(400).json({ message: 'Name and phone number are required for callback request.' });
     }
-
-    // More specific phone number validation could be added here if the schema's regex isn't enough
+    // Note: More specific phone number format validation is in the CallbackRequest model schema.
 
     const newCallbackRequest = new CallbackRequest({
       name,
       phoneNumber,
       preferredTime,
       reason,
-      status: 'Pending' // Default status
+      status: 'Pending' // Initial status for new requests
     });
 
     await newCallbackRequest.save();
 
-    // Optional: Send a notification (email/SMS) to the admin/relevant department here.
-    // This is an advanced feature. For now, we just save to DB.
+    // Optional: Implement notification (e.g., email to admin) about the new request in a future iteration.
 
     res.status(201).json({
       message: 'Your callback request has been submitted successfully. We will contact you shortly.',
-      request: { // Send back some details of what was submitted
+      // Optionally send back parts of the request for confirmation, excluding sensitive or internal fields
+      request: {
           name: newCallbackRequest.name,
-          phoneNumber: newCallbackRequest.phoneNumber,
+          phoneNumber: newCallbackRequest.phoneNumber, // Consider if this should be returned
           preferredTime: newCallbackRequest.preferredTime,
           submittedAt: newCallbackRequest.createdAt
       }
@@ -211,39 +233,39 @@ exports.handleCallbackRequest = async (req, res) => {
       const messages = Object.values(error.errors).map(val => val.message);
       return res.status(400).json({ message: messages.join(', ') });
     }
-    res.status(500).json({ message: 'Server Error while submitting your request.' });
+    res.status(500).json({ message: 'Server Error while submitting callback request.' });
   }
 };
 
-// @desc    Submit a general contact inquiry
-// @route   POST /api/public/contact-inquiries
-// @access  Public
+/**
+ * @desc    Submit a general contact inquiry from the public.
+ * @route   POST /api/public/contact-inquiries
+ * @access  Public
+ */
 exports.handleContactInquiry = async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
 
-    // Basic Validation
+    // Basic validation for required fields
     if (!name || !email || !message) {
-      return res.status(400).json({ message: 'Name, email, and message are required.' });
+      return res.status(400).json({ message: 'Name, email, and message are required for contact inquiry.' });
     }
 
     const newInquiry = new ContactInquiry({
       name,
       email,
-      subject: subject || 'General Inquiry', // Use default if subject is not provided
+      subject: subject || 'General Inquiry', // Provide a default subject if none is given
       message,
-      status: 'New' // Default status
+      status: 'New' // Initial status for new inquiries
     });
-
 
     await newInquiry.save();
 
-    // Optional: Send an email notification to the hospital's contact email address.
-    // This is an advanced feature and requires an email sending setup.
+    // Optional: Implement notification (e.g., email to hospital's contact address) in a future iteration.
 
     res.status(201).json({
       message: 'Your inquiry has been submitted successfully. We will get back to you as soon as possible.',
-      inquiry: { // Send back some details of what was submitted
+      inquiry: { // Return some details of the submitted inquiry for confirmation
           name: newInquiry.name,
           email: newInquiry.email,
           subject: newInquiry.subject,
@@ -257,121 +279,6 @@ exports.handleContactInquiry = async (req, res) => {
       const messages = Object.values(error.errors).map(val => val.message);
       return res.status(400).json({ message: messages.join(', ') });
     }
-    res.status(500).json({ message: 'Server Error while submitting your inquiry.' });
+    res.status(500).json({ message: 'Server Error while submitting contact inquiry.' });
   }
-};
-
-
-// We'll add other public controller functions here
-// @desc    Get a list of doctors (public view) with optional filters
-// @route   GET /api/public/doctors
-// @access  Public
-exports.getPublicDoctorsList = async (req, res) => {
-  try {
-    const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 10;
-    const skip = (page - 1) * limit;
-
-    const { specialization, name, departmentId } = req.query; // Added departmentId filter
-    const query = {};
-
-    if (specialization) {
-      query.specialization = { $regex: new RegExp(specialization, 'i') };
-    }
-    if (name) {
-      query.name = { $regex: new RegExp(name, 'i') };
-    }
-    if (departmentId) {
-      if (!mongoose.Types.ObjectId.isValid(departmentId)) {
-        return res.status(400).json({ message: 'Invalid Department ID format for filter.' });
-      }
-      query.department = departmentId; // Filter by department ID
-    }
-    
-    // Define public fields, now including the new ones
-    const publicDoctorFields = '_id name specialization photoUrl publicBio department'; // Added department
-
-    const totalDoctors = await Doctor.countDocuments(query);
-    const doctors = await Doctor.find(query)
-      .populate('department', 'name') // Populate department name
-      .select(publicDoctorFields)
-      .sort({ name: 1 })
-      .skip(skip)
-      .limit(limit);
-
-    res.status(200).json({
-      message: 'Doctors retrieved successfully.',
-      count: doctors.length,
-      total: totalDoctors,
-      currentPage: page,
-      totalPages: Math.ceil(totalDoctors / limit),
-      doctors,
-    });
-  } catch (error) {
-    console.error('Error fetching public doctors list:', error.message);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
-
-// @desc    Get a list of featured doctors
-// @route   GET /api/public/doctors/featured
-// @access  Public
-exports.getFeaturedDoctors = async (req, res) => {
-  try {
-    const limit = parseInt(req.query.limit, 10) || 5;
-    // Define public fields, now including the new ones
-    const publicDoctorFields = '_id name specialization photoUrl publicBio department'; // Added department
-
-    // Now primarily uses the isFeatured flag
-    const doctors = await Doctor.find({ isFeatured: true })
-        .populate('department', 'name') // Populate department name
-        .select(publicDoctorFields)
-        .limit(limit);
-    
-    // Fallback if no featured doctors are found (optional)
-    // if (doctors.length === 0) {
-    //   // Could fetch newest or random doctors as a fallback
-    //   // For now, it will just return an empty list if none are featured
-    // }
-
-    res.status(200).json({
-      message: 'Featured doctors retrieved successfully.',
-      count: doctors.length,
-      doctors,
-    });
-  } catch (error) {
-    console.error('Error fetching featured doctors:', error.message);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
-
-// @desc    Get public details of a specific doctor
-// @route   GET /api/public/doctors/:doctorId
-// @access  Public
-exports.getPublicDoctorProfile = async (req, res) => {
-    try {
-        const { doctorId } = req.params;
-        if (!mongoose.Types.ObjectId.isValid(doctorId)) {
-            return res.status(400).json({ message: 'Invalid Doctor ID format.' });
-        }
-
-        // Define public fields, now including the new ones and department
-        const publicDoctorFields = '_id name specialization photoUrl publicBio department';
-        const doctor = await Doctor.findById(doctorId)
-            .populate('department', 'name description') // Populate more department details if needed
-            .select(publicDoctorFields);
-
-        if (!doctor) {
-            return res.status(404).json({ message: 'Doctor not found.' });
-        }
-
-        res.status(200).json({ doctor });
-
-    } catch (error) {
-        console.error('Error fetching public doctor profile:', error.message);
-        if (error.kind === 'ObjectId' && error.name === 'CastError') { // More specific check for CastError
-             return res.status(400).json({ message: 'Invalid Doctor ID format (during query).' });
-        }
-        res.status(500).json({ message: 'Server Error' });
-    }
 };

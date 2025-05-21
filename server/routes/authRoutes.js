@@ -2,31 +2,53 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
-// --- UPDATE THIS LINE TO INCLUDE loginAdmin ---
-const { // <--- This destructures the import
+const {
   loginDoctor,
   registerPatient,
   loginPatient,
   loginAdmin,
-  changePassword // 'changePassword' is imported here as a standalone function
-} = require('../controllers/authController'); // All functions are imported from authController
+  changePassword
+} = require('../controllers/authController');
 
+// --- User Login Routes ---
 
-// Doctor Login
+/**
+ * @route   POST /api/auth/doctor/login
+ * @desc    Authenticate doctor and get token
+ * @access  Public
+ */
 router.post('/doctor/login', loginDoctor);
 
-// Patient Registration
-router.post('/patient/register', registerPatient);
-
-// Patient Login
+/**
+ * @route   POST /api/auth/patient/login
+ * @desc    Authenticate patient and get token
+ * @access  Public
+ */
 router.post('/patient/login', loginPatient);
 
-// --- ADD THIS ROUTE FOR ADMIN LOGIN ---
-// @route   POST api/auth/admin/login
-// @desc    Authenticate admin & get token
-// @access  Public
+/**
+ * @route   POST /api/auth/admin/login
+ * @desc    Authenticate admin & get token
+ * @access  Public
+ */
 router.post('/admin/login', loginAdmin);
 
-router.put('/change-password', protect,changePassword);
+// --- Patient Registration ---
+
+/**
+ * @route   POST /api/auth/patient/register
+ * @desc    Register a new patient
+ * @access  Public
+ */
+router.post('/patient/register', registerPatient);
+
+// --- Password Management ---
+
+/**
+ * @route   PUT /api/auth/change-password
+ * @desc    Change password for authenticated user (Admin, Doctor, or Patient)
+ * @access  Private (Authenticated User)
+ */
+router.put('/change-password', protect, changePassword);
 
 module.exports = router;
