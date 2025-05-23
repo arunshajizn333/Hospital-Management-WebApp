@@ -16,6 +16,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ContactInfoComponent } from './components/public/contact-info/contact-info.component';
 import { TestimonialsComponent } from './components/public/testimonials/testimonials.component';
 import { DepartmentListPageComponent } from './components/public/department-list-page/department-list-page.component';
+import { FeaturedDoctorsComponent } from './components/public/featured-doctors/featured-doctors.component';
+import { HospitalInfoSnippetComponent } from './components/public/hospital-info-snippet/hospital-info-snippet.component';
+import { DoctorLoginComponent } from './components/auth/doctor-login/doctor-login.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { DepartmentListPageComponent } from './components/public/department-list
     ContactInfoComponent,
     TestimonialsComponent,
     DepartmentListPageComponent,
+    FeaturedDoctorsComponent,
+    HospitalInfoSnippetComponent,
+    DoctorLoginComponent,
    
    
   ],

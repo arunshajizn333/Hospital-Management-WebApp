@@ -1,0 +1,34 @@
+<div class="dedicated-login-page">
+  <div class="login-form-container">
+    <h2>Doctor Portal Login</h2>
+    <p class="login-description">Please enter your credentials to access the Doctor Dashboard.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="doc-email">Email address:</label>
+        <input type="email" id="doc-email" formControlName="email" class="form-control" placeholder="Enter your email">
+        <div *ngIf="f['email'].touched && f['email'].errors" class="invalid-feedback">
+          <div *ngIf="f['email'].errors?.['required']">Email is required.</div>
+          <div *ngIf="f['email'].errors?.['email']">Please enter a valid email address.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="doc-password">Password:</label>
+        <input type="password" id="doc-password" formControlName="password" class="form-control" placeholder="Enter your password">
+        <div *ngIf="f['password'].touched && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors?.['required']">Password is required.</div>
+        </div>
+      </div>
+
+      <div *ngIf="loginError" class="alert alert-danger login-error-message">
+        {{ loginError }}
+      </div>
+
+      <button type="submit" [disabled]="isSubmitting || loginForm.invalid" class="btn-submit-login">
+        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        {{ isSubmitting ? 'Logging in...' : 'Login as Doctor' }}
+      </button>
+    </form>
+    </div>
+</div>

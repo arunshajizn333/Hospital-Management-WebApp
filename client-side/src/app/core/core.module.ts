@@ -1,6 +1,7 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+ import { AuthGuard } from './guards/auth.guard';
+import { AuthService } from './services/auth.service';
 
 
 @NgModule({
@@ -10,6 +11,8 @@ import { CommonModule } from '@angular/common';
     
   ],
   providers: [
+    AuthGuard,
+    AuthService
     // Singleton services, guards, interceptors will be provided here later
     // e.g., AuthService, AuthGuard, RoleGuard, AuthInterceptor
   ]

@@ -4,19 +4,60 @@
   </div>
 
   <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
-    <span>&#9776;</span> </button>
+    <span>&#9776;</span>
+  </button>
 
   <div class="navbar-collapse" [class.active]="navbarOpen">
     <ul class="navbar-links">
-      <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" (click)="closeNavbar()">Home</a></li>
-      <li><a routerLink="/departments" routerLinkActive="active-link" (click)="closeNavbar()">Departments</a></li>
-      <li><a routerLink="/find-doctor" routerLinkActive="active-link" (click)="closeNavbar()">Find a Doctor</a></li>
-      <li><a routerLink="/about-us" routerLinkActive="active-link" (click)="closeNavbar()">About Us</a></li>
-      <li><a routerLink="/contact-us" routerLinkActive="active-link" (click)="closeNavbar()">Contact Us</a></li>
+      <li>
+        <a
+          routerLink="/"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeNavbar()"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/departments"
+          routerLinkActive="active-link"
+          (click)="closeNavbar()"
+          >Departments</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/find-doctor"
+          routerLinkActive="active-link"
+          (click)="closeNavbar()"
+          >Find a Doctor</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/about-us"
+          routerLinkActive="active-link"
+          (click)="closeNavbar()"
+          >About Us</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/contact-us"
+          routerLinkActive="active-link"
+          (click)="closeNavbar()"
+          >Contact Us</a
+        >
+      </li>
     </ul>
     <div class="navbar-auth-links">
-      <a routerLink="/login" class="btn btn-login" (click)="closeNavbar()">Login</a>
-      <a routerLink="/register/patient" class="btn btn-register" (click)="closeNavbar()">Register</a>
+      <button type="button" (click)="openLogin()" class="btn btn-login">
+        Login
+      </button>
+      <button type="button" (click)="openRegister()" class="btn btn-register">
+        Register
+      </button>
     </div>
   </div>
 </nav>

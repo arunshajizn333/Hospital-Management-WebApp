@@ -1,0 +1,88 @@
+<div class="dashboard-overview">
+  <header class="dashboard-header">
+    <h1 *ngIf="currentUser">Welcome back, {{ currentUser.name }}!</h1>
+    <p *ngIf="!currentUser">Welcome to your Patient Dashboard.</p>
+  </header>
+
+  <section class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="actions-grid">
+      <a routerLink="../book-appointment" class="action-card">
+        <div class="action-icon"></div>
+        <span>Book New Appointment</span>
+      </a>
+      <a routerLink="../appointments" class="action-card">
+        <div class="action-icon"></div>
+        <span>View My Appointments</span>
+      </a>
+      <a routerLink="../profile" class="action-card">
+        <div class="action-icon"></div>
+        <span>Manage My Profile</span>
+      </a>
+      <a routerLink="../medical-records" class="action-card">
+        <div class="action-icon"></div>
+        <span>View Medical Records</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="upcoming-appointments">
+    <h2>Upcoming Appointments</h2>
+    <div *ngIf="isLoadingAppointments" class="loading-indicator">
+      <p>Loading upcoming appointments...</p>
+    </div>
+    <div
+      *ngIf="appointmentsError && !isLoadingAppointments"
+      class="error-message alert alert-danger"
+    >
+      <p>{{ appointmentsError }}</p>
+    </div>
+    <div
+      *ngIf="
+        !isLoadingAppointments &&
+        !appointmentsError &&
+        upcomingAppointments.length > 0
+      "
+      class="appointments-list"
+    >
+      <div
+        *ngFor="let apt of upcomingAppointments"
+        class="appointment-summary-card"
+      >
+        <h4>With Dr. {{ getDoctorName(apt.doctor) }}</h4>
+        <p class="specialization" *ngIf="getDoctorSpecialization(apt.doctor)">
+          {{ getDoctorSpecialization(apt.doctor) }}
+        </p>
+        <p>
+          <strong>Date:</strong> {{ apt.appointmentDate | date : "fullDate" }}
+        </p>
+        <p><strong>Time:</strong> {{ apt.appointmentTime }}</p>
+        <p>
+          <strong>Status:</strong>
+          <span class="status-badge status-{{ apt.status | lowercase }}">{{
+            apt.status
+          }}</span>
+        </p>
+      </div>
+    </div>
+    <p
+      *ngIf="
+        !isLoadingAppointments &&
+        !appointmentsError &&
+        upcomingAppointments.length === 0
+      "
+      class="no-data-message"
+    >
+      You have no upcoming appointments scheduled.
+    </p>
+    <div
+      *ngIf="
+        !isLoadingAppointments &&
+        upcomingAppointments.length >= maxUpcomingAppointmentsToShow
+      "
+      class="view-all-link"
+    >
+      <a routerLink="../appointments">View All Appointments</a>
+    </div>
+  </section>
+</div>

@@ -1,74 +1,119 @@
-/* Basic styles for login page - expand as needed */
-.login-page-container {
-  max-width: 450px;
-  margin: 50px auto;
-  padding: 30px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+/* src/app/components/auth/login/login.component.css */
+.login-modal-content {
+  padding: 10px; /* Padding is mostly handled by .modal-content in app.component.css */
 }
 
-.login-page-container h2 {
+.login-modal-content h2 {
   text-align: center;
-  margin-bottom: 15px;
-  color: #333;
+  margin-bottom: 10px;
+  color: var(--primary-color-darker, #004085);
+  font-size: 1.6em;
 }
 
-.login-page-container .login-description {
+.login-modal-content .login-description {
   text-align: center;
-  margin-bottom: 25px;
-  color: #666;
-  font-size: 0.95em;
+  margin-bottom: 20px;
+  color: var(--text-color-muted, #6c757d);
+  font-size: 0.9em;
 }
 
 .login-form .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .login-form label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #555;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.9rem;
 }
 
-.login-form input[type="email"],
-.login-form input[type="password"] {
+.login-form .form-control { /* Ensure this class is on your inputs */
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
+  padding: 10px;
+  border: 1px solid #ced4da;
   border-radius: 4px;
   box-sizing: border-box;
+  font-size: 0.95em;
 }
 
-.login-form .btn-submit-login {
+.login-error-message.alert-danger {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0.6rem 1rem;
+  font-size: 0.85em;
+}
+
+.btn-submit-login {
   width: 100%;
-  padding: 12px;
-  background-color: #007bff;
+  padding: 10px;
+  background-color: var(--primary-color, #007bff);
   color: white;
   border: none;
   border-radius: 4px;
   font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
-.login-form .btn-submit-login:hover {
-  background-color: #0056b3;
+.btn-submit-login:hover {
+  background-color: var(--primary-color-darker, #0056b3);
+}
+.btn-submit-login:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-.login-page-container .register-link {
+
+.switch-form-link {
   text-align: center;
-  margin-top: 20px;
-  font-size: 0.9em;
+  margin-top: 15px;
+  font-size: 0.85em;
 }
 
-.login-page-container .register-link a {
-  color: #007bff;
+.switch-form-link a {
+  color: var(--primary-color, #007bff);
   text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
 }
 
-.login-page-container .register-link a:hover {
+.switch-form-link a:hover {
   text-decoration: underline;
+}
+
+/* Validation Feedback Styles */
+.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.8em;
+  color: var(--danger-color, #dc3545);
+}
+
+.form-control.ng-invalid.ng-touched + .invalid-feedback,
+.form-control.ng-invalid.ng-dirty + .invalid-feedback {
+  display: block;
+}
+.ng-invalid.ng-touched:not(form)  {
+  border-color: var(--danger-color, #dc3545);
+}
+
+/* Spinner for submit button */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: .2em;
+  vertical-align: -0.125em; /* Align with button text */
+  margin-right: 0.5em; /* Space before "Logging in..." text */
+  border: .2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spinner-border .75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
 }

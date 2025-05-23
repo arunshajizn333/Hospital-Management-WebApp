@@ -12,6 +12,75 @@
   z-index: 1000;
 }
 
+
+/* src/app/components/layout/public-navbar/public-navbar.component.css */
+
+/* ... (existing styles for .public-navbar, .navbar-brand, .navbar-links, etc.) ... */
+
+.public-navbar .navbar-auth-links {
+  display: flex; /* Align buttons in a row */
+  align-items: center; /* Vertically align if they have different heights */
+}
+
+/* Styling for individual auth buttons */
+.public-navbar .navbar-auth-links .btn { /* Generic button class if you add it */
+  text-decoration: none;
+  padding: 0.5rem 1rem; /* Adjust padding as needed */
+  border-radius: 5px;  /* Standard border radius */
+  margin-left: 0.8rem; /* Space between buttons */
+  font-weight: 500;
+  font-size: 0.95em; /* Slightly smaller than main nav links perhaps */
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  line-height: normal; /* Ensure text is centered in button */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.public-navbar .navbar-auth-links .btn-login {
+  color: var(--primary-color, #007bff);
+  background-color: var(--white-color, #ffffff);
+  border: 1px solid var(--primary-color, #007bff);
+}
+
+.public-navbar .navbar-auth-links .btn-login:hover {
+  background-color: var(--primary-color, #007bff);
+  color: var(--white-color, #ffffff);
+}
+
+.public-navbar .navbar-auth-links .btn-register {
+  background-color: var(--success-color, #28a745); /* Using success color for register */
+  color: var(--white-color, #ffffff);
+  border: 1px solid var(--success-color, #28a745);
+}
+
+.public-navbar .navbar-auth-links .btn-register:hover {
+  background-color: var(--success-color-darker, #218838); /* Darker shade on hover */
+  border-color: var(--success-color-darker, #218838);
+}
+
+
+/* Responsive adjustments for the auth links within the collapsed mobile menu */
+@media (max-width: 991px) { /* Same breakpoint as your navbar collapse */
+  .public-navbar .navbar-collapse.active .navbar-auth-links { /* Target when menu is open */
+    flex-direction: column; /* Stack buttons vertically */
+    width: 100%;
+    margin-top: 1rem;      /* Space above the auth buttons block */
+    border-top: 1px solid var(--border-color, #eee); /* Separator line */
+    padding-top: 1rem;     /* Padding above the first button */
+  }
+
+  .public-navbar .navbar-collapse.active .navbar-auth-links .btn {
+    width: 100%; /* Make buttons full width in mobile menu */
+    margin-left: 0;  /* Reset left margin */
+    margin-bottom: 0.75rem; /* Space between stacked buttons */
+    text-align: center; /* Center text in buttons */
+  }
+
+  .public-navbar .navbar-collapse.active .navbar-auth-links .btn:last-child {
+    margin-bottom: 0; /* No bottom margin for the last button */
+  }
+}
+
 .public-navbar .navbar-brand a {
   font-weight: bold;
   color: #0056b3;

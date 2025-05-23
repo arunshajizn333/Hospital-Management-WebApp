@@ -1,0 +1,118 @@
+/* src/app/components/auth/doctor-login/doctor-login.component.css */
+.dedicated-login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px); /* Adjust based on navbar/footer height if they are present on this page */
+  padding: 20px;
+  background-color: var(--body-bg-color, #f0f2f5); /* Light page background */
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 420px; /* Standard login form width */
+  padding: 30px 35px;
+  background-color: var(--white-color, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-form-container h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: var(--primary-color-darker, #004085);
+  font-size: 1.8em;
+}
+
+.login-form-container .login-description {
+  text-align: center;
+  margin-bottom: 25px;
+  color: var(--text-color-muted, #6c757d);
+  font-size: 0.95em;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.login-form .form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color, #ced4da);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+.login-form .form-control:focus {
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.login-error-message.alert-danger {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.btn-submit-login {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.05em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-submit-login:hover {
+  background-color: var(--primary-color-darker, #0056b3);
+}
+.btn-submit-login:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.forgot-password-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+.forgot-password-link a {
+  color: var(--primary-color, #007bff);
+  text-decoration: none;
+}
+.forgot-password-link a:hover {
+  text-decoration: underline;
+}
+
+/* Validation Feedback and Spinner (similar to previous login/register forms) */
+.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: var(--danger-color, #dc3545);
+}
+.form-control.ng-invalid.ng-touched + .invalid-feedback,
+.form-control.ng-invalid.ng-dirty + .invalid-feedback {
+  display: block;
+}
+.ng-invalid.ng-touched:not(form)  {
+  border-color: var(--danger-color, #dc3545);
+}
+.spinner-border-sm {
+  width: 1rem; height: 1rem; border-width: .2em; vertical-align: -0.125em;
+  margin-right: 0.5em; border: .2em solid currentColor; border-right-color: transparent;
+  border-radius: 50%; display: inline-block; animation: spinner-border .75s linear infinite;
+}
+@keyframes spinner-border { to { transform: rotate(360deg); } }

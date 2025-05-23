@@ -1,0 +1,119 @@
+/* src/app/modules/patient/components/patient-dashboard-home/patient-dashboard-home.component.css */
+.dashboard-overview {
+  padding: 20px;
+}
+
+.dashboard-header h1 {
+  font-size: 2em;
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 20px;
+}
+
+.quick-actions, .upcoming-appointments {
+  margin-bottom: 40px;
+}
+
+.quick-actions h2, .upcoming-appointments h2 {
+  font-size: 1.5em;
+  color: var(--primary-color, #007bff);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary-color-light, #a0cfff);
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.action-card {
+  background-color: var(--light-bg-color, #f8f9fa);
+  padding: 25px 20px;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-color, #343a40);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 500;
+}
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  color: var(--primary-color, #007bff);
+}
+.action-card .action-icon {
+  font-size: 2.5em; /* Placeholder for icon */
+  margin-bottom: 10px;
+  color: var(--primary-color, #007bff);
+}
+
+
+.appointments-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.appointment-summary-card {
+  background-color: var(--white-color, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-left: 5px solid var(--accent-color, #17a2b8); /* Accent border */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.appointment-summary-card h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: var(--primary-color-darker, #004085);
+  font-size: 1.2em;
+}
+.appointment-summary-card p {
+  margin-bottom: 6px;
+  font-size: 0.95em;
+  color: var(--text-color-muted, #6c757d);
+}
+.appointment-summary-card p strong {
+  color: var(--text-color, #343a40);
+}
+.appointment-summary-card .specialization {
+    font-size: 0.9em;
+    color: var(--secondary-color, #6c757d);
+    font-style: italic;
+    margin-bottom: 10px;
+}
+.status-badge {
+  padding: 0.2em 0.6em;
+  border-radius: 0.25rem;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: var(--white-color, #fff);
+}
+.status-scheduled { background-color: var(--primary-color, #007bff); }
+.status-confirmed { background-color: var(--success-color, #28a745); }
+/* Add more status colors as needed */
+
+.view-all-link {
+    text-align: right;
+    margin-top: 20px;
+}
+.view-all-link a {
+    color: var(--primary-color, #007bff);
+    text-decoration: none;
+    font-weight: bold;
+}
+.view-all-link a:hover {
+    text-decoration: underline;
+}
+
+.loading-indicator p, .no-data-message { /* General messages */
+  color: var(--text-color-muted, #6c757d);
+  padding: 20px 0;
+  text-align: center;
+  font-style: italic;
+}
+.error-message.alert { /* If using .alert class */
+  margin-top: 15px;
+}

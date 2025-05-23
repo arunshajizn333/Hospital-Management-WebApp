@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ModalManagerService } from '../../../core/services/modal-manager.service'; // Import the service
 
 @Component({
   selector: 'app-public-navbar',
@@ -9,7 +10,7 @@ import { Component } from '@angular/core';
 export class PublicNavbarComponent {
   navbarOpen = false;
 
-  constructor() { }
+ constructor(private modalManagerService: ModalManagerService) { }
 
   toggleNavbar() {
     this.navbarOpen = !this.navbarOpen;
@@ -18,4 +19,13 @@ export class PublicNavbarComponent {
   closeNavbar() {
     this.navbarOpen = false;
   }
+  openLogin(): void {
+    this.closeNavbar(); // Close hamburger if open
+    this.modalManagerService.openLoginModal();
+  }
+  openRegister(): void {
+    this.closeNavbar(); // Close hamburger if open
+    this.modalManagerService.openRegisterModal();
+  }
+  
 }

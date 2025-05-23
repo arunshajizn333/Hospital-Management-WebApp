@@ -1,75 +1,175 @@
-/* Basic styles for registration page - similar to login, expand as needed */
 .register-page-container {
   max-width: 500px;
   margin: 50px auto;
-  padding: 30px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  height: 500px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
 }
 
 .register-page-container h2 {
   text-align: center;
-  margin-bottom: 15px;
-  color: #333;
+  font-size: 1.9rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
 }
 
-.register-page-container .register-description {
+.register-description {
   text-align: center;
-  margin-bottom: 25px;
-  color: #666;
-  font-size: 0.95em;
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 10px;
 }
 
-.register-form .form-group {
-  margin-bottom: 20px;
+.register-form {
+  display: flex;
+  flex-direction: column;
 }
 
-  .register-form label {
-display: block;
-margin-bottom: 8px;
-font-weight: bold;
-color: #555;
+.form-group {
+  margin-bottom: 10px;
 }
 
-.register-form input[type="text"],
-.register-form input[type="email"],
-.register-form input[type="password"] {
+label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+/* Input Styling */
+.form-control {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  transition: all 0.2s ease;
   box-sizing: border-box;
 }
 
-.register-form .btn-submit-register {
-  width: 100%;
-  padding: 12px;
-  background-color: #28a745; /* Green for registration */
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.form-control:focus {
+  border-color: #66afe9;
+  box-shadow: 0 0 6px rgba(102, 175, 233, 0.5);
+  outline: none;
 }
 
-.register-form .btn-submit-register:hover {
+/* Validation Feedback */
+.invalid-feedback {
+  display: none;
+  margin-top: 3px;
+  font-size: 0.85rem;
+  color: #dc3545;
+}
+
+.form-control.ng-invalid.ng-touched + .invalid-feedback,
+.form-control.ng-invalid.ng-dirty + .invalid-feedback {
+  display: block;
+}
+
+.ng-invalid.ng-touched:not(form) {
+  border-color: #dc3545;
+}
+
+/* Alert Messages */
+.alert {
+  padding: 0.5rem 1rem;
+  margin-top: 5px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+/* Submit Button */
+.btn-submit-register {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-submit-register:hover:not(:disabled) {
   background-color: #218838;
 }
 
-.register-page-container .login-link {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 0.9em;
+.btn-submit-register:disabled {
+  background-color: #a6d8b7;
+  cursor: not-allowed;
 }
 
-.register-page-container .login-link a {
+/* Spinner */
+.spinner-border-sm {
+  margin-right: 6px;
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.2em;
+  vertical-align: -0.125em;
+  border: 0.2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Login link */
+.login-link-modal {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 20px;
+}
+
+.login-link-modal a {
   color: #007bff;
   text-decoration: none;
 }
 
-.register-page-container .login-link a:hover {
+.login-link-modal a:hover {
   text-decoration: underline;
+}
+
+/* Responsive Layout */
+@media (max-width: 480px) {
+  .register-page-container {
+    padding: 25px 20px;
+    margin: 20px 10px;
+  }
+
+  .register-page-container h2 {
+    font-size: 1.6rem;
+  }
+
+  .btn-submit-register {
+    font-size: 0.95rem;
+  }
+
+  label, .form-control {
+    font-size: 0.9rem;
+  }
 }

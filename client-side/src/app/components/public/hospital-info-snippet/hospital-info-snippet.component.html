@@ -1,0 +1,28 @@
+<section class="hospital-info-snippet"> <h2>About Us</h2>
+  <div *ngIf="isLoadingHospitalInfo" class="loading-indicator">
+    <p>Loading hospital information...</p>
+  </div>
+  <div *ngIf="hospitalInfoError && !isLoadingHospitalInfo" class="error-message alert alert-danger">
+      <p>{{ hospitalInfoError }}</p>
+  </div>
+  <div *ngIf="hospitalInfo && !isLoadingHospitalInfo" class="hospital-info-content">
+      <h3>{{ hospitalInfo.headline }}</h3>
+      <p class="intro-paragraph">{{ hospitalInfo.introductoryParagraph }}</p>
+      <div *ngIf="hospitalInfo.keyStatistics && hospitalInfo.keyStatistics.length > 0" class="key-statistics">
+          <h4>Our Milestones</h4>
+          <div class="statistics-grid">
+              <div *ngFor="let stat of hospitalInfo.keyStatistics" class="stat-item">
+                  <img *ngIf="stat.iconUrl" [src]="stat.iconUrl" [alt]="stat.label" class="stat-icon">
+                  <div *ngIf="!stat.iconUrl" class="stat-icon-placeholder"><span>{{ stat.label.charAt(0) }}</span></div>
+                  <strong>{{ stat.value }}</strong>
+                  <p class="stat-label">{{ stat.label }}</p>
+                  <small class="stat-description">{{ stat.description }}</small>
+              </div>
+          </div>
+      </div>
+      <p class="concluding-statement" *ngIf="hospitalInfo.concludingStatement">{{ hospitalInfo.concludingStatement }}</p>
+  </div>
+  <p *ngIf="!isLoadingHospitalInfo && !hospitalInfoError && !hospitalInfo" class="info-not-available">
+      Hospital information is currently not available.
+  </p>
+  </section>

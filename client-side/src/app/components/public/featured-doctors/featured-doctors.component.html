@@ -1,0 +1,22 @@
+<section class="featured-doctors-preview"> <h2>Meet Our Specialists</h2>
+  <div *ngIf="isLoadingFeaturedDoctors" class="loading-indicator">
+    <p>Loading featured doctors...</p>
+  </div>
+  <div *ngIf="featuredDoctorsError && !isLoadingFeaturedDoctors" class="error-message alert alert-danger">
+    <p>{{ featuredDoctorsError }}</p>
+  </div>
+  <div *ngIf="!isLoadingFeaturedDoctors && !featuredDoctorsError && featuredDoctors.length > 0" class="doctor-list">
+    <div *ngFor="let doctor of featuredDoctors" class="doctor-card">
+      <img *ngIf="doctor.photoUrl" [src]="doctor.photoUrl" [alt]="doctor.name" class="doctor-photo">
+      <img *ngIf="!doctor.photoUrl" src="" [alt]="doctor.name" class="doctor-photo"> <h3>Dr. {{ doctor.name }}</h3>
+      <p class="specialization">{{ doctor.specialization }}</p>
+      <p *ngIf="getDepartmentName(doctor.department)" class="department-name">
+        Department: {{ getDepartmentName(doctor.department) }}
+      </p>
+      <p *ngIf="doctor.publicBio" class="doctor-bio">{{ doctor.publicBio | slice:0:100 }}{{ doctor.publicBio && doctor.publicBio.length > 100 ? '...' : '' }}</p>
+      </div>
+  </div>
+  <p *ngIf="!isLoadingFeaturedDoctors && !featuredDoctorsError && featuredDoctors.length === 0" class="no-data-message">
+    No featured doctors to display at this moment.
+  </p>
+  </section>

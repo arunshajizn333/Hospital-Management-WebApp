@@ -1,6 +1,7 @@
 /* src/app/components/public/home/home.component.css */
 :host {
   display: block;
+  
 }
 
 .home-page {
@@ -9,7 +10,7 @@
   width: 100%;
   padding-top: 0; /* Remove padding if navbar is handled differently or hero has enough */
   padding-bottom: 40px; /* Space at the very bottom of the page content */
-  background-color: var(--body-bg-color, #f0f2f5); /* A very light overall page background, if desired */
+  background-color: #dae2e1; /* A very light overall page background, if desired */
 }
 
 /* Hero Section - NOW WITH THE BACKGROUND IMAGE */
@@ -42,7 +43,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.3); /* Adjust darkness/opacity (e.g., 0.3 for 30% black) */
+  background-color: rgba(103, 131, 156, 0.3); /* Adjust darkness/opacity (e.g., 0.3 for 30% black) */
   z-index: 1; /* Ensure overlay is behind content */
 }
 
@@ -122,121 +123,126 @@
   border-radius: 2px;
 }
 
-
-/* Card Styling (Departments & Doctors) - keep as is, they look good */
+/* Card Styling (for Departments & Featured Doctors) */
 .department-list, .doctor-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
-  margin-top: 20px; /* Space below section H2 */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Slightly smaller min for cards */
+  gap: 25px; /* Consistent gap */
 }
 
 .department-card, .doctor-card {
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   background-color: var(--white-color, #ffffff);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden; /* Keep this for image border radius */
 }
 .department-card:hover, .doctor-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
 }
 
-.department-image, .doctor-photo {
+.department-image {
   width: 100%;
+  height: 180px;
   object-fit: cover;
+  /* border-radius: 8px 8px 0 0; /* If image is direct child and card has padding=0 */
 }
-.department-image { height: 200px; border-radius: 10px 10px 0 0; /* Image fits card radius */}
 .doctor-photo {
-  height: 150px; /* Adjust if preferred */
-  width: 150px;
+  width: 140px; /* Slightly adjusted */
+  height: 140px;
   border-radius: 50%;
+  object-fit: cover;
   margin: 20px auto 15px auto;
-  border: 5px solid var(--white-color, #fff);
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  border: 4px solid var(--light-bg-color, #f8f9fa); /* Light border against card bg */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 /* Content within cards */
+/* Add a wrapper div with class="card-content" inside your .department-card and .doctor-card in HTML */
 .department-card .card-content, .doctor-card .card-content {
   padding: 20px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
-/* You might need to add <div class="card-content">...</div> inside your .department-card and .doctor-card in HTML */
 
-.department-card h3, .doctor-card h3 { /* Style for titles within cards */
+.department-card h3, .doctor-card h3 {
   margin-top: 0;
-  color: var(--primary-color, #007bff);
-  font-size: 1.4rem;
-  margin-bottom: 10px;
+  font-size: 1.3rem;
+  margin-bottom: 8px;
 }
-.doctor-card h3 {
-  color: var(--text-color, #343a40);
-}
+.department-card h3 { color: var(--primary-color, #007bff); }
+.doctor-card h3 { color: var(--text-color, #343a40); }
 
-/* ... (rest of your .department-card and .doctor-card specific styles for p, specialization, etc.) ... */
 .department-card p.department-description, .doctor-card p.doctor-bio {
-  font-size: 0.95em;
+  font-size: 0.9rem;
   color: var(--text-color-muted, #6c757d);
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   flex-grow: 1;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 .doctor-card .specialization {
-  font-size: 1.05em;
+  font-size: 1em;
   color: var(--primary-color, #007bff);
-  margin-bottom: 8px;
-  font-weight: 600;
+  margin-bottom: 6px;
+  font-weight: 500;
 }
 .doctor-card .department-name {
-  font-size: 0.9em;
+  font-size: 0.85em;
   color: var(--text-color-muted, #6c757d);
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 .department-card .services-list {
   padding-left: 0;
   list-style-position: inside;
-  font-size: 0.9em;
+  font-size: 0.85em;
   color: #555;
-  margin-top: auto;
+  margin-top: auto; /* Pushes to bottom if card content is flex column */
   list-style-type: '✓ ';
 }
 .department-card .services-list li {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
-
-/* Hospital Info Snippet & Statistics */
-/* (Keep your existing styles for .hospital-info-content, .key-statistics, .stat-item etc.) */
-/* Ensure they look good on the new section background */
+/* Hospital Info Snippet - already well-styled from your previous CSS, ensure it fits */
 .hospital-info-snippet {
-  background-color: var(--light-bg-color, #f8f9fa); /* Example distinct background for this section */
+  background-color: var(--light-bg-color, #f8f9fa); /* Keep distinct background */
 }
+.hospital-info-content h3 { /* Title for headline */
+  font-size: 1.6rem;
+  text-align: center; /* Center headline if desired */
+}
+.statistics-grid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller min for stats */
+  gap: 20px;
+}
+.stat-item {
+  padding: 20px 15px;
+  border-top: 3px solid var(--accent-color, #17a2b8);
+}
+.stat-item strong { font-size: 2rem; }
+.stat-item .stat-label { font-size: 1rem; }
+.stat-item .stat-description { font-size: 0.8rem; }
 
 
-/* Loading and Error Messages */
+/* Loading, Error, No-Data Messages */
 .loading-indicator p,
 .no-data-message,
 .info-not-available {
   color: var(--text-color-muted, #6c757d);
-  font-size: 1.1em;
+  font-size: 1rem;
   padding: 30px 0;
-  background-color: transparent; /* Ensure no conflict with section background */
+  text-align: center;
 }
-.error-message {
-  color: var(--danger-color, #dc3545);
-  background-color: #f8d7da;
-  border: 1px solid var(--danger-color, #dc3545);
-  padding: 15px;
-  border-radius: 4px;
-  margin: 20px auto; /* Center error message */
-  max-width: 800px; /* Give it a max width */
+.error-message.alert { /* More specific selector if using alert classes */
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
+
+
 
 /* General Responsiveness for Sections & Typography */
 @media (max-width: 767px) {

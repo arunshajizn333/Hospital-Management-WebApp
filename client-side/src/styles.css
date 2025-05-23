@@ -21,6 +21,7 @@
 html {
   box-sizing: border-box;
   scroll-behavior: smooth;
+  
 }
 
 *,
@@ -32,20 +33,21 @@ html {
 body {
   font-family: var(--font-family-sans-serif);
   color: var(--text-color);
-  background-color: var(--white-color);
+  background-color: #dae2e1;   
   margin: 0;
   padding: 0;
   line-height: 1.6;
   font-size: 16px; /* Base font size */
+    
 }
 
 .container {
-  width: 90%;
+  width: 95%;
   max-width: 1200px; /* Max width for larger screens */
   margin-left: auto;
   margin-right: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 /* General Button Styling (can be overridden by component styles) */

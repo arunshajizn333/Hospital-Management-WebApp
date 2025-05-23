@@ -40,7 +40,7 @@ export class PublicDataService {
  
    getHospitalInfo(): Observable<HospitalInfo> {
     const fullUrl = `${this.baseApiUrl}${this.publicApiSegment}/hospital-info`; // USE BACKTICKS HERE
-    console.log('Requesting hospital info from URL (after correction attempt):', fullUrl); // Added a marker
+    console.log('Requesting hospital info from URL :', fullUrl); // Added a marker
     return this.http.get<HospitalInfoApiResponse>(fullUrl)
       .pipe(
         map(response => response.hospitalInfo)

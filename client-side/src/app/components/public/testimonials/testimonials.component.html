@@ -8,7 +8,9 @@
         <p *ngIf="testimonial.location" class="location">{{ testimonial.location }}</p>
       </div>
       <div *ngIf="testimonial.rating && testimonial.rating > 0" class="star-rating">
-        <span *ngFor="let star of getStars(testimonial.rating)" class="star filled">&#9733;</span> <span *ngFor="let star of getEmptyStars(testimonial.rating)" class="star empty">&#9734;</span> </div>
+        <span *ngFor="let star of getStars(testimonial.rating)" class="star filled">&#9733;</span>
+        <span *ngFor="let star of getEmptyStars(testimonial.rating)" class="star empty">&#9734;</span>
+      </div>
     </div>
   </div>
   <p *ngIf="testimonials.length === 0" class="no-testimonials">
