@@ -4,6 +4,7 @@ import { AppointmentService } from '../../../../core/services/appointment.servic
 import { User } from '../../../../shared/models/user.model'; // Adjust path
 import { Appointment } from '../../../../shared/models/appointment.model'; // Adjust path
 import { Doctor } from '../../../../shared/models/doctor.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-patient-dashboard-home',
@@ -20,7 +21,8 @@ export class PatientDashboardHomeComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+     private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -58,5 +60,10 @@ export class PatientDashboardHomeComponent implements OnInit {
       return doctor.specialization;
     }
     return null;
+  }
+
+    // Navigation methods for quick actions
+   navigateTo(path: string): void {
+    this.router.navigate([`/patient/${path}`]); // Navigate relative to patient module base
   }
 }

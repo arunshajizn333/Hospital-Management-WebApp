@@ -22,3 +22,9 @@ export interface AppointmentsApiResponse {
   appointments: Appointment[];
   // Include other pagination fields if your backend sends them for this specific endpoint
 }
+
+// Example in shared/models/appointment.model.ts
+export interface BookAppointmentResponse {
+    message: string;
+    appointment: Appointment;
+}

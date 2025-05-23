@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/public/home/home.component';
 import { DepartmentListPageComponent } from './components/public/department-list-page/department-list-page.component';
 import { DoctorLoginComponent } from './components/auth/doctor-login/doctor-login.component';
+import { AdminLoginComponent } from './components/auth/admin-login/admin-login.component';
 
 // import { NotFoundComponent } from './components/layout/not-found/not-found.component';
 
@@ -42,6 +43,7 @@ const routes: Routes = [
     // AuthGuard and RoleGuard will be applied inside PatientRoutingModule or on this level if preferred
   },
    { path: 'doctor-login', component: DoctorLoginComponent },
+   { path: 'admin-login', component: AdminLoginComponent },
   // {
   //   path: 'doctor', // Base path for doctor dashboard
   //   loadChildren: () => import('./modules/doctor/doctor.module').then(m => m.DoctorModule) // Create DoctorModule later

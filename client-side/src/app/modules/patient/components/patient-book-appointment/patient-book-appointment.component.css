@@ -1,0 +1,96 @@
+/* src/app/modules/patient/components/patient-book-appointment/patient-book-appointment.component.css */
+.book-appointment-container.card {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.card-header h2 {
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 5px;
+}
+.card-header p {
+  font-size: 0.95em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+.booking-step {
+  padding: 20px;
+  margin-bottom: 25px;
+  border: 1px solid var(--border-color, #eee);
+  border-radius: 8px;
+  background-color: var(--white-color, #fff);
+}
+.booking-step:last-of-type {
+  margin-bottom: 0;
+}
+
+.booking-step h3 {
+  font-size: 1.3em;
+  color: var(--primary-color, #007bff);
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+.form-control { /* Ensure defined globally or in shared styles */
+  display: block; width: 100%; padding: .5rem .75rem; font-size: 1rem;
+  border: 1px solid #ced4da; border-radius: .25rem; box-sizing: border-box;
+}
+
+.loading-indicator, .no-data-message {
+  padding: 15px;
+  text-align: center;
+  font-style: italic;
+  color: var(--text-color-muted, #6c757d);
+}
+.alert { /* Defined globally or shared */
+  margin-top: 10px;
+}
+
+.slots-grid {
+    margin-top: 15px;
+}
+.slots-grid h4 {
+    font-size: 1em;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+.slot-button {
+    background-color: var(--light-bg-color, #f8f9fa);
+    border: 1px solid var(--border-color, #dee2e6);
+    color: var(--primary-color, #007bff);
+    margin: 5px;
+    padding: 8px 12px;
+    transition: all 0.2s ease;
+}
+.slot-button:hover {
+    background-color: var(--primary-color-light, #e0efff);
+    border-color: var(--primary-color, #007bff);
+}
+.slot-button.selected {
+    background-color: var(--primary-color, #007bff);
+    color: var(--white-color, #fff);
+    border-color: var(--primary-color-darker, #0056b3);
+    font-weight: bold;
+}
+.summary-selection {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--light-bg-color, #e9ecef);
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+.btn-submit-booking {
+  font-size: 1.1em;
+  padding: 10px 20px;
+}
+.spinner-border-sm { /* Define globally or here */ }

@@ -2,54 +2,98 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment'; // Adjust path if needed
-// Assuming you have an Appointment model/interface for the frontend
-import { Appointment, AppointmentsApiResponse } from '../../shared/models/appointment.model'; // Adjust path if needed
+import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Appointment, AppointmentsApiResponse, BookAppointmentResponse } from '../../shared/models/appointment.model'; // Adjust path
+import { Doctor } from '../../shared/models/doctor.model'; // For doctor details if needed
+
+// Interface for data needed to book an appointment
+export interface BookAppointmentData {
+  doctorId: string;
+  appointmentDate: string; // Should be in YYYY-MM-DD format for backend
+  appointmentTime: string; // e.g., "10:00"
+  reason?: string;
+  patientNotes?: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
-  private apiUrl = `${environment.apiBaseUrl}/appointments`; // Base URL for appointment endpoints
+  private apiUrl = `${environment.apiBaseUrl}/appointments`;
 
   constructor(private http: HttpClient) { }
 
   /**
    * Gets the current authenticated patient's appointments.
-   * Allows filtering by status and sorting.
-   * @param status Optional status to filter by (e.g., 'Scheduled', 'Completed')
-   * @param sort Optional sort order (e.g., 'upcoming', 'past')
-   * @param limit Optional limit for the number of appointments to fetch
    */
   getMyPatientAppointments(status?: string, sort?: string, limit?: number): Observable<Appointment[]> {
     let params = new HttpParams();
-    if (status) {
-      params = params.append('status', status);
-    }
-    if (sort) {
-      params = params.append('sort', sort);
-    }
-    if (limit !== undefined) {
-      params = params.append('limit', limit.toString());
-    }
+    if (status) params = params.append('status', status);
+    if (sort) params = params.append('sort', sort);
+    if (limit !== undefined) params = params.append('limit', limit.toString());
 
-    // The backend route for patient's own appointments is GET /api/appointments/my
     const requestUrl = `${this.apiUrl}/my`;
-    console.log(`Requesting patient appointments from: ${requestUrl} with params:`, params.toString());
-
     return this.http.get<AppointmentsApiResponse>(requestUrl, { params })
       .pipe(
-        map(response => response.appointments), // Assuming backend returns { appointments: [...] }
+        map(response => response.appointments || []),
         catchError(this.handleError)
       );
   }
 
-  // Add other appointment-related methods here later:
-  // bookAppointment(appointmentData: any): Observable<Appointment> { ... }
-  // updatePatientAppointment(appointmentId: string, updateData: any): Observable<Appointment> { ... }
-  // cancelPatientAppointment(appointmentId: string): Observable<any> { ... }
-  // getAppointmentById(appointmentId: string): Observable<Appointment> { ... }
+  /**
+   * Allows a patient to cancel their own upcoming appointment.
+   */
+  cancelPatientAppointment(appointmentId: string): Observable<any> {
+    const requestUrl = `${this.apiUrl}/my/${appointmentId}`;
+    return this.http.delete<any>(requestUrl)
+      .pipe(
+        tap(response => console.log('Cancellation response:', response)),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Books a new appointment for the authenticated patient.
+   * @param appointmentData - Data needed to book the appointment.
+   */
+bookAppointment(appointmentData: BookAppointmentData): Observable<BookAppointmentResponse> { // Return full response
+  const requestUrl = `${this.apiUrl}`;
+  return this.http.post<BookAppointmentResponse>(requestUrl, appointmentData)
+    .pipe(
+      tap(response => console.log('Appointment booked successfully:', response)),
+      catchError(this.handleError)
+    );
+}
+
+  /**
+   * (Future) Allows a patient to update/reschedule their own appointment.
+   * @param appointmentId The ID of the appointment to update.
+   * @param updateData The data to update.
+   */
+  // updateMyAppointment(appointmentId: string, updateData: Partial<BookAppointmentData>): Observable<Appointment> {
+  //   const requestUrl = `${this.apiUrl}/my/${appointmentId}`; // Backend: PUT /api/appointments/my/:appointmentId
+  //   return this.http.put<Appointment>(requestUrl, updateData)
+  //     .pipe(
+  //       tap(updatedAppointment => console.log('Appointment updated by patient:', updatedAppointment)),
+  //       catchError(this.handleError)
+  //     );
+  // }
+
+
+  // Helper to get public doctor details (might move to a DoctorService later)
+  getPublicDoctorProfile(doctorId: string): Observable<Doctor> {
+      const requestUrl = `${environment.apiBaseUrl}/public/doctors/${doctorId}`;
+      return this.http.get<{doctor: Doctor}>(requestUrl).pipe(map(res => res.doctor), catchError(this.handleError));
+  }
+
+  // Helper to get available slots (might move to a DoctorService later)
+  getDoctorAvailableSlots(doctorId: string, date: string): Observable<string[]> {
+      const requestUrl = `${environment.apiBaseUrl}/doctors/${doctorId}/available-slots`;
+      let params = new HttpParams().set('date', date);
+      return this.http.get<{availableSlots: string[]}>(requestUrl, { params }).pipe(map(res => res.availableSlots), catchError(this.handleError));
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred with an appointment operation!';
@@ -64,7 +108,7 @@ export class AppointmentService {
         errorMessage = `Server error: ${error.status} - ${error.statusText || 'Unknown server error'}`;
       }
     }
-    console.error(errorMessage, error);
+    console.error("AppointmentService Error:", errorMessage, error);
     return throwError(() => new Error(errorMessage));
   }
 }

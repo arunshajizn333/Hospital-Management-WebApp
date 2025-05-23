@@ -1,2 +1,43 @@
-<h2>My Medical Records</h2>
-<p>Access your medical history, lab results, and prescriptions.</p>
+<div class="medical-records-page">
+  <header class="page-header">
+    <h2>My Medical Records</h2>
+    <p *ngIf="patientName">Viewing records for {{ patientName }}.</p>
+    <p *ngIf="!patientName">Review your medical history, diagnoses, and treatments.</p>
+  </header>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Loading your medical records...</p>
+    </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="alert alert-danger error-summary">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && medicalRecords.length > 0" class="records-list">
+    <div *ngFor="let record of medicalRecords" class="record-card">
+      <div class="record-header">
+        <h3>{{ record.description || 'Medical Entry' }}</h3>
+        <p class="record-date">Date: {{ record.date | date:'fullDate' }} ({{ record.date | date:'shortTime' }})</p>
+      </div>
+      <div class="record-body">
+        <div *ngIf="record.diagnosis" class="record-detail">
+          <strong>Diagnosis:</strong>
+          <p>{{ record.diagnosis }}</p>
+        </div>
+        <div *ngIf="record.treatment" class="record-detail">
+          <strong>Treatment/Prescription:</strong>
+          <p>{{ record.treatment }}</p>
+        </div>
+        <div *ngIf="record.doctorAttended" class="record-detail">
+          <strong>Attending Physician:</strong>
+          <p>Dr. {{ getAttendingDoctorName(record.doctorAttended) }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && medicalRecords.length === 0" class="no-data-message">
+    <p><i class="fas fa-file-medical"></i> You have no medical records available at this time.</p>
+    <p>Your medical records will appear here after your consultations with our doctors.</p>
+  </div>
+</div>

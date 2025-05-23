@@ -1,0 +1,32 @@
+<div class="dedicated-login-page admin-login-page"> <div class="login-form-container admin-login-container">
+    <h2>Admin Portal Login</h2>
+    <p class="login-description">Access the hospital administration panel.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="admin-email">Email address:</label>
+        <input type="email" id="admin-email" formControlName="email" class="form-control" placeholder="Enter your admin email">
+        <div *ngIf="f['email'].touched && f['email'].errors" class="invalid-feedback">
+          <div *ngIf="f['email'].errors?.['required']">Email is required.</div>
+          <div *ngIf="f['email'].errors?.['email']">Please enter a valid email address.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="admin-password">Password:</label>
+        <input type="password" id="admin-password" formControlName="password" class="form-control" placeholder="Enter your password">
+        <div *ngIf="f['password'].touched && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors?.['required']">Password is required.</div>
+        </div>
+      </div>
+
+      <div *ngIf="loginError" class="alert alert-danger login-error-message">
+        {{ loginError }}
+      </div>
+
+      <button type="submit" [disabled]="isSubmitting || loginForm.invalid" class="btn-submit-login admin-submit-btn"> <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        {{ isSubmitting ? 'Logging in...' : 'Login as Admin' }}
+      </button>
+    </form>
+    </div>
+</div>

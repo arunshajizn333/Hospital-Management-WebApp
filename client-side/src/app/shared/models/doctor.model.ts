@@ -16,7 +16,6 @@ export interface DoctorsApiResponse {
     message: string;
     count: number;
     doctors: Doctor[];
-    // Add pagination fields if your featured doctors endpoint or general list uses them
     total?: number;
     currentPage?: number;
     totalPages?: number;

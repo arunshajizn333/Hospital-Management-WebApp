@@ -1,2 +1,94 @@
-<h2>My Profile</h2>
-<p>View and update your personal and contact information here.</p>
+<div class="patient-profile-page">
+  <header class="profile-header">
+    <h2>My Profile</h2>
+    <p>View and update your personal and contact information below.</p>
+  </header>
+
+  <div *ngIf="isLoading && !patientProfile" class="loading-indicator">
+    <p>Loading your profile details...</p>
+    </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="alert alert-danger error-summary">
+    <p><strong>Error:</strong> {{ errorMessage }}</p>
+  </div>
+
+  <form *ngIf="profileForm && !isLoading" [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form card">
+    <div class="card-body">
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <fieldset>
+        <legend>Personal Information</legend>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="profile-name">Full Name:</label>
+            <input type="text" id="profile-name" formControlName="name" class="form-control" placeholder="Your full name">
+            <div *ngIf="f['name'].touched && f['name'].errors" class="invalid-feedback">
+              <div *ngIf="f['name'].errors?.['required']">Full name is required.</div>
+              <div *ngIf="f['name'].errors?.['minlength']">Name must be at least 2 characters.</div>
+              <div *ngIf="f['name'].errors?.['maxlength']">Name cannot exceed 100 characters.</div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="profile-email">Email Address:</label>
+            <input type="email" id="profile-email" formControlName="email" class="form-control" readonly
+                   title="Email cannot be changed.">
+            <small class="form-text text-muted">Your email address is used for login and cannot be changed here.</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="profile-dob">Date of Birth:</label>
+            <input type="date" id="profile-dob" formControlName="dateOfBirth" class="form-control">
+            </div>
+
+          <div class="form-group col-md-6">
+            <label for="profile-gender">Gender:</label>
+            <select id="profile-gender" formControlName="gender" class="form-control">
+              <option value="" disabled selected>Select your gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Contact Information</legend>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="profile-phone">Phone Number:</label>
+            <input type="tel" id="profile-phone" formControlName="contact_phone" class="form-control" placeholder="e.g., (555) 123-4567">
+            <div *ngIf="f['contact_phone'].touched && f['contact_phone'].errors?.['pattern']" class="invalid-feedback">
+              Please enter a valid phone number.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="profile-address">Address:</label>
+          <textarea id="profile-address" formControlName="contact_address" class="form-control" rows="3" placeholder="Enter your full address"></textarea>
+          <div *ngIf="f['contact_address'].touched && f['contact_address'].errors?.['maxlength']" class="invalid-feedback">
+            Address cannot exceed 250 characters.
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="isSubmitting || profileForm.invalid || !profileForm.dirty" class="btn btn-primary btn-submit-profile">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          {{ isSubmitting ? 'Saving Changes...' : 'Save Profile Changes' }}
+        </button>
+      </div>
+    </div> </form>
+
+  <div class="mt-4 text-center change-password-link">
+    <a routerLink="/patient/change-password" class="btn btn-outline-secondary">
+        <i class="fas fa-key"></i> Change Password
+    </a>
+    </div>
+</div>

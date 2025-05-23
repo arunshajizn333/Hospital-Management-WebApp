@@ -12,15 +12,28 @@ const mongoose = require('mongoose'); // Used for ObjectId validation
  */
 exports.getMyPatientProfile = async (req, res) => {
   try {
-    // req.user.id is populated by the 'protect' middleware
-    const patient = await Patient.findById(req.user.id).select('-password'); // Exclude password from response
+    // req.user.id is populated by the 'protect' middleware from the authenticated patient's token
+    const patientId = req.user.id;
+
+    const patient = await Patient.findById(patientId)
+      .select('-password') // Exclude password from the main patient document response
+      .populate({
+        path: 'medicalHistory.doctorAttended', // Path to the nested field in the array
+        select: 'name specialization' // Specify which fields of the Doctor to populate
+        // model: 'Doctor' // Mongoose can usually infer this from the schema ref, but can be explicit
+      });
 
     if (!patient) {
       return res.status(404).json({ message: 'Patient profile not found.' });
     }
+
+    // The patient object now has medicalHistory where each entry's doctorAttended
+    // field (if it had an ID) is replaced with the doctor's name and specialization.
     res.status(200).json(patient);
+
   } catch (error) {
-    console.error('Error fetching patient profile:', error.message);
+    console.error('Error fetching patient profile with medical history:', error.message);
+    // Consider more specific error handling if needed (e.g., for population errors)
     res.status(500).json({ message: 'Server Error while fetching patient profile.' });
   }
 };

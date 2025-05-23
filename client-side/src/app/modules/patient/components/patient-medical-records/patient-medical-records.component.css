@@ -1,0 +1,119 @@
+/* src/app/modules/patient/components/patient-medical-records/patient-medical-records.component.css */
+.medical-records-page {
+  padding: 20px 25px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+.page-header h2 {
+  font-size: 2em;
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 5px;
+}
+.page-header p {
+  font-size: 1em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+.loading-indicator p, .no-data-message { /* Shared styles */
+  color: var(--text-color-muted, #6c757d);
+  padding: 30px 0;
+  text-align: center;
+  font-style: italic;
+}
+.no-data-message i {
+    font-size: 1.5em;
+    margin-right: 8px;
+    vertical-align: middle;
+    color: var(--primary-color, #007bff);
+}
+.no-data-message p:last-of-type {
+    font-size: 0.9em;
+}
+
+
+.error-summary.alert { /* If using .alert class globally */
+  margin-top: 15px;
+  margin-bottom: 20px;
+  /* Ensure global alert styles are defined */
+}
+
+.records-list {
+  display: grid;
+  grid-template-columns: 1fr; /* Single column list */
+  gap: 20px;
+}
+
+.record-card {
+  background-color: var(--white-color, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.06);
+  overflow: hidden; /* If using borders that might interact with child radius */
+}
+
+.record-card .record-header {
+  background-color: var(--light-bg-color, #f8f9fa);
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+}
+
+.record-card .record-header h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.25em;
+  color: var(--primary-color, #007bff);
+  font-weight: 600;
+}
+
+.record-card .record-header .record-date {
+  font-size: 0.85em;
+  color: var(--text-color-muted, #6c757d);
+  margin: 0;
+}
+
+.record-card .record-body {
+  padding: 20px;
+}
+
+.record-card .record-detail {
+  margin-bottom: 15px;
+}
+.record-card .record-detail:last-child {
+  margin-bottom: 0;
+}
+
+.record-card .record-detail strong {
+  display: block;
+  font-size: 0.9em;
+  color: var(--text-color, #343a40);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.record-card .record-detail p {
+  margin: 0;
+  font-size: 0.95em;
+  color: #454545;
+  line-height: 1.5;
+  white-space: pre-wrap; /* Preserve line breaks from backend notes */
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .medical-records-page {
+    padding: 15px;
+  }
+  .page-header h2 {
+    font-size: 1.7em;
+  }
+  .record-card .record-header h3 {
+    font-size: 1.15em;
+  }
+  .record-card .record-body, .record-card .record-header {
+    padding: 15px;
+  }
+}

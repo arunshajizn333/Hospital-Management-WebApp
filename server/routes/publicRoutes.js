@@ -8,7 +8,7 @@ const publicController = require('../controllers/publicController');
  * @desc    Get a list of all active medical departments
  * @access  Public
  */
-router.get('/departments', publicController.getAllDepartments);
+router.get('/', publicController.getAllDepartments);
 
 // --- Public Doctor Information ---
 /**

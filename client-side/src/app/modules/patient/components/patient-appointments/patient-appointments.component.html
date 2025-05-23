@@ -1,2 +1,72 @@
-<h2>My Appointments</h2>
-<p>View your upcoming and past appointments. You can also manage them here.</p>
+<div class="patient-appointments-page">
+  <header class="page-header">
+    <h2>My Appointments</h2>
+    <p>View and manage your upcoming and past appointments with Sacred Mission Hospital.</p>
+  </header>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Loading your appointments...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="alert alert-danger error-summary">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="cancelSuccessMessage" class="alert alert-success">
+    {{ cancelSuccessMessage }}
+  </div>
+  <div *ngIf="cancelErrorMessage" class="alert alert-danger">
+    {{ cancelErrorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage">
+    <section class="appointments-section upcoming-section">
+      <h3><i class="fas fa-calendar-alt"></i> Upcoming Appointments</h3>
+      <div *ngIf="upcomingAppointments.length > 0" class="appointments-grid">
+        <div *ngFor="let apt of upcomingAppointments" class="appointment-card upcoming">
+          <div class="card-header">
+            <h4> {{ getDoctorName(apt.doctor) }}</h4>
+            <span class="specialization" *ngIf="getDoctorSpecialization(apt.doctor)">{{ getDoctorSpecialization(apt.doctor) }}</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Date:</strong> {{ apt.appointmentDate | date:'fullDate' }} ({{ apt.appointmentDate | date:'EEEE' }})</p>
+            <p><strong>Time:</strong> {{ apt.appointmentTime }}</p> <p><strong>Reason:</strong> {{ apt.reason || 'Not specified' }}</p>
+          </div>
+          <div class="card-footer">
+            <span class="status-badge status-{{apt.status | lowercase}}">{{ apt.status }}</span>
+            <button *ngIf="isCancellable(apt)" (click)="cancelAppointment(apt._id)" class="btn btn-danger btn-sm btn-cancel">
+              Cancel Appointment
+            </button>
+            </div>
+        </div>
+      </div>
+      <p *ngIf="upcomingAppointments.length === 0" class="no-data-message">
+        You have no upcoming appointments. <a routerLink="../book-appointment">Book one now!</a>
+      </p>
+    </section>
+
+    <section class="appointments-section past-section">
+      <h3><i class="fas fa-history"></i> Past Appointments</h3>
+      <div *ngIf="pastAppointments.length > 0" class="appointments-grid">
+        <div *ngFor="let apt of pastAppointments" class="appointment-card past status-{{apt.status | lowercase}}">
+          <div class="card-header">
+            <h4>{{ getDoctorName(apt.doctor) }}</h4>
+            <span class="specialization" *ngIf="getDoctorSpecialization(apt.doctor)">{{ getDoctorSpecialization(apt.doctor) }}</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Date:</strong> {{ apt.appointmentDate | date:'fullDate' }}</p>
+            <p><strong>Time:</strong> {{ apt.appointmentTime }}</p>
+            <p><strong>Reason:</strong> {{ apt.reason || 'Not specified' }}</p>
+            <p *ngIf="apt.doctorNotes"><strong>Doctor's Notes:</strong> {{ apt.doctorNotes }}</p>
+          </div>
+          <div class="card-footer">
+            <span class="status-badge status-{{apt.status | lowercase}}">{{ apt.status }}</span>
+            </div>
+        </div>
+      </div>
+      <p *ngIf="pastAppointments.length === 0" class="no-data-message">
+        You have no past appointment records.
+      </p>
+    </section>
+  </div>
+</div>

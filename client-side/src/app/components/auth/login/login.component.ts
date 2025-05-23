@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
       next: (user: User) => {
         this.isSubmitting = false;
         this.loginForm.reset();
+        
         this.modalManagerService.closeLoginModal(); // Close the modal on successful login
        this.router.navigate(['/patient']); // Navigate to the patient dashboard
       },

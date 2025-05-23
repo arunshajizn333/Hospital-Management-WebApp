@@ -6,14 +6,13 @@ import { LoginCredentials } from '../../../shared/models/auth.model'; // Adjust 
 import { User } from '../../../shared/models/user.model'; // Adjust path if needed
 
 
-
 @Component({
-  selector: 'app-doctor-login',
+  selector: 'app-admin-login',
   standalone: false,
-  templateUrl: './doctor-login.component.html',
-  styleUrl: './doctor-login.component.css'
+  templateUrl: './admin-login.component.html',
+  styleUrl: './admin-login.component.css'
 })
-export class DoctorLoginComponent implements OnInit {
+export class AdminLoginComponent implements OnInit {
   loginForm!: FormGroup;
   isSubmitting = false;
   loginError: string | null = null;
@@ -27,10 +26,11 @@ export class DoctorLoginComponent implements OnInit {
   ngOnInit(): void {
     const currentUser = this.authService.currentUserValue;
     if (currentUser) {
-      if (currentUser.role === 'doctor') {
-        this.router.navigate(['/doctor/dashboard']); // Or your actual doctor dashboard route
+      if (currentUser.role === 'admin') {
+        this.router.navigate(['/admin/dashboard']); // Or your actual admin dashboard route
       } else {
-        this.router.navigate(['/doctor-login']); // Redirect other logged-in users to home
+        // Redirect other logged-in users to home or their respective dashboards
+        this.router.navigate(['/admin-login']);
       }
     }
 
@@ -52,18 +52,18 @@ export class DoctorLoginComponent implements OnInit {
     this.isSubmitting = true;
     const credentials: LoginCredentials = this.loginForm.value;
 
-    this.authService.login(credentials, 'doctor').subscribe({
+    this.authService.login(credentials, 'admin').subscribe({
       next: (user: User) => {
         this.isSubmitting = false;
-        if (user.role === 'doctor') {
-          this.router.navigate(['/doctor/dashboard']); // Navigate to doctor dashboard
+        if (user.role === 'admin') {
+          this.router.navigate(['/admin/dashboard']); // Navigate to admin dashboard
         } else {
-          this.loginError = 'Login successful, but role is not Doctor.';
+          this.loginError = 'Login successful, but role is not Admin.';
           this.authService.logout(); // Log out if role mismatch
         }
       },
       error: (error) => {
-        console.error('Doctor login failed:', error);
+        console.error('Admin login failed:', error);
         this.loginError = error.message || 'Login failed. Please check your credentials.';
         this.isSubmitting = false;
       }
