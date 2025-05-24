@@ -1,0 +1,175 @@
+<div class="availability-management-container card">
+  <div class="card-header">
+    <h2>Manage My Availability</h2>
+    <p>Define your weekly recurring schedule and set specific date overrides for exceptions (e.g., holidays, special hours).</p>
+  </div>
+
+  <div class="card-body">
+    <div *ngIf="isLoading" class="loading-indicator">
+      <p>Loading your availability settings...</p>
+      </div>
+
+    <div *ngIf="errorMessage && !isLoading" class="alert alert-danger error-summary">
+      <p><strong>Error:</strong> {{ errorMessage }}</p>
+    </div>
+    <div *ngIf="successMessage && !isSubmitting" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <form *ngIf="availabilityForm && !isLoading" [formGroup]="availabilityForm" (ngSubmit)="onSubmit()">
+
+      <fieldset class="mb-4">
+        <legend>Weekly Recurring Schedule</legend>
+        <div formArrayName="availabilitySchedule" class="weekly-schedule-grid">
+          <div *ngFor="let dayControl of availabilitySchedule.controls; let i = index" [formGroupName]="i" class="day-schedule-card">
+            <h4>{{ daysOfWeek[i] }}</h4>
+
+            <div class="form-check mb-2">
+              <input type="checkbox" [id]="'isAvailableDay' + i" formControlName="isAvailable" class="form-check-input">
+              <label [for]="'isAvailableDay' + i" class="form-check-label">Available on this day</label>
+            </div>
+
+            <ng-container *ngIf="dayControl.get('isAvailable')?.value">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label [for]="'startTimeDay' + i">Start Time:</label>
+                  <input type="time" [id]="'startTimeDay' + i" formControlName="startTime" class="form-control">
+                  <div *ngIf="dayControl.get('startTime')?.touched && dayControl.get('startTime')?.errors" class="invalid-feedback">
+                    <div *ngIf="dayControl.get('startTime')?.errors?.['requiredIfAvailable']">Start time is required.</div>
+                    <div *ngIf="dayControl.get('startTime')?.errors?.['invalidTimeFormat']">Invalid time (HH:MM).</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label [for]="'endTimeDay' + i">End Time:</label>
+                  <input type="time" [id]="'endTimeDay' + i" formControlName="endTime" class="form-control">
+                  <div *ngIf="dayControl.get('endTime')?.touched && dayControl.get('endTime')?.errors" class="invalid-feedback">
+                    <div *ngIf="dayControl.get('endTime')?.errors?.['requiredIfAvailable']">End time is required.</div>
+                    <div *ngIf="dayControl.get('endTime')?.errors?.['invalidTimeFormat']">Invalid time (HH:MM).</div>
+                    <div *ngIf="dayControl.get('endTime')?.errors?.['endTimeBeforeStartTime']">End time must be after start time.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label [for]="'slotDurationDay' + i">Slot Duration (minutes):</label>
+                <input type="number" [id]="'slotDurationDay' + i" formControlName="slotDurationMinutes" class="form-control" min="1">
+                <div *ngIf="dayControl.get('slotDurationMinutes')?.touched && dayControl.get('slotDurationMinutes')?.errors" class="invalid-feedback">
+                    <div *ngIf="dayControl.get('slotDurationMinutes')?.errors?.['requiredIfAvailable']">Slot duration is required.</div>
+                    <div *ngIf="dayControl.get('slotDurationMinutes')?.errors?.['min']">Must be at least 1 minute.</div>
+                </div>
+              </div>
+
+              <div class="break-times-section mt-2">
+                <h5>Break Times:</h5>
+                <div formArrayName="breakTimes">
+                  <div *ngFor="let breakControl of getBreakTimes(dayControl).controls; let j = index" [formGroupName]="j" class="break-time-item form-row align-items-end mb-2">
+                    <div class="form-group col">
+                      <label [for]="'day' + i + 'breakStart' + j">Break Start:</label>
+                      <input type="time" [id]="'day' + i + 'breakStart' + j" formControlName="breakStart" class="form-control form-control-sm">
+                    </div>
+                    <div class="form-group col">
+                      <label [for]="'day' + i + 'breakEnd' + j">Break End:</label>
+                      <input type="time" [id]="'day' + i + 'breakEnd' + j" formControlName="breakEnd" class="form-control form-control-sm">
+                    </div>
+                    <div class="form-group col-auto">
+                      <button type="button" (click)="removeBreakTime(dayControl, j)" class="btn btn-danger btn-sm">&times;</button>
+                    </div>
+                    <div *ngIf="breakControl.get('breakEnd')?.errors?.['endTimeBeforeStartTime'] && (breakControl.get('breakEnd')?.touched || breakControl.get('breakStart')?.touched)" class="col-12 invalid-feedback d-block">
+                        Break end time must be after break start time.
+                    </div>
+                  </div>
+                </div>
+                <button type="button" (click)="addBreakTime(dayControl)" class="btn btn-outline-secondary btn-sm">+ Add Break</button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="mt-4">
+        <legend>Date-Specific Overrides/Days Off</legend>
+        <div formArrayName="availabilityOverrides" class="overrides-list">
+          <div *ngFor="let overrideControl of availabilityOverrides.controls; let k = index" [formGroupName]="k" class="override-card card mb-3">
+            <div class="card-body">
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-4">
+                  <label [for]="'overrideDate' + k">Date:</label>
+                  <input type="date" [id]="'overrideDate' + k" formControlName="date" class="form-control">
+                  <div *ngIf="overrideControl.get('date')?.touched && overrideControl.get('date')?.errors?.['required']" class="invalid-feedback">Date is required.</div>
+                </div>
+                <div class="form-group col-md-3 mt-md-4 pt-md-2">
+                  <div class="form-check">
+                    <input type="checkbox" [id]="'isAvailableOverride' + k" formControlName="isAvailable" class="form-check-input">
+                    <label [for]="'isAvailableOverride' + k" class="form-check-label">Available on this date</label>
+                  </div>
+                </div>
+                <div class="form-group col-md-auto mt-md-4 pt-md-2">
+                  <button type="button" (click)="removeDateOverride(k)" class="btn btn-danger btn-sm">Remove Override</button>
+                </div>
+              </div>
+
+              <ng-container *ngIf="overrideControl.get('isAvailable')?.value">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label [for]="'startTimeOverride' + k">Start Time:</label>
+                    <input type="time" [id]="'startTimeOverride' + k" formControlName="startTime" class="form-control">
+                     <div *ngIf="overrideControl.get('startTime')?.touched && overrideControl.get('startTime')?.errors" class="invalid-feedback">
+                        <div *ngIf="overrideControl.get('startTime')?.errors?.['requiredIfAvailable']">Start time is required.</div>
+                        <div *ngIf="overrideControl.get('startTime')?.errors?.['invalidTimeFormat']">Invalid time (HH:MM).</div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label [for]="'endTimeOverride' + k">End Time:</label>
+                    <input type="time" [id]="'endTimeOverride' + k" formControlName="endTime" class="form-control">
+                     <div *ngIf="overrideControl.get('endTime')?.touched && overrideControl.get('endTime')?.errors" class="invalid-feedback">
+                        <div *ngIf="overrideControl.get('endTime')?.errors?.['requiredIfAvailable']">End time is required.</div>
+                        <div *ngIf="overrideControl.get('endTime')?.errors?.['invalidTimeFormat']">Invalid time (HH:MM).</div>
+                        <div *ngIf="overrideControl.get('endTime')?.errors?.['endTimeBeforeStartTime']">End time must be after start time.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label [for]="'slotDurationOverride' + k">Slot Duration (minutes):</label>
+                  <input type="number" [id]="'slotDurationOverride' + k" formControlName="slotDurationMinutes" class="form-control" min="1">
+                  <div *ngIf="overrideControl.get('slotDurationMinutes')?.touched && overrideControl.get('slotDurationMinutes')?.errors" class="invalid-feedback">
+                    <div *ngIf="overrideControl.get('slotDurationMinutes')?.errors?.['requiredIfAvailable']">Slot duration is required.</div>
+                    <div *ngIf="overrideControl.get('slotDurationMinutes')?.errors?.['min']">Must be at least 1 minute.</div>
+                  </div>
+                </div>
+
+                <div class="break-times-section mt-2">
+                  <h5>Break Times:</h5>
+                  <div formArrayName="breakTimes">
+                    <div *ngFor="let breakControlOverride of getBreakTimes(overrideControl).controls; let l = index" [formGroupName]="l" class="break-time-item form-row align-items-end mb-2">
+                      <div class="form-group col">
+                        <label [for]="'override' + k + 'breakStart' + l">Break Start:</label>
+                        <input type="time" [id]="'override' + k + 'breakStart' + l" formControlName="breakStart" class="form-control form-control-sm">
+                      </div>
+                      <div class="form-group col">
+                        <label [for]="'override' + k + 'breakEnd' + l">Break End:</label>
+                        <input type="time" [id]="'override' + k + 'breakEnd' + l" formControlName="breakEnd" class="form-control form-control-sm">
+                      </div>
+                      <div class="form-group col-auto">
+                        <button type="button" (click)="removeBreakTime(overrideControl, l)" class="btn btn-danger btn-sm">&times;</button>
+                      </div>
+                       <div *ngIf="breakControlOverride.get('breakEnd')?.errors?.['endTimeBeforeStartTime'] && (breakControlOverride.get('breakEnd')?.touched || breakControlOverride.get('breakStart')?.touched)" class="col-12 invalid-feedback d-block">
+                            Break end time must be after break start time.
+                        </div>
+                    </div>
+                  </div>
+                  <button type="button" (click)="addBreakTime(overrideControl)" class="btn btn-outline-secondary btn-sm">+ Add Break</button>
+                </div>
+              </ng-container>
+            </div> </div> </div>
+        <button type="button" (click)="addDateOverride()" class="btn btn-success mt-2">+ Add Date Override</button>
+      </fieldset>
+
+      <hr class="my-4">
+
+      <div class="form-actions text-right">
+        <button type="submit" [disabled]="isSubmitting || availabilityForm.invalid || !availabilityForm.dirty" class="btn btn-primary btn-lg">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          {{ isSubmitting ? 'Saving...' : 'Save Availability Changes' }}
+        </button>
+      </div>
+    </form>
+  </div> </div>

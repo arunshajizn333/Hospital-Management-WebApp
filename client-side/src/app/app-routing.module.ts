@@ -44,6 +44,7 @@ const routes: Routes = [
   },
    { path: 'doctor-login', component: DoctorLoginComponent },
    { path: 'admin-login', component: AdminLoginComponent },
+  { path: 'doctor', loadChildren: () => import('./modules/doctor/doctor.module').then(m => m.DoctorModule) },
   // {
   //   path: 'doctor', // Base path for doctor dashboard
   //   loadChildren: () => import('./modules/doctor/doctor.module').then(m => m.DoctorModule) // Create DoctorModule later

@@ -1,0 +1,216 @@
+/* src/app/modules/doctor/components/doctor-availability-management/doctor-availability-management.component.css */
+:host {
+  display: block;
+}
+
+.availability-management-container.card {
+  margin: 20px auto; /* Assuming it's within the doctor dashboard layout */
+  max-width: 900px; /* Adjust as needed */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card-header { /* Assuming you have this structure from previous examples */
+  background-color: var(--light-bg-color, #f8f9fa);
+  padding: 15px 25px;
+  border-bottom: 1px solid var(--border-color, #dee2e6);
+}
+.card-header h2 {
+  margin: 0;
+  font-size: 1.6em;
+  color: var(--primary-color-darker, #004085);
+}
+.card-header p {
+  margin: 5px 0 0 0;
+  font-size: 0.9em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+.card-body {
+  padding: 25px;
+}
+
+/* Fieldset and Legend Styling */
+fieldset {
+  border: 1px solid var(--border-color, #ddd);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+fieldset legend {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: var(--primary-color, #007bff);
+  padding: 0 10px; /* Gives some space around the legend text */
+  width: auto; /* Important for legend to not take full width and break border */
+  border-bottom: none; /* Remove if it was styled globally for legends */
+}
+
+/* Weekly Schedule Grid */
+.weekly-schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive cards for each day */
+  gap: 20px;
+}
+
+.day-schedule-card,
+.override-card .card-body { /* .override-card .card-body will contain override details */
+  background-color: var(--white-color, #fff);
+  padding: 15px;
+  border: 1px solid var(--border-color-light, #e9ecef); /* Lighter border for inner cards */
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.day-schedule-card h4 {
+  font-size: 1.15em;
+  color: var(--text-color, #343a40);
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color-light, #f0f0f0);
+  padding-bottom: 8px;
+}
+
+/* Form Elements Styling (General) */
+.form-group {
+  margin-bottom: 1rem;
+}
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: .3rem;
+  font-size: 0.9em;
+  color: var(--text-color-muted, #555);
+}
+.form-control, .form-check-input {
+  /* Assuming global .form-control styles are defined for width, padding, border */
+}
+.form-control-sm { /* For smaller inputs like break times */
+  padding: .25rem .5rem;
+  font-size: .875rem;
+  height: auto; /* Override default height if needed */
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+}
+.form-check-input {
+  margin-right: 8px;
+  width: auto; /* Override form-control width */
+  height: auto;
+}
+.form-check-label {
+  margin-bottom: 0; /* Align with checkbox */
+  font-weight: normal;
+  color: var(--text-color, #343a40);
+}
+
+.invalid-feedback { /* Assuming global or shared styles for this */
+  display: none;
+  color: var(--danger-color, #dc3545);
+  font-size: 0.8em;
+  margin-top: 0.2rem;
+}
+/* Show feedback when control is invalid and touched/dirty */
+.ng-invalid.ng-touched:not(form) + .invalid-feedback,
+.ng-invalid.ng-dirty:not(form) + .invalid-feedback {
+  display: block;
+}
+.ng-invalid.ng-touched:not(form)  {
+  border-color: var(--danger-color, #dc3545) !important; /* Ensure visibility */
+}
+
+
+/* Break Times Section within each day/override */
+.break-times-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--border-color-light, #e9ecef);
+}
+.break-times-section h5 {
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--text-color-muted, #6c757d);
+  margin-bottom: 10px;
+}
+.break-time-item {
+  background-color: var(--light-bg-color, #f9f9f9); /* Slight background for break item */
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 8px !important; /* Override .form-row mb if needed */
+}
+.break-time-item .form-group {
+  margin-bottom: 0 !important; /* Remove bottom margin for inputs within break item */
+}
+.break-time-item .btn-danger.btn-sm {
+  padding: .25rem .5rem;
+  line-height: 1.5; /* Ensure button text aligns */
+}
+
+/* Overrides Section */
+.overrides-list .override-card {
+  margin-bottom: 20px !important; /* From original card styling */
+  background-color: #fff; /* Ensure overrides have distinct background */
+}
+.override-card .card-body {
+  background-color: transparent; /* Reset background from day-schedule-card if sharing class */
+  box-shadow: none;
+  border: none;
+  padding: 15px 0 0 0; /* Adjust padding for override content */
+}
+.override-card .form-row.align-items-center .form-group {
+    margin-bottom: 0; /* Align items in the first row of override card */
+}
+
+.form-actions {
+  text-align: right;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color, #eee);
+}
+.btn-primary.btn-lg { /* For the main save button */
+  padding: 10px 25px;
+  font-size: 1.1em;
+}
+
+.loading-indicator, .alert { /* General message styling */
+  margin-bottom: 20px;
+}
+
+
+/* Responsive adjustments for the availability form */
+@media (max-width: 767px) {
+  .weekly-schedule-grid {
+    grid-template-columns: 1fr; /* Stack day cards on mobile */
+  }
+  .day-schedule-card, .override-card .card-body {
+    padding: 15px;
+  }
+  .break-time-item .form-group.col,
+  .override-card .form-row .form-group.col-md-6,
+  .override-card .form-row .form-group.col-md-4,
+  .override-card .form-row .form-group.col-md-3,
+  .override-card .form-row .form-group.col-md-auto {
+    flex-basis: 100%; /* Stack inner form group columns */
+    max-width: 100%;
+    margin-bottom: 10px; /* Add margin for stacked inputs */
+  }
+  .break-time-item .form-group.col-auto {
+    text-align: right; /* Align remove button for breaks */
+  }
+  .override-card .form-row.align-items-center .form-group.col-md-auto {
+    margin-top: 0 !important; /* Reset top margin for remove override button */
+    padding-top: 0 !important;
+    width: 100%;
+    text-align: right;
+  }
+  .override-card .form-row.align-items-center .form-group.col-md-3 { /* Checkbox container */
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  .form-actions {
+    text-align: center;
+  }
+  .form-actions .btn-primary.btn-lg {
+    width: 100%;
+  }
+}

@@ -28,9 +28,9 @@ export class DoctorLoginComponent implements OnInit {
     const currentUser = this.authService.currentUserValue;
     if (currentUser) {
       if (currentUser.role === 'doctor') {
-        this.router.navigate(['/doctor/dashboard']); // Or your actual doctor dashboard route
+        this.router.navigate(['/doctor']); // Or your actual doctor dashboard route
       } else {
-        this.router.navigate(['/doctor-login']); // Redirect other logged-in users to home
+        this.router.navigate(['/']); // Redirect other logged-in users to home
       }
     }
 

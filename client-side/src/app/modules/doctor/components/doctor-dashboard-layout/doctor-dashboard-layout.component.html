@@ -1,0 +1,18 @@
+<div class="doctor-dashboard-layout">
+  <aside class="sidebar">
+    <h3>Doctor Menu</h3>
+    <nav>
+      <ul>
+        <li><a routerLink="overview" routerLinkActive="active-sidebar-link">Dashboard</a></li>
+        <li><a routerLink="my-schedule" routerLinkActive="active-sidebar-link">My Schedule</a></li>
+        <li><a routerLink="appointments" routerLinkActive="active-sidebar-link">Manage Appointments</a></li>
+        <li><a routerLink="availability" routerLinkActive="active-sidebar-link">Set Availability</a></li>
+        <li><a routerLink="my-patients" routerLinkActive="active-sidebar-link">My Patients</a></li>
+        <li><a routerLink="profile" routerLinkActive="active-sidebar-link">My Profile</a></li>
+        <li><a (click)="logout()" class="logout-link">Logout</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="content-area">
+    <router-outlet></router-outlet> </main>
+</div>
