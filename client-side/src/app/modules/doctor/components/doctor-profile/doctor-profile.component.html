@@ -1,2 +1,83 @@
-<h2>My Doctor Profile</h2>
-<p>View and update your professional details and contact information.</p>
+<div class="doctor-profile-page">
+  <header class="profile-header">
+    <h2>My Doctor Profile</h2>
+    <p>View and manage your professional information.</p>
+  </header>
+
+  <div *ngIf="isLoading && !currentDoctor" class="loading-indicator">
+    <p>Loading your profile...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="alert alert-danger error-summary">
+    <p><strong>Error:</strong> {{ errorMessage }}</p>
+  </div>
+
+  <form *ngIf="profileForm && currentDoctor && !isLoading" [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form card">
+    <div class="card-body">
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <fieldset>
+        <legend>Professional Information (Managed by Admin)</legend>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Full Name:</label>
+            <p class="form-control-static">{{ currentDoctor.name }}</p>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Email Address:</label>
+            <p class="form-control-static">{{ adminManagedFields.email }}</p>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Specialization:</label>
+            <p class="form-control-static">{{ adminManagedFields.specialization }}</p>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Department:</label>
+            <p class="form-control-static">{{ adminManagedFields.departmentName }}</p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Editable Information</legend>
+        <div class="form-group">
+          <label for="doc-phone">Contact Phone:</label>
+          <input type="tel" id="doc-phone" formControlName="phone" class="form-control" placeholder="Your contact phone number">
+          <div *ngIf="f['phone'].touched && f['phone'].errors?.['pattern']" class="invalid-feedback">
+            Please enter a valid phone number.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="doc-photoUrl">Photo URL:</label>
+          <input type="url" id="doc-photoUrl" formControlName="photoUrl" class="form-control" placeholder="http://example.com/your-photo.jpg">
+          </div>
+
+        <div class="form-group">
+          <label for="doc-publicBio">Public Bio:</label>
+          <textarea id="doc-publicBio" formControlName="publicBio" class="form-control" rows="5" placeholder="Write a short bio for your public profile..."></textarea>
+          <div *ngIf="f['publicBio'].touched && f['publicBio'].errors?.['maxlength']" class="invalid-feedback">
+            Bio cannot exceed 1000 characters.
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="isSubmitting || profileForm.invalid || !profileForm.dirty" class="btn btn-primary btn-submit-profile">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm"></span>
+          {{ isSubmitting ? 'Saving Changes...' : 'Save Profile Changes' }}
+        </button>
+      </div>
+    </div> </form>
+
+  <div *ngIf="currentDoctor && !isLoading" class="mt-4 text-center change-password-link">
+    <a routerLink="/doctor/change-password" class="btn btn-outline-secondary">
+        <i class="fas fa-key"></i> Change My Password
+    </a>
+    </div>
+
+</div>

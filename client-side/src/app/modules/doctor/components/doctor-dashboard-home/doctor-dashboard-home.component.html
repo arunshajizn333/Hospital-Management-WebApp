@@ -1,2 +1,58 @@
-<h2>Doctor Dashboard Overview</h2>
-<p>Welcome back, Dr. [Doctor Name]!</p> <p>Your upcoming appointments and key tasks will be summarized here.</p>
+<div class="doctor-dashboard-overview">
+  <header class="dashboard-header">
+    <h1 *ngIf="currentDoctor">Welcome back,  {{ currentDoctor.name }}!</h1>
+    <p *ngIf="!currentDoctor">Welcome to your Doctor Dashboard.</p>
+    <p class="dashboard-subtitle">Here's a snapshot of your day and quick access to your tools.</p>
+  </header>
+
+  <section class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="actions-grid">
+      <button type="button" (click)="navigateTo('my-schedule')" class="action-card">
+        <div class="action-icon"><i class="fas fa-calendar-alt"></i></div>
+        <span>View Full Schedule</span>
+      </button>
+      <button type="button" (click)="navigateTo('appointments')" class="action-card">
+        <div class="action-icon"><i class="fas fa-tasks"></i></div>
+        <span>Manage Appointments</span>
+      </button>
+      <button type="button" (click)="navigateTo('availability')" class="action-card">
+        <div class="action-icon"><i class="fas fa-user-clock"></i></div>
+        <span>Set My Availability</span>
+      </button>
+      <button type="button" (click)="navigateTo('my-patients')" class="action-card">
+        <div class="action-icon"><i class="fas fa-users"></i></div>
+        <span>My Patients</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="todays-appointments">
+    <h2>Today's Appointments</h2>
+    <div *ngIf="isLoadingAppointments" class="loading-indicator">
+      <p>Loading today's appointments...</p>
+    </div>
+    <div *ngIf="appointmentsError && !isLoadingAppointments" class="error-message alert alert-warning">
+      <p><i class="fas fa-exclamation-triangle"></i> {{ appointmentsError }}</p>
+    </div>
+
+    <div *ngIf="!isLoadingAppointments && !appointmentsError && todaysAppointments.length > 0" class="appointments-list-summary">
+      <div *ngFor="let apt of todaysAppointments" class="appointment-summary-item">
+        <div class="appointment-time">{{ apt.appointmentTime }}</div> <div class="appointment-patient">
+            Patient: <strong>{{ getPatientName(apt.patient) }}</strong>
+        </div>
+        <div class="appointment-reason">Reason: {{ apt.reason || 'Not specified' }}</div>
+        <div class="appointment-status">
+            Status: <span class="status-badge status-{{apt.status | lowercase}}">{{ apt.status }}</span>
+        </div>
+        </div>
+    </div>
+
+    <p *ngIf="!isLoadingAppointments && !appointmentsError && todaysAppointments.length === 0" class="no-data-message">
+      <i class="fas fa-calendar-day"></i> You have no appointments scheduled for today.
+    </p>
+    <div *ngIf="!isLoadingAppointments && todaysAppointments.length >= maxAppointmentsToShow" class="view-all-link mt-3">
+      <a (click)="navigateTo('appointments')" class="btn btn-link">View All Appointments</a>
+    </div>
+  </section>
+</div>

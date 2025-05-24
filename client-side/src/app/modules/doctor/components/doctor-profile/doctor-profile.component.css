@@ -1,0 +1,179 @@
+/* src/app/modules/doctor/components/doctor-profile/doctor-profile.component.css */
+.doctor-profile-page {
+  max-width: 900px; /* Or adjust to fit your dashboard content area well */
+  margin: 0 auto; /* Center within the content area if max-width is used */
+  padding: 20px 25px; /* Consistent padding */
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.profile-header h2 {
+  font-size: 2em;
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.profile-header p {
+  font-size: 1em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+.loading-indicator, .error-summary {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.error-summary { /* Assuming global .alert.alert-danger styles */
+  /* Styles for error summary from global or here */
+}
+
+.profile-form.card {
+  background-color: var(--white-color, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.profile-form .card-body {
+  padding: 25px 30px;
+}
+
+.profile-form fieldset {
+  border: none;
+  padding: 0;
+  margin-bottom: 25px;
+}
+.profile-form fieldset:last-of-type {
+  margin-bottom: 10px;
+}
+
+.profile-form legend {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: var(--primary-color, #007bff);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--primary-color-light, #a0cfff);
+  width: 100%;
+}
+
+/* Read-only information display */
+.form-control-static {
+  display: block;
+  width: 100%;
+  padding: 0.65rem 0; /* Align with input padding top/bottom, no horizontal padding */
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-color, #212529);
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color-light, #f0f0f0); /* Subtle underline */
+  margin-bottom: 0.5rem; /* Space below static text */
+}
+
+
+/* Form Elements (reusing some global/shared styles if possible) */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -10px;
+  margin-left: -10px;
+}
+.form-row .form-group {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.form-group {
+  margin-bottom: 1.25rem;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+}
+.form-control { /* Should match global/shared styles */
+  /* Defined in previous CSS, ensure it's globally available or copy here */
+}
+input.form-control[readonly] { /* For the email field */
+  background-color: var(--light-bg-color, #e9ecef);
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+.form-text.text-muted {
+  font-size: 0.8em;
+  color: var(--text-color-muted, #6c757d);
+  margin-top: 0.25rem;
+}
+
+.invalid-feedback { /* Ensure defined globally or here */ }
+.form-control.ng-invalid.ng-touched + .invalid-feedback,
+.form-control.ng-invalid.ng-dirty + .invalid-feedback { /* Ensure defined */ }
+.ng-invalid.ng-touched:not(form) { /* Ensure defined */ }
+
+.alert { /* Basic alert styles, ensure defined globally or here */ }
+.alert-success { /* Defined globally or here */ }
+.alert-danger { /* Defined globally or here */ }
+
+.form-actions {
+  text-align: right;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color, #eee);
+}
+.btn-submit-profile {
+  padding: 0.7rem 1.8rem; /* Good padding for primary action */
+  font-size: 1rem;
+}
+
+.spinner-border-sm { /* Ensure defined globally or here */ }
+
+.change-password-link {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color, #eee);
+  text-align: center; /* Center the change password button */
+}
+.change-password-link .btn-outline-secondary {
+  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+}
+.change-password-link .btn-outline-secondary i { /* For Font Awesome */
+  margin-right: 8px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .form-row .col-md-6 { /* For two-column layout within form rows */
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 767px) {
+  .profile-header h2 {
+    font-size: 1.7em;
+  }
+  .profile-form .card-body {
+    padding: 20px;
+  }
+  .profile-form legend {
+    font-size: 1.15em;
+  }
+  .form-actions {
+    text-align: center; /* Center button on mobile */
+  }
+  .btn-submit-profile {
+    width: 100%; /* Full width button on mobile */
+  }
+  .change-password-link .btn-outline-secondary {
+      width: auto; /* Allow button to size to content or make it full width */
+      display: inline-block;
+  }
+}

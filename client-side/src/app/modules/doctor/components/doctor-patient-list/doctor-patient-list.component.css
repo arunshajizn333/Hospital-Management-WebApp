@@ -1,0 +1,136 @@
+/* src/app/modules/doctor/components/doctor-patient-list/doctor-patient-list.component.css */
+.doctor-patient-list-page {
+  padding: 20px 25px;
+}
+
+.page-header { /* Consistent page header style */
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+.page-header h2 {
+  font-size: 2em;
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 5px;
+}
+.page-header p {
+  font-size: 1em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+/* Search Form Styling */
+.search-form.card {
+  margin-bottom: 30px;
+  background-color: var(--light-bg-color, #f8f9fa);
+  border: 1px solid var(--border-color, #e9ecef);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+.search-form .card-title {
+  font-size: 1.2em;
+  color: var(--primary-color, #007bff);
+  margin-bottom: 15px;
+}
+.search-form .form-row { /* Using flex for alignment */
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  align-items: flex-end; /* Align items to the bottom */
+  gap: 15px; /* Space between form groups */
+}
+.search-form .form-group {
+  flex: 1 1 auto; /* Allow form groups to grow and shrink */
+  margin-bottom: 0; /* Remove bottom margin as gap handles it */
+}
+.search-form .form-group.col-md-8 { /* Adjust flex-basis for wider search input */
+    flex-basis: 60%;
+}
+.search-form .form-group.col-md-2 { /* Adjust flex-basis for buttons */
+    flex-basis: calc(20% - 15px); /* (100% / number of items) - gap */
+    min-width: 100px; /* Minimum width for buttons */
+}
+
+
+.search-form label {
+  display: block;
+  margin-bottom: .3rem;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+.form-control { /* Ensure this is globally styled or defined here */
+    display: block;
+    width: 100%;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    box-sizing: border-box;
+}
+.btn.w-100 { width: 100%; }
+
+/* Loading, Error, No-Data Messages */
+.loading-indicator, .no-data-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.1em;
+  color: var(--text-color-muted, #6c757d);
+  margin-top: 20px;
+}
+.error-summary.alert {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.no-data-message i { /* For Font Awesome icons */
+  font-size: 1.5em;
+  margin-right: 8px;
+  vertical-align: middle;
+  color: var(--primary-color, #007bff);
+}
+
+/* Patients Table Container */
+.patients-table-container {
+  margin-top: 20px;
+  background-color: var(--white-color, #fff);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  overflow-x: auto; /* Ensures table is scrollable on small screens */
+}
+.results-info {
+  padding: 10px 15px;
+  font-size: 0.9em;
+  color: var(--text-color-muted, #6c757d);
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.table { /* Basic Bootstrap-like table styling */
+  width: 100%;
+  margin-bottom: 1rem;
+  color: var(--text-color, #212529);
+  border-collapse: collapse; /* For cleaner lines */
+}
+.table th, .table td {
+  padding: 0.85rem; /* Slightly more padding */
+  vertical-align: middle; /* Vertically align content in cells */
+  border-top: 1px solid var(--border-color, #dee2e6);
+  font-size: 0.95em;
+}
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid var(--border-color, #dee2e6); /* Thicker bottom border for header */
+  background-color: var(--light-bg-color, #f8f9fa); /* Light background for header */
+  color: var(--primary-color-darker, #004085);
+  font-weight: 600;
+  text-align: left;
+}
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05); /* Subtle hover for rows */
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.025); /* Very light striping */
+}
+.table .btn-sm { /* For "View Records" button */
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  display: inline-flex; /* For icon and text alignment */
+  align-items: center;
+}
+.table

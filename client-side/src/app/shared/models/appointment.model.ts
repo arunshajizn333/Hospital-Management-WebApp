@@ -1,12 +1,12 @@
 // src/app/shared/models/appointment.model.ts
-import { Doctor } from './doctor.model'; // Assuming you have this
-import { Patient } from './patient.model'; // Assuming you have this
 
+import { Patient } from './patient.model';
+import { Doctor } from './doctor.model';
 export interface Appointment {
   _id: string;
-  patient: Patient | string; // Can be populated or just ID
-  doctor: Doctor | string;   // Can be populated or just ID
-  appointmentDate: string; // Or Date
+  patient: Patient | string;
+  doctor: Doctor | string;
+  appointmentDate: string;
   appointmentTime: string;
   reason?: string;
   status: 'Scheduled' | 'Confirmed' | 'Completed' | 'CancelledByPatient' | 'CancelledByDoctor' | 'CancelledByAdmin' | 'NoShow';
@@ -17,14 +17,15 @@ export interface Appointment {
 }
 
 export interface AppointmentsApiResponse {
-  message?: string; // Optional message
-  count?: number;
-  appointments: Appointment[];
-  // Include other pagination fields if your backend sends them for this specific endpoint
+    message?: string;
+    count?: number; // Number of items on the current page
+    appointments: Appointment[];
+    total?: number;         // Total items matching query
+    currentPage?: number;   // Current page number
+    totalPages?: number;    // Total number of pages
 }
 
-// Example in shared/models/appointment.model.ts
-export interface BookAppointmentResponse {
+export interface BookAppointmentResponse { // For when booking an appointment
     message: string;
     appointment: Appointment;
 }

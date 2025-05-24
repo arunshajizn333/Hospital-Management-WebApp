@@ -32,4 +32,13 @@ export interface Patient {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface PatientsApiResponse {
+    message?: string;
+    count?: number;    // Number of items on the current page
+    total?: number;    // Total items matching query across all pages
+    currentPage?: number;
+    totalPages?: number;
+    patients: Patient[]; // The array of patient objects
+}
 // ... other API response interfaces ...

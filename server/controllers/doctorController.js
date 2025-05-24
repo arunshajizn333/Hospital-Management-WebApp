@@ -2,7 +2,7 @@
 const Doctor = require('../models/Doctor'); // Import the Doctor model
 const Appointment = require('../models/Appointment');
 const mongoose = require('mongoose');
-
+const Department = require('../models/Department');
 // @desc    Register/Create a new doctor
 // @route   POST /api/doctors
 // @access  Private (initially Admin)
@@ -424,5 +424,142 @@ exports.getDoctorAvailability = async (req, res) => {
   } catch (error) {
     console.error("Error fetching doctor's availability:", error.message);
     res.status(500).json({ message: 'Server Error' });
+  }
+};
+/**
+ * @desc    Doctor gets their own profile details
+ * @route   GET /api/doctors/me/profile
+ * @access  Private (Doctor)
+ */
+exports.getMyDoctorProfile = async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.user.id)
+      .select('-password -isAdminControlled') // Exclude sensitive/internal fields
+      .populate('department', 'name description'); // Populate department details
+
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor profile not found.' });
+    }
+    res.status(200).json(doctor);
+  } catch (error) {
+    console.error("Error fetching doctor's own profile:", error.message);
+    res.status(500).json({ message: "Server Error fetching profile." });
+  }
+};
+
+/**
+ * @desc    Doctor updates their own profile details
+ * @route   PUT /api/doctors/me/profile
+ * @access  Private (Doctor)
+ */
+exports.updateMyDoctorProfile = async (req, res) => {
+  try {
+    const doctorId = req.user.id;
+    // Fields a doctor might be allowed to update themselves:
+    const { phone, publicBio, photoUrl /* any other doctor-editable fields */ } = req.body;
+
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found.' });
+    }
+
+    // Update allowed fields
+    if (phone !== undefined) doctor.phone = phone;
+    if (publicBio !== undefined) doctor.publicBio = publicBio;
+    if (photoUrl !== undefined) doctor.photoUrl = photoUrl;
+    // Note: Name, email, specialization, department, role are typically admin-managed.
+    // If doctors can change their email, add uniqueness check and potentially re-verification flow.
+
+    const updatedDoctor = await doctor.save();
+
+    // Prepare response, excluding sensitive fields
+    const doctorResponse = updatedDoctor.toObject();
+    delete doctorResponse.password;
+    delete doctorResponse.isAdminControlled;
+    // If department was an ObjectId and not populated by save, re-populate or structure response
+    // However, findByIdAndUpdate with {new: true} and populate is also an option.
+    // For save(), we might need to re-fetch and populate if we need the populated department in response.
+    // For simplicity, let's return the updated doctor and frontend can re-fetch if needed or use stored department name.
+
+    const populatedDoctor = await Doctor.findById(updatedDoctor._id)
+                                .select('-password -isAdminControlled')
+                                .populate('department', 'name description');
+
+
+    res.status(200).json({
+      message: 'Profile updated successfully.',
+      doctor: populatedDoctor
+    });
+
+  } catch (error) {
+    console.error("Error updating doctor's own profile:", error.message);
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({ message: messages.join(', ') });
+    }
+    res.status(500).json({ message: 'Server Error updating profile.' });
+  }
+};
+
+/**
+ * @desc    Doctor gets a list of their patients (based on appointments)
+ * @route   GET /api/doctors/me/patients
+ * @access  Private (Doctor)
+ */
+exports.getMyPatients = async (req, res) => {
+  try {
+    const doctorId = req.user.id;
+
+    // Pagination
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
+
+    // Search query (e.g., by patient name)
+    const searchQuery = req.query.search;
+
+    // 1. Find all unique patient IDs from appointments associated with this doctor
+    const patientIdsFromAppointments = await Appointment.distinct('patient', { doctor: doctorId });
+
+    if (patientIdsFromAppointments.length === 0) {
+      return res.status(200).json({
+        message: 'No patients found associated with your appointments.',
+        count: 0,
+        total: 0,
+        currentPage: 1,
+        totalPages: 0,
+        patients: [],
+      });
+    }
+
+    // 2. Build query to fetch these patients, with optional name search
+    const patientQuery = {
+      _id: { $in: patientIdsFromAppointments },
+    };
+
+    if (searchQuery) {
+      patientQuery.name = { $regex: new RegExp(searchQuery, 'i') };
+    }
+
+    // 3. Fetch patient details with pagination
+    const totalPatients = await Patient.countDocuments(patientQuery);
+    const patients = await Patient.find(patientQuery)
+      .select('name email dateOfBirth gender contact.phone') // Select fields needed for the list view
+      .sort({ name: 1 }) // Sort by name
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      message: 'Patients retrieved successfully.',
+      count: patients.length,
+      total: totalPatients,
+      currentPage: page,
+      totalPages: Math.ceil(totalPatients / limit),
+      patients,
+    });
+
+  } catch (error) {
+    console.error("Error fetching doctor's patients:", error.message);
+    res.status(500).json({ message: "Server Error fetching patients." });
   }
 };

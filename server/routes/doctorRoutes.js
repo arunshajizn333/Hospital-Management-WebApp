@@ -37,14 +37,23 @@ router.get('/:doctorId/available-slots', doctorController.getDoctorAvailableSlot
 //  * @desc    Doctor gets their own profile details
 //  * @access  Private (Doctor)
 //  */
-// router.get('/me/profile', protect, authorize('doctor'), doctorController.getMyDoctorProfile);
+router.get('/me/profile', protect, authorize('doctor'), doctorController.getMyDoctorProfile);
 
 // /**
 //  * @route   PUT /api/doctors/me/profile
 //  * @desc    Doctor updates their own profile details
 //  * @access  Private (Doctor)
 //  */
-// router.put('/me/profile', protect, authorize('doctor'), doctorController.updateMyDoctorProfile);
+router.put('/me/profile', protect, authorize('doctor'), doctorController.updateMyDoctorProfile);
+
+// --- NEW: Doctor's Patients List ---
+/**
+ * @route   GET /api/doctors/me/patients
+ * @desc    Doctor gets a list of their patients
+ * @access  Private (Doctor)
+ */
+router.get('/me/patients', protect, authorize('doctor'), doctorController.getMyPatients);
+
 
 
 module.exports = router;

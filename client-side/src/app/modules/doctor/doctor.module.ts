@@ -9,7 +9,7 @@ import { DoctorAvailabilityManagementComponent } from './components/doctor-avail
 import { DoctorAppointmentsComponent } from './components/doctor-appointments/doctor-appointments.component';
 import { DoctorPatientListComponent } from './components/doctor-patient-list/doctor-patient-list.component';
 import { DoctorPatientRecordComponent } from './components/doctor-patient-record/doctor-patient-record.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -27,7 +27,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     DoctorRoutingModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule ,
+    FormsModule
   ]
 })
 export class DoctorModule { }

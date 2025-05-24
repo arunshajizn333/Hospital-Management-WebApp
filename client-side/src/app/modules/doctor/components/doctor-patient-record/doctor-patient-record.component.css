@@ -1,0 +1,188 @@
+/* src/app/modules/doctor/components/doctor-patient-record/doctor-patient-record.component.css */
+.patient-record-page {
+  padding: 20px 25px;
+}
+
+.page-header {
+  display: flex; /* Align items in a row */
+  justify-content: space-between; /* Push title and button to opposite ends */
+  align-items: center; /* Vertically align items */
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.page-header .header-content {
+  text-align: left; /* Default alignment for title block */
+}
+
+.page-header h2 {
+  font-size: 2em;
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.page-header p {
+  font-size: 1em;
+  color: var(--text-color-muted, #6c757d);
+  margin-bottom: 0;
+}
+
+.back-button.btn-sm { /* Style for the back button */
+  padding: 0.3rem 0.8rem;
+  font-size: 0.9em;
+}
+.back-button.btn-sm i {
+  margin-right: 5px;
+}
+
+/* Card styling for sections */
+.card {
+  background-color: var(--white-color, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  margin-bottom: 30px; /* Space between cards */
+}
+
+.card-header {
+  background-color: var(--light-bg-color, #f8f9fa);
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px 8px 0 0;
+}
+
+.card-header h4 {
+  margin: 0;
+  font-size: 1.25em;
+  color: var(--primary-color, #007bff);
+  font-weight: 500;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Patient Demographics Section */
+.patient-demographics .info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+  gap: 10px 20px; /* Row gap, Column gap */
+  font-size: 0.95em;
+}
+.patient-demographics .info-grid div {
+  padding: 5px 0;
+}
+.patient-demographics .info-grid strong {
+  color: var(--text-color, #343a40);
+  min-width: 120px; /* Adjust for alignment if needed */
+  display: inline-block; /* Or float left and clear for better alignment */
+}
+
+/* Add New Medical Record Form */
+.add-medical-record .form-group {
+  margin-bottom: 1rem;
+}
+.add-medical-record label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: .4rem;
+  font-size: 0.9em;
+  color: var(--text-color-muted, #555);
+}
+.form-control { /* Ensure this is globally styled or defined here */ }
+.btn-submit-record {
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* Medical History List */
+.medical-history h4 { /* This is for the card title */
+  /* Styles are handled by .card-header h4 */
+}
+
+.history-list {
+  margin-top: 10px;
+}
+
+.history-item {
+  background-color: var(--white-color, #fdfdfd); /* Slightly off-white or keep white */
+  border: 1px solid var(--border-color-light, #f0f0f0);
+  border-radius: 6px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.history-item-header {
+  background-color: var(--light-bg-color, #f9f9f9);
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--border-color-light, #f0f0f0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px 6px 0 0;
+}
+.history-item-header h5 {
+  margin: 0;
+  font-size: 1.1em;
+  color: var(--primary-color-darker, #0056b3);
+  font-weight: 600;
+}
+.history-item-header .history-date {
+  font-size: 0.8em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+.history-item-body {
+  padding: 15px;
+  font-size: 0.9rem;
+}
+.history-item-body p {
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+  color: #454545;
+}
+.history-item-body p:last-child {
+  margin-bottom: 0;
+}
+.history-item-body strong {
+  color: var(--text-color, #343a40);
+  font-weight: 500;
+}
+
+/* Loading, Error, No-Data Messages (can be global/shared) */
+.loading-indicator, .no-data-message {
+  text-align: center; padding: 20px; font-size: 1.1em;
+  color: var(--text-color-muted, #6c757d); margin-top: 20px;
+}
+.no-data-message i { font-size: 1.5em; margin-right: 8px; vertical-align: middle;}
+.alert { margin-top: 15px; margin-bottom: 20px; /* Global alert styles needed */ }
+
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .patient-record-page {
+    padding: 15px;
+  }
+  .page-header {
+    flex-direction: column; /* Stack header items on mobile */
+    align-items: flex-start; /* Align to start */
+  }
+  .page-header .back-button {
+    margin-bottom: 10px; /* Space below back button */
+  }
+  .page-header h2 {
+    font-size: 1.7em;
+  }
+  .patient-demographics .info-grid {
+    grid-template-columns: 1fr; /* Stack demographics info */
+  }
+  .history-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .history-item-header .history-date {
+    margin-top: 5px;
+  }
+}

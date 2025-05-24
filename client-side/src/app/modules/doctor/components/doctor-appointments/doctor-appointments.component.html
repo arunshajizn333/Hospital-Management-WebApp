@@ -1,3 +1,110 @@
-<p>doctor-appointments works!</p>
-<h2>Manage My Appointments</h2>
-<p>View your scheduled appointments, confirm them, or update their status (e.g., completed).</p>
+<div class="doctor-appointments-page">
+  <header class="page-header">
+    <h2>My Appointments</h2>
+    <p>View, manage, and update the status of your scheduled appointments.</p>
+  </header>
+
+  <form [formGroup]="filterForm" class="filter-form card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Filter Appointments</h5>
+      <div class="form-row">
+        <div class="form-group col-md-5">
+          <label for="filter-date">Date:</label>
+          <input type="date" id="filter-date" formControlName="date" class="form-control">
+        </div>
+        <div class="form-group col-md-5">
+          <label for="filter-status">Status:</label>
+          <select id="filter-status" formControlName="status" class="form-control">
+            <option value="">All Statuses</option>
+            <option *ngFor="let status of appointmentStatuses" [value]="status">{{ status }}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-2 d-flex align-items-end">
+          <button type="button" (click)="filterForm.reset({date: '', status: ''}); loadDoctorAppointments()" class="btn btn-secondary w-100">Reset Filters</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Loading your appointments...</p>
+    </div>
+  <div *ngIf="errorMessage && !isLoading" class="alert alert-danger error-summary">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+<div *ngIf="updateStatusMessage" class="alert alert-success">
+  {{ updateStatusMessage }}
+</div>
+  <div *ngIf="updateStatusError" class="alert alert-danger">
+    {{ updateStatusError }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && appointments.length > 0" class="appointments-list-container">
+    <div *ngFor="let apt of appointments" class="appointment-card-doctor">
+      <div class="card-header">
+        <h4>Patient: {{ getPatientName(apt.patient) }}</h4>
+        <span class="status-badge status-{{apt.status | lowercase}}">{{ apt.status }}</span>
+      </div>
+      <div class="card-body">
+        <p><strong>Date:</strong> {{ apt.appointmentDate | date:'fullDate' }} ({{ apt.appointmentDate | date:'EEEE' }})</p>
+        <p><strong>Time:</strong> {{ apt.appointmentTime }}</p>
+        <p><strong>Reason:</strong> {{ apt.reason || 'Not specified' }}</p>
+        <p *ngIf="apt.patientNotes"><strong>Patient Notes:</strong> {{ apt.patientNotes }}</p>
+        <p *ngIf="apt.doctorNotes"><strong>Your Notes:</strong> {{ apt.doctorNotes }}</p>
+      </div>
+      <div class="card-footer">
+        <button type="button" (click)="openStatusUpdateModal(apt)" class="btn btn-sm btn-outline-primary">
+          Update Status / Add Notes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="!isLoading && !errorMessage && appointments.length === 0" class="no-data-message">
+    <i class="fas fa-calendar-times"></i> No appointments found matching your criteria.
+  </p>
+
+  <nav *ngIf="!isLoading && !errorMessage && totalPages > 1" aria-label="Appointments pagination" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="javascript:void(0)" (click)="prevPage()">Previous</a>
+      </li>
+      <li class="page-item disabled"><span class="page-link">Page {{ currentPage }} of {{ totalPages }}</span></li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" href="javascript:void(0)" (click)="nextPage()">Next</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div *ngIf="selectedAppointmentForStatusUpdate" class="status-update-modal card mt-4">
+    <div class="card-header">
+      <h5>Update Appointment Status for Patient: {{ getPatientName(selectedAppointmentForStatusUpdate.patient) }}</h5>
+      <p>Date: {{ selectedAppointmentForStatusUpdate.appointmentDate | date:'mediumDate' }} at {{ selectedAppointmentForStatusUpdate.appointmentTime }}</p>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="newStatus">New Status:</label>
+        <select id="newStatus" [(ngModel)]="newStatus" class="form-control">
+          <option value="" disabled>Select new status</option>
+          <option value="Confirmed">Confirmed</option>
+          <option value="Completed">Completed</option>
+          <option value="NoShow">No Show</option>
+          <option value="CancelledByDoctor">Cancelled by Doctor</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="doctorNotes">Doctor's Notes (Optional):</label>
+        <textarea id="doctorNotes" [(ngModel)]="doctorNotesForUpdate" class="form-control" rows="3" placeholder="Add any relevant notes"></textarea>
+      </div>
+      <div *ngIf="updateStatusError" class="alert alert-danger mt-2">
+        {{ updateStatusError }}
+      </div>
+      <div class="form-actions">
+        <button type="button" (click)="submitStatusUpdate()" class="btn btn-primary" [disabled]="!newStatus">Save Status</button>
+        <button type="button" (click)="cancelStatusUpdate()" class="btn btn-secondary ml-2">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>

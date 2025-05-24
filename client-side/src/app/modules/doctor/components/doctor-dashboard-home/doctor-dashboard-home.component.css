@@ -1,0 +1,126 @@
+/* src/app/modules/doctor/components/doctor-dashboard-home/doctor-dashboard-home.component.css */
+.doctor-dashboard-overview {
+  padding: 20px 25px;
+}
+
+.dashboard-header {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+.dashboard-header h1 {
+  font-size: 2em;
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+.dashboard-header .dashboard-subtitle {
+  font-size: 1em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+.quick-actions, .todays-appointments {
+  margin-bottom: 35px;
+}
+
+.quick-actions h2, .todays-appointments h2 {
+  font-size: 1.6em;
+  color: var(--primary-color, #007bff);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary-color-light, #a0cfff);
+  font-weight: 500;
+}
+
+.actions-grid { /* Copied from PatientDashboardHome, can be shared */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.action-card { /* Copied from PatientDashboardHome, can be shared */
+  background-color: var(--white-color, #ffffff);
+  padding: 25px 20px;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-color, #343a40);
+  border: 1px solid var(--border-color, #e0e0e0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 120px;
+}
+.action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+  color: var(--primary-color-darker, #0056b3);
+  border-color: var(--primary-color-light, #a0cfff);
+}
+.action-card .action-icon { font-size: 2.2em; margin-bottom: 12px; color: var(--primary-color, #007bff); }
+.action-card .action-icon i { line-height: 1; }
+.action-card span { font-size: 0.95em; }
+
+/* Today's Appointments Styling */
+.appointments-list-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.appointment-summary-item {
+  background-color: var(--white-color, #fff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-left: 4px solid var(--accent-color, #17a2b8); /* Accent color for items */
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  font-size: 0.9rem; /* Smaller base font for summary items */
+}
+.appointment-summary-item:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+}
+
+.appointment-time {
+  font-weight: bold;
+  font-size: 1.1em; /* Make time stand out */
+  color: var(--primary-color, #007bff);
+  margin-bottom: 8px;
+}
+.appointment-patient {
+  margin-bottom: 5px;
+  color: var(--text-color, #343a40);
+}
+.appointment-patient strong {
+    font-weight: 600;
+}
+.appointment-reason {
+  font-style: italic;
+  color: var(--text-color-muted, #6c757d);
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Show ellipsis if reason is too long */
+  max-width: 250px; /* Adjust as needed */
+}
+.appointment-status {
+    text-align: right;
+}
+.status-badge { /* Copied from patient dashboard, can be global */
+  padding: 0.25em 0.7em; border-radius: 10px; font-size: 0.7em; font-weight: bold;
+  color: var(--white-color, #fff); text-transform: uppercase; letter-spacing: 0.5px;
+}
+.status-scheduled { background-color: var(--primary-color, #007bff); }
+.status-confirmed { background-color: var(--success-color, #28a745); }
+/* ... other status badge styles ... */
+
+.view-all-link { text-align: center; margin-top: 25px; }
+.view-all-link .btn-link { /* Copied from patient dashboard */ }
+
+.loading-indicator p, .no-data-message { /* Copied from patient dashboard */ }
+.no-data-message i { font-size: 1.5em; margin-right: 8px; vertical-align: middle; }
+.error-message.alert { margin-top: 15px; }

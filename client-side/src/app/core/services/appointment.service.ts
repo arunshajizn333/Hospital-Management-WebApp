@@ -16,6 +16,12 @@ export interface BookAppointmentData {
   patientNotes?: string;
 }
 
+// Interface for data needed to update appointment status by doctor
+export interface UpdateAppointmentStatusData {
+  status: 'Confirmed' | 'Completed' | 'NoShow' | 'CancelledByDoctor'; // Define allowed statuses
+  doctorNotes?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -66,19 +72,19 @@ bookAppointment(appointmentData: BookAppointmentData): Observable<BookAppointmen
     );
 }
 
-  /**
-   * (Future) Allows a patient to update/reschedule their own appointment.
-   * @param appointmentId The ID of the appointment to update.
-   * @param updateData The data to update.
-   */
-  // updateMyAppointment(appointmentId: string, updateData: Partial<BookAppointmentData>): Observable<Appointment> {
-  //   const requestUrl = `${this.apiUrl}/my/${appointmentId}`; // Backend: PUT /api/appointments/my/:appointmentId
-  //   return this.http.put<Appointment>(requestUrl, updateData)
-  //     .pipe(
-  //       tap(updatedAppointment => console.log('Appointment updated by patient:', updatedAppointment)),
-  //       catchError(this.handleError)
-  //     );
-  // }
+  // /**
+  //  * (Future) Allows a patient to update/reschedule their own appointment.
+  //  * @param appointmentId The ID of the appointment to update.
+  //  * @param updateData The data to update.
+  //  */
+  // // updateMyAppointment(appointmentId: string, updateData: Partial<BookAppointmentData>): Observable<Appointment> {
+  // //   const requestUrl = `${this.apiUrl}/my/${appointmentId}`; // Backend: PUT /api/appointments/my/:appointmentId
+  // //   return this.http.put<Appointment>(requestUrl, updateData)
+  // //     .pipe(
+  // //       tap(updatedAppointment => console.log('Appointment updated by patient:', updatedAppointment)),
+  // //       catchError(this.handleError)
+  // //     );
+  // // }
 
 
   // Helper to get public doctor details (might move to a DoctorService later)
@@ -93,6 +99,57 @@ bookAppointment(appointmentData: BookAppointmentData): Observable<BookAppointmen
       let params = new HttpParams().set('date', date);
       return this.http.get<{availableSlots: string[]}>(requestUrl, { params }).pipe(map(res => res.availableSlots), catchError(this.handleError));
   }
+
+/**
+   * Gets the current authenticated doctor's appointments.
+   * Allows filtering by status, date, and sorting.
+   * @param status Optional status to filter by (e.g., 'Scheduled', 'Confirmed')
+   * @param date Optional date string (YYYY-MM-DD) to filter by
+   * @param sort Optional sort order (e.g., 'time_asc')
+   * @param limit Optional limit for the number of appointments
+   */
+  getMyAppointmentsAsDoctor(
+  status?: string,
+  date?: string,
+  sort?: string,
+  page?: number,
+  limit?: number
+): Observable<AppointmentsApiResponse> { // <<< RETURN TYPE IS AppointmentsApiResponse
+  let params = new HttpParams();
+  if (status) params = params.append('status', status);
+  if (date) params = params.append('date', date);
+  if (sort) params = params.append('sort', sort);
+  if (page !== undefined) params = params.append('page', page.toString());
+  if (limit !== undefined) params = params.append('limit', limit.toString());
+
+  const requestUrl = `${this.apiUrl}/doctor/my`;
+  console.log(`Requesting doctor appointments from: ${requestUrl} with params:`, params.toString());
+
+  return this.http.get<AppointmentsApiResponse>(requestUrl, { params })
+    .pipe(
+      // REMOVE any .map(response => response.appointments || []) that might have been here.
+      // We want to return the full AppointmentsApiResponse object.
+      tap(response => console.log('Full response from getMyAppointmentsAsDoctor:', response)), // For debugging
+      catchError(this.handleError)
+    );
+}
+
+/**
+   * Allows a doctor to update the status of one of their appointments.
+   * @param appointmentId The ID of the appointment to update.
+   * @param statusData The new status and optional notes.
+   */
+  updateAppointmentStatusByDoctor(appointmentId: string, statusData: UpdateAppointmentStatusData): Observable<Appointment> {
+    const requestUrl = `${this.apiUrl}/doctor/${appointmentId}/status`; // Backend: PUT /api/appointments/doctor/:appointmentId/status
+    console.log(`Updating appointment status: ${requestUrl}`, statusData);
+    return this.http.put<Appointment>(requestUrl, statusData) // Expecting the updated Appointment back
+      .pipe(
+        tap(updatedAppointment => console.log('Appointment status updated by doctor:', updatedAppointment)),
+        catchError(this.handleError)
+      );
+  }
+
+
 
 
   private handleError(error: HttpErrorResponse) {

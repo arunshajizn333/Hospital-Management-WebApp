@@ -1,2 +1,104 @@
-<h2>Patient Medical Record</h2>
-<p>View and manage medical history, add consultation notes, prescriptions for [Patient Name].</p>
+<div class="patient-record-page">
+  <header class="page-header">
+    <button type="button" (click)="goBackToPatientList()" class="btn btn-outline-secondary btn-sm back-button">
+      <i class="fas fa-arrow-left"></i> Back to Patient List
+    </button>
+    <h2 *ngIf="patient">Medical Record: {{ patient.name }}</h2>
+    <h2 *ngIf="!patient && !isLoadingPatient && !patientError">Patient Record</h2>
+    <p *ngIf="patient">View existing records and add new consultation notes or findings.</p>
+  </header>
+
+  <div *ngIf="isLoadingPatient" class="loading-indicator">
+    <p>Loading patient details...</p>
+    </div>
+  <div *ngIf="patientError && !isLoadingPatient" class="alert alert-danger error-summary">
+    <p>{{ patientError }}</p>
+  </div>
+
+  <div *ngIf="patient && !isLoadingPatient" class="patient-record-content">
+    <section class="patient-demographics card mb-4">
+      <div class="card-header">
+        <h4>Patient Information</h4>
+      </div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div><strong>Name:</strong> {{ patient.name }}</div>
+          <div><strong>Email:</strong> {{ patient.email }}</div>
+          <div><strong>Date of Birth:</strong> {{ patient.dateOfBirth ? (patient.dateOfBirth | date:'longDate') : 'N/A' }}</div>          <div><strong>Gender:</strong> {{ patient.gender || 'N/A' }}</div>
+          <div><strong>Phone:</strong> {{ patient.contact?.phone || 'N/A' }}</div>
+          <div><strong>Address:</strong> {{ patient.contact?.address || 'N/A' }}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="add-medical-record card mb-4">
+      <div class="card-header">
+        <h4>Add New Medical Record / Consultation Note</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="addRecordForm" (ngSubmit)="onAddMedicalRecord()">
+          <div class="form-group">
+            <label for="record-description">Description / Chief Complaint:</label>
+            <input type="text" id="record-description" formControlName="description" class="form-control" placeholder="e.g., Follow-up, Annual Checkup, Symptoms">
+            <div *ngIf="arf['description'].touched && arf['description'].errors" class="invalid-feedback">
+              <div *ngIf="arf['description'].errors?.['required']">Description is required.</div>
+              <div *ngIf="arf['description'].errors?.['maxlength']">Cannot exceed 500 characters.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="record-diagnosis">Diagnosis (Optional):</label>
+            <textarea id="record-diagnosis" formControlName="diagnosis" class="form-control" rows="3" placeholder="Enter diagnosis details"></textarea>
+            <div *ngIf="arf['diagnosis'].touched && arf['diagnosis'].errors?.['maxlength']" class="invalid-feedback">
+              Cannot exceed 1000 characters.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="record-treatment">Treatment / Prescription (Optional):</label>
+            <textarea id="record-treatment" formControlName="treatment" class="form-control" rows="3" placeholder="Enter treatment plan or prescriptions"></textarea>
+            <div *ngIf="arf['treatment'].touched && arf['treatment'].errors?.['maxlength']" class="invalid-feedback">
+              Cannot exceed 1000 characters.
+            </div>
+          </div>
+
+          <div *ngIf="addRecordSuccessMessage" class="alert alert-success mt-2">
+            {{ addRecordSuccessMessage }}
+          </div>
+          <div *ngIf="addRecordErrorMessage" class="alert alert-danger mt-2">
+            {{ addRecordErrorMessage }}
+          </div>
+
+          <button type="submit" [disabled]="isSubmittingRecord || addRecordForm.invalid" class="btn btn-primary btn-submit-record">
+            <span *ngIf="isSubmittingRecord" class="spinner-border spinner-border-sm"></span>
+            {{ isSubmittingRecord ? 'Saving Record...' : 'Add Medical Record' }}
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <section class="medical-history card">
+      <div class="card-header">
+        <h4>Medical History</h4>
+      </div>
+      <div class="card-body">
+        <div *ngIf="patient.medicalHistory && patient.medicalHistory.length > 0; else noHistory" class="history-list">
+          <div *ngFor="let record of patient.medicalHistory" class="history-item">
+            <div class="history-item-header">
+              <h5>{{ record.description || 'Medical Entry' }}</h5>
+              <span class="history-date">{{ record.date | date:'fullDate' }} at {{ record.date | date:'shortTime' }}</span>
+            </div>
+            <div class="history-item-body">
+              <p *ngIf="record.diagnosis"><strong>Diagnosis:</strong> {{ record.diagnosis }}</p>
+              <p *ngIf="record.treatment"><strong>Treatment:</strong> {{ record.treatment }}</p>
+              <p *ngIf="record.doctorAttended">
+                <strong>Attending:</strong> Dr. {{ getAttendingDoctorName(record.doctorAttended) }}
+              </p>
+            </div>
+            </div>
+        </div>
+        <ng-template #noHistory>
+          <p class="no-data-message">No prior medical history recorded for this patient.</p>
+        </ng-template>
+      </div>
+    </section>
+  </div>
+</div>
