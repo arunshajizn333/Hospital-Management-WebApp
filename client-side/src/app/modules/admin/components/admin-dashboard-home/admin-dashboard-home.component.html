@@ -1,0 +1,101 @@
+<div class="admin-dashboard-overview">
+  <header class="dashboard-header">
+    <h1 *ngIf="currentAdmin">Welcome, {{ currentAdmin.name }} (Admin)!</h1>
+    <p *ngIf="!currentAdmin">Welcome to the Admin Dashboard.</p>
+    <p class="dashboard-subtitle">Oversee hospital operations, manage users, and view key analytics.</p>
+  </header>
+
+  <section class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="actions-grid">
+      <button type="button" (click)="navigateTo('manage-doctors')" class="action-card">
+        <div class="action-icon"><i class="fas fa-user-md"></i></div>
+        <span>Manage Doctors</span>
+      </button>
+      <button type="button" (click)="navigateTo('manage-departments')" class="action-card">
+        <div class="action-icon"><i class="fas fa-hospital-symbol"></i></div>
+        <span>Manage Departments</span>
+      </button>
+      <button type="button" (click)="navigateTo('view-appointments')" class="action-card">
+        <div class="action-icon"><i class="fas fa-calendar-alt"></i></div>
+        <span>View All Appointments</span>
+      </button>
+      <button type="button" (click)="navigateTo('hospital-settings')" class="action-card">
+        <div class="action-icon"><i class="fas fa-cogs"></i></div>
+        <span>Hospital Settings</span>
+      </button>
+       <button type="button" (click)="navigateTo('view-patients')" class="action-card">
+        <div class="action-icon"><i class="fas fa-users"></i></div>
+        <span>View Patients</span>
+      </button>
+      <button type="button" (click)="navigateTo('manage-callbacks')" class="action-card">
+        <div class="action-icon"><i class="fas fa-phone-volume"></i></div>
+        <span>Callback Requests</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="patient-summary-section card">
+    <div class="card-header">
+      <h3><i class="fas fa-procedures"></i> Patient Statistics</h3>
+    </div>
+    <div class="card-body">
+      <div *ngIf="isLoadingPatientSummary" class="loading-indicator">Loading patient summary...</div>
+      <div *ngIf="patientSummaryError && !isLoadingPatientSummary" class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> {{ patientSummaryError }}
+      </div>
+      <div *ngIf="patientSummary && !isLoadingPatientSummary && !patientSummaryError" class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-value">{{ patientSummary.totalRegisteredPatients }}</span>
+          <span class="stat-label">Total Registered Patients</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ patientSummary.numberOfUniquePatientsWithAppointments }}</span>
+          <span class="stat-label">Patients with Appointments</span>
+        </div>
+        </div>
+    </div>
+  </section>
+
+  <section class="doctor-summary-section card">
+    <div class="card-header">
+      <h3><i class="fas fa-stethoscope"></i> Doctor Activity Summary</h3>
+    </div>
+    <div class="card-body">
+      <div *ngIf="isLoadingDoctorSummary" class="loading-indicator">Loading doctor summaries...</div>
+      <div *ngIf="doctorSummaryError && !isLoadingDoctorSummary" class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> {{ doctorSummaryError }}
+      </div>
+      <div *ngIf="doctorAppointmentSummary.length > 0 && !isLoadingDoctorSummary && !doctorSummaryError" class="table-responsive">
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <th>Doctor Name</th>
+              <th>Specialization</th>
+              <th>Total Appts.</th>
+              <th>Scheduled</th>
+              <th>Confirmed</th>
+              <th>Completed</th>
+              <th>Cancelled</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let summary of doctorAppointmentSummary">
+              <td>{{ summary.name }}</td>
+              <td>{{ summary.specialization || 'N/A' }}</td>
+              <td>{{ summary.counts.total }}</td>
+              <td>{{ summary.counts.scheduled }}</td>
+              <td>{{ summary.counts.confirmed }}</td>
+              <td>{{ summary.counts.completed }}</td>
+              <td>{{ summary.counts.cancelled }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p *ngIf="doctorAppointmentSummary.length === 0 && !isLoadingDoctorSummary && !doctorSummaryError" class="no-data-message">
+        No doctor activity data available yet.
+      </p>
+    </div>
+  </section>
+
+</div>

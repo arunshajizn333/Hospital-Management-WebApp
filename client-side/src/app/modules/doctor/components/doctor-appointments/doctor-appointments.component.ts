@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppointmentService, UpdateAppointmentStatusData } from '../../../../core/services/appointment.service'; // Adjust path
 import { Appointment, AppointmentsApiResponse } from '../../../../shared/models/appointment.model'; // Adjust path, ensure AppointmentsApiResponse is imported
-import { Patient } from '../../../../shared/models/patient.model'; // For typing populated patient info
+import { Patient,PopulatedPatientInfo } from '../../../../shared/models/patient.model'; // For typing populated patient info
 
 @Component({
   selector: 'app-doctor-appointments',
@@ -142,7 +142,7 @@ export class DoctorAppointmentsComponent implements OnInit {
     this.updateStatusError = null;
   }
 
-  getPatientName(patient: Patient | string | undefined): string {
+ getPatientName(patient: PopulatedPatientInfo | string | undefined): string { // <<< CORRECTED TYPE HERE
     if (patient && typeof patient === 'object' && patient.name) {
       return patient.name;
     }

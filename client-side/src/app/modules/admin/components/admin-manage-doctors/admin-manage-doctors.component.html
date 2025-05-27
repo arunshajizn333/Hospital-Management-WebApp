@@ -1,0 +1,543 @@
+<div class="admin-manage-doctors-page">
+  <header class="page-header">
+    <h2>Manage Doctor Profiles</h2>
+    <p>Add new doctors, update existing profiles, and manage their details.</p>
+  </header>
+
+  <div class="text-right mb-3">
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="openAddDoctorModal()"
+    >
+      <i class="fas fa-user-plus"></i> Add New Doctor
+    </button>
+  </div>
+
+  <form
+    [formGroup]="filterForm"
+    (ngSubmit)="onSearch()"
+    class="filter-form card mb-4"
+  >
+    <div class="card-body">
+      <h5 class="card-title">Filter Doctors</h5>
+      <div class="form-row align-items-end">
+        <div class="form-group col-md-4">
+          <label for="filter-name">Name:</label>
+          <input
+            type="text"
+            id="filter-name"
+            formControlName="name"
+            class="form-control form-control-sm"
+            placeholder="Search by name..."
+          />
+        </div>
+        <div class="form-group col-md-3">
+          <label for="filter-specialization">Specialization:</label>
+          <input
+            type="text"
+            id="filter-specialization"
+            formControlName="specialization"
+            class="form-control form-control-sm"
+            placeholder="Search by specialization..."
+          />
+        </div>
+        <div class="form-group col-md-3">
+          <label for="filter-department">Department:</label>
+          <select
+            id="filter-department"
+            formControlName="departmentId"
+            class="form-control form-control-sm"
+          >
+            <option value="">All Departments</option>
+            <option *ngFor="let dept of departments" [value]="dept._id">
+              {{ dept.name }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col-md-2">
+          <button type="submit" class="btn btn-info btn-sm w-100">
+            Apply Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="isLoadingDoctors" class="loading-indicator">
+    <p>Loading doctors...</p>
+  </div>
+  <div
+    *ngIf="errorMessage && !isLoadingDoctors && !showDoctorForm"
+    class="alert alert-danger"
+  >
+    {{ errorMessage }}
+  </div>
+  <div
+    *ngIf="successMessage && !isSubmitting && !showDoctorForm"
+    class="alert alert-success"
+  >
+    {{ successMessage }}
+  </div>
+
+  <div
+    *ngIf="!isLoadingDoctors && !errorMessage && doctors.length > 0"
+    class="doctors-table-container table-responsive"
+  >
+    <p class="results-info">
+      Showing {{ doctors.length }} of {{ totalDoctors }} doctors.
+    </p>
+    <table class="table table-hover table-striped table-sm">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Specialization</th>
+          <th>Department</th>
+          <th>Phone</th>
+          <th>Featured</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doctor of doctors">
+          <td>{{ doctor.name }}</td>
+          <td>{{ doctor.email }}</td>
+          <td>{{ doctor.specialization }}</td>
+          <td>{{ getDepartmentName(doctor.department) }}</td>
+          <td>{{ doctor.phone || "N/A" }}</td>
+          <td>{{ doctor.isFeatured ? "Yes" : "No" }}</td>
+          <td>
+            <button
+              type="button"
+              (click)="openEditDoctorModal(doctor)"
+              class="btn btn-sm btn-outline-primary mr-1"
+              title="Edit Doctor"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              type="button"
+              (click)="confirmDeleteDoctor(doctor._id)"
+              class="btn btn-sm btn-outline-danger"
+              title="Delete Doctor"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p
+    *ngIf="!isLoadingDoctors && !errorMessage && doctors.length === 0"
+    class="no-data-message"
+  >
+    No doctors found matching your criteria.
+  </p>
+
+  <nav
+    *ngIf="!isLoadingDoctors && !errorMessage && totalPages > 1"
+    aria-label="Doctors pagination"
+    class="mt-4"
+  >
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="javascript:void(0)" (click)="prevPage()"
+          >Previous</a
+        >
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link"
+          >Page {{ currentPage }} of {{ totalPages }}</span
+        >
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" href="javascript:void(0)" (click)="nextPage()"
+          >Next</a
+        >
+      </li>
+    </ul>
+  </nav>
+
+  <div *ngIf="showDoctorForm" class="doctor-form-modal-overlay">
+    <div class="doctor-form-modal-content card">
+      <div class="card-header">
+        <h4 class="card-title">
+          {{ isEditMode ? "Edit Doctor Profile" : "Add New Doctor" }}
+        </h4>
+        <button
+          type="button"
+          class="close-btn"
+          (click)="closeDoctorFormModal()"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="doctorForm" (ngSubmit)="onDoctorFormSubmit()">
+          <fieldset>
+            <legend>Basic Information</legend>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="docName">Full Name:</label>
+                <input
+                  type="text"
+                  id="docName"
+                  formControlName="name"
+                  class="form-control"
+                />
+                <div
+                  *ngIf="
+                    doctorForm.get('name')?.touched &&
+                    doctorForm.get('name')?.errors
+                  "
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="doctorForm.get('name')?.errors?.['required']">
+                    Name is required.
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="docEmail">Email:</label>
+                <input
+                  type="email"
+                  id="docEmail"
+                  formControlName="email"
+                  class="form-control"
+                />
+                <div
+                  *ngIf="
+                    doctorForm.get('email')?.touched &&
+                    doctorForm.get('email')?.errors
+                  "
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="doctorForm.get('email')?.errors?.['required']">
+                    Email is required.
+                  </div>
+                  <div *ngIf="doctorForm.get('email')?.errors?.['email']">
+                    Invalid email format.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="!isEditMode">
+              <label for="docPassword">Password:</label>
+              <input
+                type="password"
+                id="docPassword"
+                formControlName="password"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  doctorForm.get('password')?.touched &&
+                  doctorForm.get('password')?.errors
+                "
+                class="invalid-feedback"
+              >
+                <div *ngIf="doctorForm.get('password')?.errors?.['required']">
+                  Password is required for new doctor.
+                </div>
+                <div *ngIf="doctorForm.get('password')?.errors?.['minlength']">
+                  Password must be at least 6 characters.
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="docSpecialization">Specialization:</label>
+                <input
+                  type="text"
+                  id="docSpecialization"
+                  formControlName="specialization"
+                  class="form-control"
+                />
+                <div
+                  *ngIf="doctorForm.get('specialization')?.touched && doctorForm.get('specialization')?.errors?.['required']"
+                  class="invalid-feedback"
+                >
+                  Specialization is required.
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="docDepartment">Department:</label>
+                <select
+                  id="docDepartment"
+                  formControlName="department"
+                  class="form-control"
+                >
+                  <option [ngValue]="null" disabled>Select Department</option>
+                  <option *ngFor="let dept of departments" [value]="dept._id">
+                    {{ dept.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="doctorForm.get('department')?.touched && doctorForm.get('department')?.errors?.['required']"
+                  class="invalid-feedback"
+                >
+                  Department is required.
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="docPhone">Phone:</label>
+              <input
+                type="tel"
+                id="docPhone"
+                formControlName="phone"
+                class="form-control"
+              />
+              <div
+                *ngIf="doctorForm.get('phone')?.touched && doctorForm.get('phone')?.errors?.['pattern']"
+                class="invalid-feedback"
+              >
+                Invalid phone number format.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="docRole">Role:</label>
+              <select id="docRole" formControlName="role" class="form-control">
+                <option value="doctor">Doctor</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Public Profile Details</legend>
+            <div class="form-group">
+              <label for="docPhotoUrl">Photo URL:</label>
+              <input
+                type="url"
+                id="docPhotoUrl"
+                formControlName="photoUrl"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label for="docPublicBio">Public Bio:</label>
+              <textarea
+                id="docPublicBio"
+                formControlName="publicBio"
+                class="form-control"
+                rows="3"
+              ></textarea>
+            </div>
+            <div class="form-check mb-3">
+              <input
+                type="checkbox"
+                id="docIsFeatured"
+                formControlName="isFeatured"
+                class="form-check-input"
+              />
+              <label for="docIsFeatured" class="form-check-label"
+                >Mark as Featured Doctor</label
+              >
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Weekly Recurring Schedule</legend>
+            <div
+              formArrayName="availabilitySchedule"
+              class="weekly-schedule-grid-form"
+            >
+              <div
+                *ngFor="
+                  let dayCtrl of doctorFormAvailabilitySchedule.controls;
+                  let i = index
+                "
+                [formGroupName]="i"
+                class="day-schedule-card-form"
+              >
+                <h6>{{ daysOfWeek[i] }}</h6>
+                <div class="form-check mb-2">
+                  <input
+                    type="checkbox"
+                    [id]="'docIsAvailDay' + i"
+                    formControlName="isAvailable"
+                    class="form-check-input"
+                  />
+                  <label [for]="'docIsAvailDay' + i" class="form-check-label"
+                    >Available</label
+                  >
+                </div>
+                <ng-container *ngIf="dayCtrl.get('isAvailable')?.value">
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label>Start:</label
+                      ><input
+                        type="time"
+                        formControlName="startTime"
+                        class="form-control form-control-sm"
+                      />
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>End:</label
+                      ><input
+                        type="time"
+                        formControlName="endTime"
+                        class="form-control form-control-sm"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Slot (min):</label
+                    ><input
+                      type="number"
+                      formControlName="slotDurationMinutes"
+                      class="form-control form-control-sm"
+                    />
+                  </div>
+                  <div class="break-times-section-form">
+                    <label class="small">Breaks:</label>
+                    <div formArrayName="breakTimes">
+                      <div
+                        *ngFor="
+                          let breakCtrl of getDoctorFormBreakTimes(dayCtrl)
+                            .controls;
+                          let j = index
+                        "
+                        [formGroupName]="j"
+                        class="break-time-item-form form-row align-items-center"
+                      >
+                        <div class="col">
+                          <input
+                            type="time"
+                            formControlName="breakStart"
+                            class="form-control form-control-sm"
+                          />
+                        </div>
+                        <div class="col">
+                          <input
+                            type="time"
+                            formControlName="breakEnd"
+                            class="form-control form-control-sm"
+                          />
+                        </div>
+                        <div class="col-auto">
+                          <button
+                            type="button"
+                            (click)="removeDoctorFormBreakTime(dayCtrl, j)"
+                            class="btn btn-danger btn-xs"
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      (click)="addDoctorFormBreakTime(dayCtrl)"
+                      class="btn btn-outline-secondary btn-xs mt-1"
+                    >
+                      + Add Break
+                    </button>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="mt-3">
+            <legend>Date-Specific Overrides</legend>
+            <div
+              formArrayName="availabilityOverrides"
+              class="overrides-list-form"
+            >
+              <div
+                *ngFor="
+                  let overrideCtrl of doctorFormAvailabilityOverrides.controls;
+                  let k = index
+                "
+                [formGroupName]="k"
+                class="override-card-form card mb-2"
+              >
+                <div class="card-body p-2">
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-4">
+                      <label>Date:</label
+                      ><input
+                        type="date"
+                        formControlName="date"
+                        class="form-control form-control-sm"
+                      />
+                    </div>
+                    <div class="form-group col-md-3 mt-md-2">
+                      <input
+                        type="checkbox"
+                        [id]="'docIsAvailOverride' + k"
+                        formControlName="isAvailable"
+                        class="form-check-input"
+                      /><label
+                        [for]="'docIsAvailOverride' + k"
+                        class="form-check-label ml-1"
+                        >Available</label
+                      >
+                    </div>
+                    <div class="form-group col-md-auto mt-md-2">
+                      <button
+                        type="button"
+                        (click)="removeDoctorFormDateOverride(k)"
+                        class="btn btn-danger btn-sm"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="overrideCtrl.get('isAvailable')?.value">
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              (click)="addDoctorFormDateOverride()"
+              class="btn btn-success btn-sm mt-2"
+            >
+              + Add Override
+            </button>
+          </fieldset>
+
+          <div
+            *ngIf="errorMessage && showDoctorForm"
+            class="alert alert-danger mt-3"
+          >
+            {{ errorMessage }}
+          </div>
+
+          <div class="form-actions mt-4">
+            <button
+              type="button"
+              (click)="closeDoctorFormModal()"
+              class="btn btn-secondary mr-2"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSubmitting || doctorForm.invalid"
+              class="btn btn-primary"
+            >
+              <span
+                *ngIf="isSubmitting"
+                class="spinner-border spinner-border-sm"
+              ></span>
+              {{
+                isSubmitting
+                  ? "Saving..."
+                  : isEditMode
+                  ? "Update Doctor"
+                  : "Create Doctor"
+              }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

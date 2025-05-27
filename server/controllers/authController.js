@@ -115,7 +115,7 @@ exports.loginPatient = async (req, res) => {
 };
 
 
-// --- NEW ADMIN LOGIN FUNCTION ---
+// ---  ADMIN LOGIN FUNCTION ---
 // @desc    Authenticate admin & get token
 // @route   POST /api/auth/admin/login
 // @access  Public

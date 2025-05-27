@@ -1,0 +1,318 @@
+/* src/app/modules/admin/components/admin-manage-doctors/admin-manage-doctors.component.css */
+:host {
+  display: block;
+}
+
+.admin-manage-doctors-page {
+  padding: 20px 25px;
+}
+
+.page-header { /* Consistent page header style */
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+.page-header h2 {
+  font-size: 2em;
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 5px;
+}
+.page-header p {
+  font-size: 1em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+.text-right { text-align: right; }
+.mb-3 { margin-bottom: 1rem !important; }
+.mr-1 { margin-right: .25rem !important; }
+.mt-1 { margin-top: .25rem !important; }
+.mt-2 { margin-top: .5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+.mb-2 { margin-bottom: .5rem !important; }
+.mb-4 { margin-bottom: 1.5rem !important; }
+.p-2 { padding: .5rem !important; }
+
+.btn-success i, .btn-outline-primary i, .btn-outline-danger i {
+  margin-right: .3rem;
+}
+
+/* Filter Form Styling */
+.filter-form.card {
+  margin-bottom: 30px;
+  background-color: var(--light-bg-color, #f8f9fa);
+  border: 1px solid var(--border-color, #e9ecef);
+}
+.filter-form .card-title {
+  font-size: 1.2em;
+  color: var(--primary-color, #007bff);
+  margin-bottom: 15px;
+}
+.form-row { display: flex; flex-wrap: wrap; margin-right: -5px; margin-left: -5px; }
+.form-row > .col, .form-row > [class*="col-"] { padding-right: 5px; padding-left: 5px; }
+.align-items-end { align-items: flex-end !important; }
+
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: .3rem; font-weight: 500; font-size: 0.9em; }
+.form-control, .form-control-sm { /* Ensure global or shared styles */
+    display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem;
+    line-height: 1.5; color: #495057; background-color: #fff;
+    background-clip: padding-box; border: 1px solid #ced4da;
+    border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    box-sizing: border-box;
+}
+.form-control-sm { padding: .25rem .5rem; font-size: .875rem; border-radius: .2rem; }
+.btn.w-100 { width: 100%; }
+
+
+/* Loading, Error, Success Messages */
+.loading-indicator, .no-data-message {
+  text-align: center; padding: 20px; font-size: 1.1em;
+  color: var(--text-color-muted, #6c757d); margin-top: 20px;
+}
+.alert { /* Global or shared style needed */
+  margin-top: 15px; margin-bottom: 15px; padding: .75rem 1.25rem;
+  border: 1px solid transparent; border-radius: .25rem;
+}
+.alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+.alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+
+
+/* Doctors List Table */
+.doctors-table-container {
+  background-color: var(--white-color, #fff);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  overflow-x: auto;
+}
+.results-info { padding: 10px 15px; font-size: 0.9em; color: var(--text-color-muted, #6c757d); border-bottom: 1px solid var(--border-color, #eee); }
+.table { width: 100%; margin-bottom: 0; /* Removed bottom margin as container handles it */ }
+.table th, .table td { padding: 0.75rem; vertical-align: middle; border-top: 1px solid var(--border-color, #dee2e6); font-size: 0.9rem; }
+.table thead th {
+  background-color: var(--light-bg-color, #f8f9fa); color: var(--primary-color-darker, #004085);
+  font-weight: 600; text-align: left; border-bottom-width: 2px;
+}
+.table-hover tbody tr:hover { background-color: rgba(0,0,0,.035); }
+.table-striped tbody tr:nth-of-type(odd) { background-color: rgba(0,0,0,.015); }
+.table .btn-sm i { margin-right: 3px; }
+
+/* Pagination (can be global/shared) */
+.pagination { /* ... styles from previous pagination ... */ }
+.justify-content-center { justify-content: center !important; }
+
+/* Doctor Add/Edit Form Modal Styling */
+.doctor-form-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Above other content */
+}
+
+.doctor-form-modal-content.card {
+  width: 90%;
+  max-width: 800px; /* Allow more width for the complex form */
+  max-height: 90vh; /* Max height */
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white-color, #fff);
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+.doctor-form-modal-content .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-color, #007bff);
+  color: var(--white-color, #fff);
+  padding: 1rem 1.5rem;
+}
+.doctor-form-modal-content .card-header .card-title {
+  margin: 0;
+  font-size: 1.4em;
+  color: var(--white-color, #fff); /* Ensure title is white */
+}
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: rgba(255,255,255,0.8);
+  opacity: 0.8;
+  padding: 0 .5rem;
+}
+.close-btn:hover {
+  opacity: 1;
+  color: var(--white-color, #fff);
+}
+
+.doctor-form-modal-content .card-body {
+  padding: 20px 25px;
+  overflow-y: auto; /* Enable scrolling for long form content */
+  flex-grow: 1;
+}
+
+.doctor-form-modal-content fieldset {
+  border: 1px solid var(--border-color, #ddd);
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+}
+.doctor-form-modal-content fieldset legend {
+  font-size: 1.15em;
+  font-weight: 600;
+  color: var(--primary-color, #007bff);
+  padding: 0 8px;
+  width: auto;
+}
+.doctor-form-modal-content .form-actions {
+  display: flex; /* Align buttons */
+  justify-content: flex-end; /* Push buttons to the right */
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color, #eee);
+  margin-top: 20px;
+}
+.doctor-form-modal-content .form-actions .btn {
+  margin-left: 10px;
+}
+.doctor-form-modal-content .form-actions .btn-secondary {
+  background-color: var(--secondary-color, #6c757d);
+  color: var(--white-color, #fff);
+}
+
+
+/* Styles for Availability Schedule within the Doctor Form */
+.weekly-schedule-grid-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+}
+.day-schedule-card-form {
+  background-color: var(--light-bg-color, #f9f9f9);
+  padding: 12px;
+  border: 1px solid var(--border-color-light, #e9ecef);
+  border-radius: 4px;
+}
+.day-schedule-card-form h6 {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--text-color, #343a40);
+}
+.break-times-section-form {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-color-light, #e9ecef);
+}
+.break-times-section-form label.small {
+  font-size: 0.8em;
+  font-weight: normal;
+  color: var(--text-color-muted, #6c757d);
+}
+.break-time-item-form {
+  background-color: var(--white-color, #fff); /* Slightly different background for break item */
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 6px !important;
+}
+.btn-xs { /* Extra small buttons */
+  padding: .1rem .3rem;
+  font-size: .75rem;
+  line-height: 1.2;
+}
+
+
+/* Styles for Date Overrides within the Doctor Form */
+.overrides-list-form .override-card-form.card {
+  margin-bottom: 15px !important;
+  background-color: var(--light-bg-color, #f9f9f9);
+  border: 1px solid var(--border-color-light, #e9ecef);
+}
+.overrides-list-form .override-card-form .card-body {
+  padding: 15px !important; /* Override card-body default padding */
+}
+.overrides-list-form .form-row.align-items-center .form-group {
+  margin-bottom: 5px; /* Reduce margin for compact override header row */
+}
+
+.invalid-feedback { /* Ensure visibility */
+  display: none; color: var(--danger-color, #dc3545); font-size: 0.8em; margin-top: 0.2rem;
+}
+.form-control.ng-invalid.ng-touched + .invalid-feedback,
+.form-control.ng-invalid.ng-dirty + .invalid-feedback { display: block; }
+.ng-invalid.ng-touched:not(form) { border-color: var(--danger-color, #dc3545) !important; }
+
+/* Responsive adjustments for modal form if needed */
+@media (max-width: 767px) {
+  .doctor-form-modal-content.card {
+    max-width: 95%; /* Allow more width on small screens */
+    margin: 10px; /* Some margin */
+  }
+  .doctor-form-modal-content .card-body {
+    padding: 15px;
+  }
+  .weekly-schedule-grid-form {
+    grid-template-columns: 1fr; /* Stack day cards */
+  }
+  .form-row .form-group.col-md-6,
+  .form-row .form-group.col-md-4,
+  .form-row .form-group.col-md-3,
+  .form-row .form-group.col-md-2 {
+    flex-basis: 100%; max-width: 100%; margin-bottom: 10px;
+  }
+}
+
+/* Styling for action buttons in the table */
+.table td .btn { /* Target buttons within table cells */
+  display: inline-flex; /* Helps align icon and text if you add text later */
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.5rem; /* Slightly adjust padding for icon buttons */
+  margin-right: 0.3rem; /* Default right margin for buttons in a group */
+  line-height: 1; /* Ensure icon is centered vertically */
+}
+
+.table td .btn:last-child {
+  margin-right: 0; /* No margin for the last button in a group */
+}
+
+/* Specific styling for Material Icons within these buttons */
+.table td .btn mat-icon {
+  font-size: 1.1rem; /* Adjust icon size as needed */
+  /* Material icons usually align well vertically by default */
+  /* No extra margin needed around mat-icon if button padding is sufficient */
+}
+
+/* Styles for btn-outline-primary (if not globally defined or needs tweaking) */
+.btn-outline-primary {
+  color: var(--primary-color, #007bff);
+  border-color: var(--primary-color, #007bff);
+  background-color: transparent;
+}
+.btn-outline-primary:hover {
+  color: var(--white-color, #fff);
+  background-color: var(--primary-color, #007bff);
+  border-color: var(--primary-color, #007bff);
+}
+
+/* Styles for btn-outline-danger (if not globally defined or needs tweaking) */
+.btn-outline-danger {
+  color: var(--danger-color, #dc3545);
+  border-color: var(--danger-color, #dc3545);
+  background-color: transparent;
+}
+.btn-outline-danger:hover {
+  color: var(--white-color, #fff);
+  background-color: var(--danger-color, #dc3545);
+  border-color: var(--danger-color, #dc3545);
+}
+
+/* Ensure .mr-1 is defined if you're using it for margin, or handle spacing with gap/margin on .btn */
+.mr-1 {
+  margin-right: 0.25rem !important; /* From your HTML */
+}

@@ -5,6 +5,9 @@ import { User } from '../../../../shared/models/user.model'; // Adjust path
 import { Appointment } from '../../../../shared/models/appointment.model'; // Adjust path
 import { Doctor } from '../../../../shared/models/doctor.model';
 import { Router } from '@angular/router';
+import { PopulatedDoctorInfo } from '../../../../shared/models/doctor.model'; // Or wherever it's defined
+import { PopulatedPatientInfo } from '../../../../shared/models/patient.model'; // For getPatientName
+
 
 @Component({
   selector: 'app-patient-dashboard-home',
@@ -48,19 +51,26 @@ export class PatientDashboardHomeComponent implements OnInit {
         }
       });
   }
-   getDoctorName(doctor: Doctor | string | undefined): string {
+   getDoctorName(doctor: PopulatedDoctorInfo | string | undefined): string {
     if (doctor && typeof doctor === 'object' && doctor.name) {
       return doctor.name;
     }
     return 'N/A'; // Or some other placeholder
   }
 
-  getDoctorSpecialization(doctor: Doctor | string | undefined): string | null {
+  getDoctorSpecialization(doctor: PopulatedDoctorInfo  | string | undefined): string | null {
     if (doctor && typeof doctor === 'object' && doctor.specialization) {
       return doctor.specialization;
     }
     return null;
   }
+
+   getPatientName(patient: PopulatedPatientInfo | string | undefined): string {
+     if (patient && typeof patient === 'object' && patient.name) {
+     return patient.name;
+     }
+     return 'N/A';
+ }
 
     // Navigation methods for quick actions
    navigateTo(path: string): void {

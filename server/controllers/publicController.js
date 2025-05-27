@@ -82,29 +82,30 @@ exports.getPublicDoctorsList = async (req, res) => {
 };
 
 /**
- * @desc    Get a list of featured doctors.
+ * @desc    Get a list of featured doctors
  * @route   GET /api/public/doctors/featured
  * @access  Public
  */
 exports.getFeaturedDoctors = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit, 10) || 5; // Default number of featured doctors
+    // Parse 'limit' from query parameters, default to 5 if not provided or invalid
+    const limit = parseInt(req.query.limit, 10) || 5;
+
+    // Define which fields of the Doctor model should be publicly exposed
     const publicDoctorFields = '_id name specialization photoUrl publicBio department';
 
-    // Fetches doctors marked with 'isFeatured: true' in their profile.
+    // Fetch doctors from the database where 'isFeatured' is true
     const doctors = await Doctor.find({ isFeatured: true })
-        .populate('department', 'name') // Populate department name
-        .select(publicDoctorFields)
-        .limit(limit);
-    
-    // Optional: Fallback logic if no doctors are marked as featured.
-    // Currently, it will return an empty list if none are explicitly featured.
+      .populate('department', 'name') // Populate the 'name' of the referenced department
+      .select(publicDoctorFields)     // Select only the defined public fields
+      .limit(limit);                  // Limit the number of results
 
     res.status(200).json({
       message: 'Featured doctors retrieved successfully.',
-      count: doctors.length,
-      doctors,
+      count: doctors.length, // The actual number of featured doctors found (up to the limit)
+      doctors,               // The array of featured doctor objects
     });
+
   } catch (error) {
     console.error('Error fetching featured doctors:', error.message);
     res.status(500).json({ message: 'Server Error while fetching featured doctors.' });

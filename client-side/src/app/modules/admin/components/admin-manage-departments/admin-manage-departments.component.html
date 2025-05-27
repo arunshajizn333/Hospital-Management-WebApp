@@ -1,0 +1,275 @@
+<div class="admin-manage-departments-page">
+  <header class="page-header">
+    <h2>Manage Medical Departments</h2>
+    <p>Add, edit, or remove hospital departments from the system.</p>
+  </header>
+
+  <div class="actions-bar mb-3">
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="openAddDepartmentModal()"
+    >
+      <i class="fas fa-plus-circle"></i> Add New Department
+    </button>
+  </div>
+
+  <div *ngIf="isLoading && !showDepartmentForm" class="loading-indicator">
+    <p>Loading departments...</p>
+  </div>
+  <div *ngIf="errorMessage && !showDepartmentForm" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div
+    *ngIf="successMessage && !isSubmittingForm && !showDepartmentForm"
+    class="alert alert-success"
+  >
+    {{ successMessage }}
+  </div>
+
+  <div
+    *ngIf="!isLoading && departments.length > 0"
+    class="departments-table-container table-responsive"
+  >
+    <p class="results-info">
+      Showing {{ departments.length }} of {{ totalDepartments }} departments.
+    </p>
+    <table class="table table-hover table-striped table-sm">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Services Offered</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dept of departments">
+          <td>{{ dept.name }}</td>
+          <td>
+            {{ dept.description | slice : 0 : 100
+            }}{{
+              dept.description && dept.description.length > 100 ? "..." : ""
+            }}
+          </td>
+          <td>
+            <ul
+              *ngIf="dept.servicesOffered && dept.servicesOffered.length > 0"
+              class="services-list-inline"
+            >
+              <li *ngFor="let service of dept.servicesOffered.slice(0, 3)">
+                {{ service }}
+              </li>
+              <li *ngIf="dept.servicesOffered.length > 3">...</li>
+            </ul>
+            <span
+              *ngIf="!dept.servicesOffered || dept.servicesOffered.length === 0"
+              >N/A</span
+            >
+          </td>
+          <td>
+            <button
+              type="button"
+              (click)="openEditDepartmentModal(dept)"
+              class="btn btn-sm btn-outline-primary mr-1"
+              title="Edit Department"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              type="button"
+              (click)="confirmDeleteDepartment(dept._id, dept.name)"
+              class="btn btn-sm btn-outline-danger"
+              title="Delete Department"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p
+    *ngIf="!isLoading && departments.length === 0 && !errorMessage"
+    class="no-data-message"
+  >
+    No departments found. Click "Add New Department" to get started.
+  </p>
+
+  <nav
+    *ngIf="!isLoading && totalPages > 1"
+    aria-label="Departments pagination"
+    class="mt-4"
+  >
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="javascript:void(0)" (click)="prevPage()"
+          >Previous</a
+        >
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link"
+          >Page {{ currentPage }} of {{ totalPages }}</span
+        >
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" href="javascript:void(0)" (click)="nextPage()"
+          >Next</a
+        >
+      </li>
+    </ul>
+  </nav>
+
+  <div *ngIf="showDepartmentForm" class="department-form-modal-overlay">
+    <div class="department-form-modal-content card">
+      <div class="card-header">
+        <h4 class="card-title">
+          {{ isEditMode ? "Edit Department" : "Add New Department" }}
+        </h4>
+        <button
+          type="button"
+          class="close-btn"
+          (click)="closeDepartmentFormModal()"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+      </div>
+      <div class="card-body">
+        <form
+          [formGroup]="departmentForm"
+          (ngSubmit)="onDepartmentFormSubmit()"
+        >
+          <div class="form-group">
+            <label for="deptName">Department Name:</label>
+            <input
+              type="text"
+              id="deptName"
+              formControlName="name"
+              class="form-control"
+            />
+            <div
+              *ngIf="
+                departmentForm.get('name')?.touched &&
+                departmentForm.get('name')?.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="departmentForm.get('name')?.errors?.['required']">
+                Name is required.
+              </div>
+              <div *ngIf="departmentForm.get('name')?.errors?.['minlength']">
+                Name must be at least 3 characters.
+              </div>
+              <div *ngIf="departmentForm.get('name')?.errors?.['maxlength']">
+                Name cannot exceed 100 characters.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="deptDescription">Description (Optional):</label>
+            <textarea
+              id="deptDescription"
+              formControlName="description"
+              class="form-control"
+              rows="3"
+            ></textarea>
+            <div
+              *ngIf="departmentForm.get('description')?.touched && departmentForm.get('description')?.errors?.['maxlength']"
+              class="invalid-feedback"
+            >
+              Description cannot exceed 1000 characters.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="deptImageUrl">Image URL (Optional):</label>
+            <input
+              type="url"
+              id="deptImageUrl"
+              formControlName="imageUrl"
+              class="form-control"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+
+          <div formArrayName="servicesOffered" class="mb-3">
+            <label>Services Offered (Optional):</label>
+            <div
+              *ngFor="
+                let serviceCtrl of servicesOfferedFormArray.controls;
+                let i = index
+              "
+              class="input-group input-group-sm mb-2"
+            >
+              <input
+                type="text"
+                [formControlName]="i"
+                class="form-control"
+                placeholder="Enter a service"
+              />
+              <div class="input-group-append">
+                <button
+                  type="button"
+                  (click)="removeServiceOffered(i)"
+                  class="btn btn-outline-danger btn-sm"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+            <button
+              type="button"
+              (click)="addServiceOffered()"
+              class="btn btn-outline-secondary btn-sm"
+            >
+              + Add Service
+            </button>
+          </div>
+
+          <div
+            *ngIf="errorMessage && showDepartmentForm"
+            class="alert alert-danger mt-2"
+          >
+            {{ errorMessage }}
+          </div>
+          <div
+            *ngIf="successMessage && isSubmittingForm"
+            class="alert alert-info mt-2"
+          >
+            {{ successMessage }}
+          </div>
+
+          <div class="form-actions mt-4">
+            <button
+              type="button"
+              (click)="closeDepartmentFormModal()"
+              class="btn btn-secondary mr-2"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSubmittingForm || departmentForm.invalid"
+              class="btn btn-primary"
+            >
+              <span
+                *ngIf="isSubmittingForm"
+                class="spinner-border spinner-border-sm"
+              ></span>
+              {{
+                isSubmittingForm
+                  ? "Saving..."
+                  : isEditMode
+                  ? "Update Department"
+                  : "Create Department"
+              }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

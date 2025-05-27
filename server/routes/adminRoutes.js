@@ -137,5 +137,11 @@ router.put('/doctors/:doctorId', protect, authorize('admin'), adminController.up
  */
 router.delete('/doctors/:doctorId', protect, authorize('admin'), adminController.deleteDoctorByAdmin);
 
+/**
+ * @route   GET /api/admin/patients
+ * @desc    Admin gets a list of all patients
+ * @access  Private (Admin)
+ */
+router.get('/patients', protect, authorize('admin'), adminController.getAllPatientsForAdmin);
 
 module.exports = router;

@@ -1,54 +1,78 @@
 // src/app/shared/models/doctor.model.ts
 import { Department } from './department.model';
 
+export type DayOfWeek = 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
+
 export interface BreakTime {
+  _id?: string;
   breakStart: string; // HH:MM
   breakEnd: string;   // HH:MM
-  _id?: string; // Mongoose might add this to subdocuments in array
 }
 
 export interface DailyAvailability {
-  dayOfWeek: 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday'; // This is the key
-  isAvailable: boolean;
-  startTime?: string;
-  endTime?: string;
-  slotDurationMinutes?: number;
-  breakTimes?: BreakTime[];
   _id?: string;
-}
-
-export interface DateOverride {
-  date: string; // Should be ISO string date part YYYY-MM-DD
+  dayOfWeek: DayOfWeek;
   isAvailable: boolean;
   startTime?: string; // HH:MM
   endTime?: string;   // HH:MM
   slotDurationMinutes?: number;
   breakTimes?: BreakTime[];
-  _id?: string; // Mongoose might add this to subdocuments in array
+}
+
+export interface DateOverride {
+  _id?: string;
+  date: string; // Should be ISO string date part YYYY-MM-DD when sending to form, Date object from backend
+  isAvailable: boolean;
+  startTime?: string; // HH:MM
+  endTime?: string;   // HH:MM
+  slotDurationMinutes?: number;
+  breakTimes?: BreakTime[];
 }
 
 export interface Doctor {
   _id: string;
   name: string;
-  email: string; // Usually not public, but for profile management
-  specialization?: string;
-  department?: Department | string;
+  email: string;
+  specialization?: string; // Made optional if backend select might omit it, but admin form requires it
+  department?: Department | string; // Can be populated Department object or just ID string
   phone?: string;
   photoUrl?: string;
   publicBio?: string;
   isFeatured?: boolean;
-  role?: 'doctor' | 'admin'; // Role based on your backend model
+  role?: 'doctor' | 'admin';
   availabilitySchedule?: DailyAvailability[];
   availabilityOverrides?: DateOverride[];
-  // other fields like createdAt, updatedAt if needed by frontend
+  createdAt?: string;
+  updatedAt?: string;
+  // password field is not here as it's write-only or handled by backend
 }
 
-// For API responses when fetching multiple doctors (e.g., for public lists)
 export interface DoctorsApiResponse {
-  message?: string;
-  count?: number;
-  total?: number;
-  currentPage?: number;
-  totalPages?: number;
-  doctors: Doctor[];
+    message?: string;
+    count?: number;
+    total?: number;
+    currentPage?: number;
+    totalPages?: number;
+    doctors: Doctor[];
+}
+
+// This payload is for Admin creating/updating a doctor
+export interface AdminDoctorPayload {
+  name: string;
+  email: string;
+  password?: string; // Only for create
+  specialization: string;
+  phone?: string;
+  department?: string | null; // departmentId
+  photoUrl?: string;
+  publicBio?: string;
+  isFeatured?: boolean;
+  role?: 'doctor' | 'admin';
+  availabilitySchedule?: DailyAvailability[];
+  availabilityOverrides?: DateOverride[];
+}
+export interface PopulatedDoctorInfo { // Add this if not present
+    _id: string;
+    name: string;
+    specialization?: string; // Specialization can be optional in a summary view
 }

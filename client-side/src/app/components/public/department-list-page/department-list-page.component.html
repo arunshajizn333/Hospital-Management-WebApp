@@ -15,7 +15,6 @@
   <div *ngIf="!isLoading && !errorMessage && allDepartments.length > 0" class="departments-grid">
     <div *ngFor="let dept of allDepartments" class="department-item-card">
       <img *ngIf="dept.imageUrl" [src]="dept.imageUrl" [alt]="dept.name" class="department-item-image">
-      <img *ngIf="!dept.imageUrl" src="https://via.placeholder.com/350x200?text={{dept.name || 'Department'}}" [alt]="dept.name" class="department-item-image">
       <div class="department-item-content">
         <h3>{{ dept.name }}</h3>
         <p class="department-description">{{ dept.description || 'Detailed description not available.' }}</p>

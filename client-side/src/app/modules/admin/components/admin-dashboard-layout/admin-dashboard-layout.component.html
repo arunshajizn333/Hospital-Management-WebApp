@@ -1,0 +1,24 @@
+<div class="admin-dashboard-layout">
+  <aside class="sidebar">
+    <h3>Admin Panel</h3>
+    <div class="admin-info" *ngIf="currentAdmin">
+      <p>Welcome, {{ currentAdmin.name }}</p>
+      <small>{{ currentAdmin.email }}</small>
+    </div>
+    <nav>
+      <ul>
+        <li><a routerLink="overview" routerLinkActive="active-sidebar-link"><i class="fas fa-tachometer-alt"></i> Dashboard Overview</a></li>
+        <li><a routerLink="manage-doctors" routerLinkActive="active-sidebar-link"><i class="fas fa-user-md"></i> Manage Doctors</a></li>
+        <li><a routerLink="manage-departments" routerLinkActive="active-sidebar-link"><i class="fas fa-hospital-symbol"></i> Manage Departments</a></li>
+        <li><a routerLink="view-patients" routerLinkActive="active-sidebar-link"><i class="fas fa-users"></i> View Patients</a></li>
+        <li><a routerLink="view-appointments" routerLinkActive="active-sidebar-link"><i class="fas fa-calendar-check"></i> Appointment Oversight</a></li>
+        <li><a routerLink="manage-callbacks" routerLinkActive="active-sidebar-link"><i class="fas fa-phone-alt"></i> Callback Requests</a></li>
+        <li><a routerLink="manage-inquiries" routerLinkActive="active-sidebar-link"><i class="fas fa-envelope-open-text"></i> Contact Inquiries</a></li>
+        <li><a routerLink="hospital-settings" routerLinkActive="active-sidebar-link"><i class="fas fa-cog"></i> Hospital Settings</a></li>
+        <li><a (click)="logout()" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="content-area">
+    <router-outlet></router-outlet> </main>
+</div>

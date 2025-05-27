@@ -42,3 +42,8 @@ export interface PatientsApiResponse {
     patients: Patient[]; // The array of patient objects
 }
 // ... other API response interfaces ...
+export interface PopulatedPatientInfo { // Add this if not present
+    _id: string;
+    name: string;
+    // Add other commonly populated fields like email if needed for display
+}

@@ -305,24 +305,39 @@ exports.getDoctorAppointmentSummaryForAdmin = async (req, res) => {
 };
 
 
-// --- NEW/UPDATED: Doctor Management by Admin ---
-
 // @desc    Admin creates a new doctor (handles department assignment)
 // @route   POST /api/admin/doctors
 // @access  Private (Admin)
 exports.createDoctorByAdmin = async (req, res) => {
   try {
-    const { name, email, password, specialization, phone, availabilitySchedule, departmentId, role } = req.body;
+    // Destructure all expected fields from req.body
+    const { 
+        name, 
+        email, 
+        password, 
+        specialization, 
+        phone, 
+        availabilitySchedule, // This is the complex nested array for weekly schedule
+        departmentId, 
+        role,
+        // New public profile fields we added
+        photoUrl,
+        publicBio,
+        isFeatured 
+    } = req.body;
 
+    // Core validations
     if (!name || !email || !password || !specialization) {
       return res.status(400).json({ message: 'Name, email, password, and specialization are required.' });
     }
 
-    let existingDoctor = await Doctor.findOne({ email });
+    // Check for existing doctor by email
+    let existingDoctor = await Doctor.findOne({ email }); // Mongoose email schema has lowercase: true, so this should be case-insensitive if input is also lowercased or if no special chars
     if (existingDoctor) {
       return res.status(400).json({ message: 'Doctor with this email already exists' });
     }
 
+    // Validate departmentId if provided
     if (departmentId) {
       if (!mongoose.Types.ObjectId.isValid(departmentId)) {
         return res.status(400).json({ message: 'Invalid Department ID format.' });
@@ -333,22 +348,29 @@ exports.createDoctorByAdmin = async (req, res) => {
       }
     }
 
-    const newDoctor = new Doctor({
+    // Construct the new doctor object
+    const newDoctorData = {
       name,
       email,
-      password, // Will be hashed by pre-save hook
+      password, // Password will be hashed by the pre-save hook in the Doctor model
       specialization,
-      phone,
-      availabilitySchedule, // Optional: admin can set initial schedule
-      department: departmentId || undefined,
-      role: role || 'doctor' // Admin can set role, defaults to 'doctor' if not provided or invalid
-    });
+      phone: phone || undefined, // Set to undefined if not provided to avoid empty string issues
+      availabilitySchedule: availabilitySchedule || undefined, // Use schema default if not provided
+      department: departmentId || undefined, // Assign departmentId if provided
+      role: role || 'doctor', // Default to 'doctor', admin can override if your enum allows
+      photoUrl: photoUrl || undefined,
+      publicBio: publicBio || undefined,
+      isFeatured: isFeatured === undefined ? false : Boolean(isFeatured) // Explicitly handle boolean, default to false
+    };
 
-    await newDoctor.save();
+    const newDoctor = new Doctor(newDoctorData);
+    await newDoctor.save(); // This will trigger pre-save hooks (password hashing) and schema validations
 
+    // Populate department details for the response
+    // Select fields to exclude password from the final populated response
     const populatedDoctor = await Doctor.findById(newDoctor._id)
-      .select('-password')
-      .populate('department', 'name');
+      .select('-password -isAdminControlled') // Exclude isAdminControlled as well for typical responses
+      .populate('department', 'name description'); // Populate with department name and description
 
     res.status(201).json({
       message: 'Doctor created successfully by admin.',
@@ -356,11 +378,17 @@ exports.createDoctorByAdmin = async (req, res) => {
     });
 
   } catch (err) {
-    console.error('Error creating doctor by admin:', err.message);
+    console.error('Error creating doctor by admin:', err.message, err.stack); // Log stack for more detail
     if (err.name === 'ValidationError') {
-      return res.status(400).json({ message: Object.values(err.errors).map(val => val.message).join(', ') });
+      // Extract and send Mongoose validation error messages
+      const messages = Object.values(err.errors).map(val => val.message);
+      return res.status(400).json({ message: messages.join(', ') });
     }
-    if (err.code === 11000) { return res.status(400).json({ message: `Doctor with email '${req.body.email}' already exists.`});}
+    // Check for MongoDB duplicate key error (for email, though findOne should catch it first)
+    if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
+        return res.status(400).json({ message: `Doctor with email '${req.body.email}' already exists.`});
+    }
+    // Generic server error
     res.status(500).json({ message: 'Server Error while creating doctor.' });
   }
 };
@@ -530,4 +558,54 @@ exports.deleteDoctorByAdmin = async (req, res) => {
         console.error('Error deleting doctor by admin:', error.message);
         res.status(500).json({ message: 'Server Error while deleting doctor.' });
     }
+};
+
+/**
+ * @desc    Admin gets a list of all patients (with pagination and filters)
+ * @route   GET /api/admin/patients
+ * @access  Private (Admin)
+ */
+exports.getAllPatientsForAdmin = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
+
+    const { name, email, status } = req.query; // Add other filters as needed
+    const query = {};
+
+    if (name) {
+      query.name = { $regex: new RegExp(name, 'i') };
+    }
+    if (email) {
+      query.email = { $regex: new RegExp(email, 'i') };
+    }
+    // Example: if you add an 'isActive' status to your Patient model for account status
+    // if (status) {
+    //   if (status === 'active') query.isActive = true;
+    //   if (status === 'inactive') query.isActive = false;
+    // }
+
+    const selectFields = 'name email dateOfBirth gender contact.phone createdAt isActive'; // Customize as needed
+
+    const totalPatients = await Patient.countDocuments(query);
+    const patients = await Patient.find(query)
+      .select(selectFields) // Select fields appropriate for admin list view
+      .sort({ createdAt: -1 }) // Show newest registered first, or by name: { name: 1 }
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      message: 'Patients retrieved successfully for admin.',
+      count: patients.length,
+      total: totalPatients,
+      currentPage: page,
+      totalPages: Math.ceil(totalPatients / limit),
+      patients,
+    });
+
+  } catch (error) {
+    console.error('Error fetching patients for admin:', error.message);
+    res.status(500).json({ message: 'Server Error while fetching patients.' });
+  }
 };

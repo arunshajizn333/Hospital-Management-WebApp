@@ -2,10 +2,13 @@
 
 import { Patient } from './patient.model';
 import { Doctor } from './doctor.model';
+import { PopulatedPatientInfo } from './patient.model'; // Assuming PopulatedPatientInfo is defined in patient.model.ts
+import { PopulatedDoctorInfo } from './doctor.model';   // Assuming PopulatedDoctorInfo is defined in doctor.model.ts
+
 export interface Appointment {
   _id: string;
-  patient: Patient | string;
-  doctor: Doctor | string;
+  patient: PopulatedPatientInfo  | string;
+  doctor: PopulatedDoctorInfo  | string;
   appointmentDate: string;
   appointmentTime: string;
   reason?: string;

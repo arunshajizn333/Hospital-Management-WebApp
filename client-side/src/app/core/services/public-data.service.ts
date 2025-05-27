@@ -27,7 +27,7 @@ export class PublicDataService {
       .pipe(map(response => response.departments || []));
   }
 
-  getFeaturedDoctors(limit: number = 5): Observable<Doctor[]> {
+  getFeaturedDoctors(limit: number = 3): Observable<Doctor[]> {
     const fullUrl = `${this.baseApiUrl}${this.publicApiSegment}/doctors/featured?limit=${limit}`;
     console.log('Requesting featured doctors from URL:', fullUrl);
     return this.http.get<DoctorsApiResponse>(fullUrl)

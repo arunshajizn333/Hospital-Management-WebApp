@@ -24,15 +24,7 @@ export class AdminLoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const currentUser = this.authService.currentUserValue;
-    if (currentUser) {
-      if (currentUser.role === 'admin') {
-        this.router.navigate(['/admin/dashboard']); // Or your actual admin dashboard route
-      } else {
-        // Redirect other logged-in users to home or their respective dashboards
-        this.router.navigate(['/admin-login']);
-      }
-    }
+    // ... (existing ngOnInit logic to redirect if already logged in) ...
 
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -50,20 +42,37 @@ export class AdminLoginComponent implements OnInit {
     }
 
     this.isSubmitting = true;
-    const credentials: LoginCredentials = this.loginForm.value;
+
+    // --- DETAILED LOGGING ---
+    const rawEmail = this.f['email'].value;
+    const rawPassword = this.f['password'].value;
+
+    console.log(`Admin Login - Raw Email from form: "[${rawEmail}]"`); // Brackets to show spaces
+    console.log(`Admin Login - Raw Password from form: "[${rawPassword}]"`);
+
+    const credentials: LoginCredentials = {
+      email: rawEmail.trim(), // Trim email just in case
+      password: rawPassword   // Do NOT trim password by default unless you are certain
+                               // your seeded password has no leading/trailing spaces AND
+                               // users will never intentionally use them.
+                               // For testing, if DefaultAdminPassword123! has no spaces, this is fine.
+    };
+
+    console.log('Admin Login - Credentials being sent to service:', JSON.stringify(credentials));
+    // --- END DETAILED LOGGING ---
 
     this.authService.login(credentials, 'admin').subscribe({
       next: (user: User) => {
         this.isSubmitting = false;
         if (user.role === 'admin') {
-          this.router.navigate(['/admin/dashboard']); // Navigate to admin dashboard
+          this.router.navigate(['/admin/dashboard']);
         } else {
           this.loginError = 'Login successful, but role is not Admin.';
-          this.authService.logout(); // Log out if role mismatch
+          this.authService.logout();
         }
       },
       error: (error) => {
-        console.error('Admin login failed:', error);
+        console.error('Admin login failed in component:', error);
         this.loginError = error.message || 'Login failed. Please check your credentials.';
         this.isSubmitting = false;
       }

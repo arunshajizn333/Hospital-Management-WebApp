@@ -5,13 +5,16 @@ export interface Department {
   description?: string;
   imageUrl?: string;
   servicesOffered?: string[];
-  createdAt?: string; // Dates will likely be strings from JSON
+  createdAt?: string;
   updatedAt?: string;
+  // active?: boolean; // If you add this
 }
 
-// Interface for the API response when fetching multiple departments
 export interface DepartmentsApiResponse {
-    message: string;
-    count: number;
-    departments: Department[];
+  message?: string;
+  count: number;          // Number of items on the current page
+  departments: Department[];
+  total?: number;        // <<< ADD OR ENSURE THIS EXISTS (Total items matching query)
+  currentPage?: number;  // <<< ADD OR ENSURE THIS EXISTS (Current page number)
+  totalPages?: number;   // <<< ADD OR ENSURE THIS EXISTS (Total number of pages)
 }

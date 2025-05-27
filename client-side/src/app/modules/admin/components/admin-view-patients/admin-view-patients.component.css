@@ -1,0 +1,125 @@
+/* src/app/modules/admin/components/admin-view-patients/admin-view-patients.component.css */
+.admin-view-patients-page {
+  padding: 20px 25px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+.page-header h2 {
+  font-size: 2em;
+  color: var(--primary-color-darker, #004085);
+  margin-bottom: 5px;
+}
+.page-header p {
+  font-size: 1em;
+  color: var(--text-color-muted, #6c757d);
+}
+
+/* Filter Form */
+.filter-form.card {
+  margin-bottom: 30px;
+  background-color: var(--light-bg-color, #f8f9fa);
+  border: 1px solid var(--border-color, #e9ecef);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+.filter-form .card-title {
+  font-size: 1.2em;
+  color: var(--primary-color, #007bff);
+  margin-bottom: 15px;
+}
+.form-row { display: flex; flex-wrap: wrap; margin-right: -5px; margin-left: -5px; }
+.form-row > .col, .form-row > [class*="col-"] { padding-right: 5px; padding-left: 5px; }
+.align-items-end { align-items: flex-end !important; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: .3rem; font-weight: 500; font-size: 0.9em; }
+.form-control, .form-control-sm { /* Ensure global or shared styles */ }
+.btn.w-100 { width: 100%; }
+
+
+/* Loading, Error, No-Data Messages */
+.loading-indicator, .no-data-message {
+  text-align: center; padding: 20px; font-size: 1.1em;
+  color: var(--text-color-muted, #6c757d); margin-top: 20px;
+}
+.alert { /* Ensure global styling */ }
+.no-data-message i { font-size: 1.5em; margin-right: 8px; vertical-align: middle; }
+
+/* Patients Table Styling */
+.patients-table-container {
+  margin-top: 20px;
+  background-color: var(--white-color, #fff);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  overflow-x: auto;
+}
+.results-info {
+  padding: 10px 15px;
+  font-size: 0.9em;
+  color: var(--text-color-muted, #6c757d);
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+.table { width: 100%; margin-bottom: 0; }
+.table th, .table td {
+  padding: 0.75rem;
+  vertical-align: middle;
+  border-top: 1px solid var(--border-color, #dee2e6);
+  font-size: 0.9rem;
+}
+.table thead th {
+  background-color: var(--light-bg-color, #f8f9fa);
+  color: var(--primary-color-darker, #004085);
+  font-weight: 600;
+  text-align: left;
+  border-bottom-width: 2px;
+}
+.table-hover tbody tr:hover { background-color: rgba(0,0,0,.035); }
+.table-striped tbody tr:nth-of-type(odd) { background-color: rgba(0,0,0,.015); }
+
+.table .btn-sm {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+}
+.table .btn-sm i { margin-right: 5px; }
+.ml-1 { margin-left: .25rem !important; }
+
+/* Status Badge (if you implement isActive) */
+.status-badge {
+  padding: 0.2em 0.5em;
+  font-size: 0.75em;
+  border-radius: 0.2rem;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.status-active {
+  background-color: var(--success-color, #28a745);
+  color: var(--white-color, #fff);
+}
+.status-inactive {
+  background-color: var(--secondary-color, #6c757d);
+  color: var(--white-color, #fff);
+}
+
+/* Pagination Styling (can be global/shared) */
+.pagination { /* ... styles from previous pagination ... */ }
+.justify-content-center { justify-content: center !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+
+/* Responsive Table & Filters */
+@media (max-width: 767px) {
+  .filter-form .form-row .form-group {
+    flex-basis: 100%; /* Stack filter elements */
+    margin-bottom: 10px;
+  }
+  .filter-form .form-row .form-group.col-md-2 { /* Buttons */
+    flex-basis: 100%;
+  }
+  .filter-form .form-row .btn {
+    margin-top: 5px; /* Add space if buttons stack below inputs */
+  }
+}

@@ -8,7 +8,7 @@
   <div *ngIf="!isLoadingFeaturedDoctors && !featuredDoctorsError && featuredDoctors.length > 0" class="doctor-list">
     <div *ngFor="let doctor of featuredDoctors" class="doctor-card">
       <img *ngIf="doctor.photoUrl" [src]="doctor.photoUrl" [alt]="doctor.name" class="doctor-photo">
-      <img *ngIf="!doctor.photoUrl" src="" [alt]="doctor.name" class="doctor-photo"> <h3>Dr. {{ doctor.name }}</h3>
+      <img *ngIf="!doctor.photoUrl" src="" [alt]="doctor.name" class="doctor-photo"> <h3> {{ doctor.name }}</h3>
       <p class="specialization">{{ doctor.specialization }}</p>
       <p *ngIf="getDepartmentName(doctor.department)" class="department-name">
         Department: {{ getDepartmentName(doctor.department) }}
