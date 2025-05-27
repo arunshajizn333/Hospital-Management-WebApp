@@ -30,3 +30,8 @@ export interface AuthResponse { // Used by both login and register if they retur
 //   user?: User; // Might not return full user object or token if separate login is enforced
 //   token?: string; 
 // }
+export interface ChangePasswordData {
+  currentPassword: string;
+  newPassword: string;
+  // confirmNewPassword is for client-side validation, not typically sent to backend
+}

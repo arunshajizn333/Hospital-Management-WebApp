@@ -10,6 +10,7 @@ import { PatientMedicalRecordsComponent } from './components/patient-medical-rec
 
 import { AuthGuard } from '../../core/guards/auth.guard';
 import { RoleGuard } from '../../core/guards/role.guard';
+import { ChangePasswordComponent } from '../../shared/components/change-password/change-password.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'appointments', component: PatientAppointmentsComponent },
       { path: 'book-appointment', component: PatientBookAppointmentComponent },
       { path: 'medical-records', component: PatientMedicalRecordsComponent },
+      { path: 'change-password', component: ChangePasswordComponent }
       // Add other patient-specific child routes here
     ]
   }

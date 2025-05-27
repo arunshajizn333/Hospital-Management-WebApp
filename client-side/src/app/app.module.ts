@@ -21,6 +21,7 @@ import { HospitalInfoSnippetComponent } from './components/public/hospital-info-
 import { DoctorLoginComponent } from './components/auth/doctor-login/doctor-login.component';
 import { AdminLoginComponent } from './components/auth/admin-login/admin-login.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // Import your interceptor
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +38,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // Impor
     HospitalInfoSnippetComponent,
     DoctorLoginComponent,
     AdminLoginComponent,
+
    
    
   ],
@@ -45,7 +47,8 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // Impor
     AppRoutingModule,
     CoreModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+   
   ],
   providers: [
     provideClientHydration(withEventReplay()),
