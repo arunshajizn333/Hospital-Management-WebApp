@@ -1,7 +1,7 @@
 /* src/app/modules/patient/components/patient-dashboard-layout/patient-dashboard-layout.component.css */
 .patient-dashboard-layout {
   display: flex;
-  min-height: calc(100vh - 60px); /* Assuming navbar height is approx 60px, adjust if needed */
+  min-height: calc(100vh - 60px);
 }
 
 .sidebar {

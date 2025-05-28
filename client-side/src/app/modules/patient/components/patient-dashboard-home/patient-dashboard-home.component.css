@@ -1,12 +1,15 @@
 /* src/app/modules/patient/components/patient-dashboard-home/patient-dashboard-home.component.css */
 .dashboard-overview {
   padding: 20px;
+  background-color: #f0f4f8; /* Light background for contrast */
+  border-radius: 8px;
 }
 
 .dashboard-header h1 {
-  font-size: 2em;
-  color: var(--primary-color-darker, #004085);
+  font-size: 2.5em;
+  color: var(--primary-color-darker, #003366); /* Darker blue */
   margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .quick-actions, .upcoming-appointments {
@@ -14,11 +17,14 @@
 }
 
 .quick-actions h2, .upcoming-appointments h2 {
-  font-size: 1.5em;
+  font-size: 1.8em;
   color: var(--primary-color, #007bff);
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--primary-color-light, #a0cfff);
+  background: linear-gradient(90deg, #007bff, #00c6ff); /* Gradient effect */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .actions-grid {
@@ -28,27 +34,27 @@
 }
 
 .action-card {
-  background-color: var(--light-bg-color, #f8f9fa);
+  background-color: var(--light-bg-color, #ffffff);
   padding: 25px 20px;
   border-radius: 8px;
   text-align: center;
   text-decoration: none;
   color: var(--text-color, #343a40);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.07);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
   font-weight: 500;
 }
 .action-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  color: var(--primary-color, #007bff);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  background-color: var(--primary-color-light, #a0cfff); /* Light blue on hover */
+  color: var(--white-color, #ffffff);
 }
 .action-card .action-icon {
   font-size: 2.5em; /* Placeholder for icon */
   margin-bottom: 10px;
   color: var(--primary-color, #007bff);
 }
-
 
 .appointments-list {
   display: grid;
@@ -62,12 +68,17 @@
   border-left: 5px solid var(--accent-color, #17a2b8); /* Accent border */
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+.appointment-summary-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 .appointment-summary-card h4 {
   margin-top: 0;
   margin-bottom: 8px;
-  color: var(--primary-color-darker, #004085);
+  color: var(--primary-color-darker, #003366);
   font-size: 1.2em;
 }
 .appointment-summary-card p {
@@ -93,6 +104,9 @@
 }
 .status-scheduled { background-color: var(--primary-color, #007bff); }
 .status-confirmed { background-color: var(--success-color, #28a745); }
+.status-cancelled { background-color: var(--danger-color, #dc3545); } /* Added cancelled status */
+.status-pending { background-color: var(--warning-color, #ffc107); } /* Added pending status */
+
 /* Add more status colors as needed */
 
 .view-all-link {
@@ -103,9 +117,11 @@
     color: var(--primary-color, #007bff);
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 .view-all-link a:hover {
     text-decoration: underline;
+    color: var(--primary-color-dark, #0056b3); /* Darker blue on hover */
 }
 
 .loading-indicator p, .no-data-message { /* General messages */
@@ -113,7 +129,10 @@
   padding: 20px 0;
   text-align: center;
   font-style: italic;
+  font-size: 1.1em; /* Slightly larger font for visibility */
 }
 .error-message.alert { /* If using .alert class */
   margin-top: 15px;
+  color: var(--danger-color, #dc3545); /* Red for error messages */
+  font-weight: bold;
 }

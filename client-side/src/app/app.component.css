@@ -23,6 +23,9 @@
   z-index: 1051;
   animation: fadeInModal 0.3s ease-out;
 }
+.main-content-area.no-public-navbar {
+  padding: 20px 30px 30px 30px;
+}
 
 .modal-close-button {
   position: absolute;

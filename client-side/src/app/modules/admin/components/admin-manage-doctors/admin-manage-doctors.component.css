@@ -1,318 +1,807 @@
-/* src/app/modules/admin/components/admin-manage-doctors/admin-manage-doctors.component.css */
-:host {
-  display: block;
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fa; /* Light background for contrast */
+    color: #333;
+    --primary-color-theme: #3498db; /* Define a theme color for re-use */
+    --border-radius-theme: 8px;
 }
 
 .admin-manage-doctors-page {
-  padding: 20px 25px;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: var(--border-radius-theme);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.page-header { /* Consistent page header style */
-  text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color, #eee);
+/* Header Styles */
+.page-header {
+    text-align: center;
+    margin-bottom: 30px;
 }
+
 .page-header h2 {
-  font-size: 2em;
-  color: var(--primary-color-darker, #004085);
-  margin-bottom: 5px;
-}
-.page-header p {
-  font-size: 1em;
-  color: var(--text-color-muted, #6c757d);
+    font-size: 2.5em;
+    color: #2980b9; /* Bright blue */
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.text-right { text-align: right; }
+.page-header p {
+    font-size: 1.2em;
+    color: #7f8c8d; /* Muted text color */
+}
+
+/* Common Button Styles (from previous HTML) */
+.btn {
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    line-height: 1.5;
+    border: 1px solid transparent; /* Base border */
+}
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: .875rem;
+    border-radius: 0.2rem;
+}
+.btn-xs { /* Custom class for very small buttons if needed */
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+}
+
+
+.btn-success {
+    background-color: #28a745; /* Green */
+    color: white;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Darker green */
+    border-color: #1e7e34;
+}
+
+.btn-info {
+    background-color: #17a2b8; /* Info color */
+    color: white;
+    border-color: #17a2b8;
+}
+
+.btn-info:hover {
+    background-color: #138496; /* Darker info color */
+    border-color: #117a8b;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color-theme);
+    border-color: var(--primary-color-theme);
+    background-color: transparent;
+}
+.btn-outline-primary:hover {
+    color: white;
+    background-color: var(--primary-color-theme);
+}
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+    background-color: transparent;
+}
+.btn-outline-danger:hover {
+    color: white;
+    background-color: #dc3545;
+}
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+    background-color: transparent;
+}
+.btn-outline-secondary:hover {
+    color: white;
+    background-color: #6c757d;
+}
+
+
+/* Filter Form Styles */
+.filter-form.card { /* Targeting the specific filter form card */
+    background-color: #f9f9f9;
+    border-radius: var(--border-radius-theme);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem; /* mb-4 */
+}
+
+.filter-form .card-body {
+    padding: 15px 20px;
+}
+
+.filter-form .card-title {
+    color: #2980b9;
+    margin-bottom: 15px;
+}
+
+.filter-form .form-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.filter-form .form-row .form-group {
+    margin-bottom: 0;
+}
+.filter-form .form-row .form-group label {
+    margin-bottom: .25rem;
+    font-size: 0.9em;
+}
+
+.filter-form .form-control-sm {
+    height: calc(1.5em + 0.5rem + 2px);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+.filter-form .btn-sm.w-100 {
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+/* General Utility classes from HTML */
+.text-right { text-align: right !important; }
 .mb-3 { margin-bottom: 1rem !important; }
-.mr-1 { margin-right: .25rem !important; }
-.mt-1 { margin-top: .25rem !important; }
-.mt-2 { margin-top: .5rem !important; }
+.mb-4 { margin-bottom: 1.5rem !important; }
+.mt-1 { margin-top: 0.25rem !important; }
+.mt-2 { margin-top: 0.5rem !important; }
 .mt-3 { margin-top: 1rem !important; }
 .mt-4 { margin-top: 1.5rem !important; }
-.mb-2 { margin-bottom: .5rem !important; }
-.mb-4 { margin-bottom: 1.5rem !important; }
-.p-2 { padding: .5rem !important; }
+.mr-1 { margin-right: 0.25rem !important; }
+.mr-2 { margin-right: 0.5rem !important; }
+.p-2 { padding: 0.5rem !important; }
+.ml-1 { margin-left: 0.25rem !important; }
 
-.btn-success i, .btn-outline-primary i, .btn-outline-danger i {
-  margin-right: .3rem;
+/* Loading and Alert Messages */
+.loading-indicator {
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+    padding: 20px 0;
 }
 
-/* Filter Form Styling */
-.filter-form.card {
-  margin-bottom: 30px;
-  background-color: var(--light-bg-color, #f8f9fa);
-  border: 1px solid var(--border-color, #e9ecef);
+.alert {
+    margin-top: 15px;
+    padding: 12px 15px;
+    border-radius: 5px;
+    border: 1px solid transparent;
 }
-.filter-form .card-title {
-  font-size: 1.2em;
-  color: var(--primary-color, #007bff);
-  margin-bottom: 15px;
-}
-.form-row { display: flex; flex-wrap: wrap; margin-right: -5px; margin-left: -5px; }
-.form-row > .col, .form-row > [class*="col-"] { padding-right: 5px; padding-left: 5px; }
-.align-items-end { align-items: flex-end !important; }
 
-.form-group { margin-bottom: 1rem; }
-.form-group label { display: block; margin-bottom: .3rem; font-weight: 500; font-size: 0.9em; }
-.form-control, .form-control-sm { /* Ensure global or shared styles */
-    display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem;
-    line-height: 1.5; color: #495057; background-color: #fff;
-    background-clip: padding-box; border: 1px solid #ced4da;
-    border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    box-sizing: border-box;
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
 }
-.form-control-sm { padding: .25rem .5rem; font-size: .875rem; border-radius: .2rem; }
-.btn.w-100 { width: 100%; }
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
 
 
-/* Loading, Error, Success Messages */
-.loading-indicator, .no-data-message {
-  text-align: center; padding: 20px; font-size: 1.1em;
-  color: var(--text-color-muted, #6c757d); margin-top: 20px;
-}
-.alert { /* Global or shared style needed */
-  margin-top: 15px; margin-bottom: 15px; padding: .75rem 1.25rem;
-  border: 1px solid transparent; border-radius: .25rem;
-}
-.alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
-.alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
-
-
-/* Doctors List Table */
+/* Doctors Table Styles */
 .doctors-table-container {
-  background-color: var(--white-color, #fff);
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-  overflow-x: auto;
+    margin-top: 20px;
 }
-.results-info { padding: 10px 15px; font-size: 0.9em; color: var(--text-color-muted, #6c757d); border-bottom: 1px solid var(--border-color, #eee); }
-.table { width: 100%; margin-bottom: 0; /* Removed bottom margin as container handles it */ }
-.table th, .table td { padding: 0.75rem; vertical-align: middle; border-top: 1px solid var(--border-color, #dee2e6); font-size: 0.9rem; }
-.table thead th {
-  background-color: var(--light-bg-color, #f8f9fa); color: var(--primary-color-darker, #004085);
-  font-weight: 600; text-align: left; border-bottom-width: 2px;
+.table-responsive {
+    overflow-x: auto;
 }
-.table-hover tbody tr:hover { background-color: rgba(0,0,0,.035); }
-.table-striped tbody tr:nth-of-type(odd) { background-color: rgba(0,0,0,.015); }
-.table .btn-sm i { margin-right: 3px; }
 
-/* Pagination (can be global/shared) */
-.pagination { /* ... styles from previous pagination ... */ }
-.justify-content-center { justify-content: center !important; }
+.results-info {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 10px;
+}
 
-/* Doctor Add/Edit Form Modal Styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+.table th, .table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: var(--primary-color-theme);
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f5f8;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0,0,0,0.02);
+}
+.table-striped.table-hover tbody tr:nth-of-type(odd):hover {
+    background-color: #e9ecef;
+}
+
+.table .btn-sm mat-icon,
+.table .btn-sm .fas {
+    vertical-align: middle;
+    font-size: 1.1em;
+}
+.table .btn-sm {
+    margin-right: 5px;
+}
+.table .btn-sm:last-child {
+    margin-right: 0;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .25rem;
+}
+.pagination.justify-content-center {
+    justify-content: center!important;
+}
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+.page-item .page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: var(--primary-color-theme);
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+.page-item:first-child .page-link {
+    margin-left: 0;
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+}
+.page-item:last-child .page-link {
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+.page-item .page-link:hover {
+    z-index: 2;
+    color: #0056b3;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+
+/* No Data Message */
+.no-data-message {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 20px;
+    font-size: 1.1em;
+}
+
+
+/* Doctor Form Modal Styles */
+/* Ensure these theme variables are defined, e.g., in your :root or a general stylesheet */
+:root { /* Duplicated :root, ensure it's defined once globally */
+    --primary-color-theme: #3498db;
+    --primary-hover-color-theme: #2980b9;
+    --secondary-color-theme: #6c757d;
+    --secondary-hover-color-theme: #5a6268;
+    --success-color-theme: #28a745;
+    --danger-color-theme: #dc3545;
+    --light-bg-theme: #f8f9fa;
+    --border-color-theme: #dee2e6;
+    --text-color-theme: #343a40;
+    --light-text-color-theme: #6c757d;
+    --border-radius-theme: 8px;
+    --font-family-theme: Arial, sans-serif;
+}
+
 .doctor-form-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050; /* Above other content */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    padding: 20px;
+    overflow-y: auto; /* Fallback if modal content is taller than viewport */
 }
 
 .doctor-form-modal-content.card {
-  width: 90%;
-  max-width: 800px; /* Allow more width for the complex form */
-  max-height: 90vh; /* Max height */
-  display: flex;
-  flex-direction: column;
-  background-color: var(--white-color, #fff);
-  border-radius: 8px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    background-color: #ffffff;
+    border-radius: var(--border-radius-theme);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 950px;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    /* overflow: hidden; */ /* MODIFICATION: Removed/Commented out to prevent clipping issues with form-actions */
 }
+
 .doctor-form-modal-content .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--primary-color, #007bff);
-  color: var(--white-color, #fff);
-  padding: 1rem 1.5rem;
+    background-color: var(--primary-color-theme);
+    color: #ffffff;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
+
 .doctor-form-modal-content .card-header .card-title {
-  margin: 0;
-  font-size: 1.4em;
-  color: var(--white-color, #fff); /* Ensure title is white */
+    margin-bottom: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
 }
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: rgba(255,255,255,0.8);
-  opacity: 0.8;
-  padding: 0 .5rem;
+
+.doctor-form-modal-content .close-btn {
+    background: red;
+    border: 1px solid black;
+    color: rgb(218, 33, 33);
+    font-size: 1.75em;
+    font-weight: bold;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 .5rem;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
 }
-.close-btn:hover {
-  opacity: 1;
-  color: var(--white-color, #fff);
+.doctor-form-modal-content .close-btn:hover {
+    opacity: 1;
+    background-color: red;
+    color: white;
 }
 
 .doctor-form-modal-content .card-body {
-  padding: 20px 25px;
-  overflow-y: auto; /* Enable scrolling for long form content */
-  flex-grow: 1;
+    padding: 15px 20px 20px;
+    overflow-y: auto; /* This makes the card body scrollable */
+    flex-grow: 1; /* Allows card body to take available space */
+    min-height: 100px; /* Ensure it has some minimum height to render scrollbar if content is just slightly larger */
 }
+
+.doctor-form-modal-content .card-body form {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Helps ensure form actions are at the bottom of this flex container if this is desired */
+}
+
 
 .doctor-form-modal-content fieldset {
-  border: 1px solid var(--border-color, #ddd);
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 6px;
+    border: 1px solid var(--border-color-theme);
+    padding: 12px 15px 15px;
+    margin-bottom: 18px;
+    border-radius: 6px;
 }
-.doctor-form-modal-content fieldset legend {
-  font-size: 1.15em;
-  font-weight: 600;
-  color: var(--primary-color, #007bff);
-  padding: 0 8px;
-  width: auto;
+/* Make fieldset content scrollable IF it's the main growing part and actions are separate */
+/* For current structure, card-body scrolls everything in the form */
+
+
+.doctor-form-modal-content legend {
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 1.0rem;
+    color: var(--primary-color-theme);
+    padding: 0 8px;
+    width: auto;
 }
+
+.doctor-form-modal-content .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -10px;
+    margin-left: -10px;
+}
+.doctor-form-modal-content .form-row > [class*="col-"] {
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-bottom: 12px;
+}
+.doctor-form-modal-content .form-row > .form-group {
+     margin-bottom: 0;
+}
+
+
+.doctor-form-modal-content .form-group {
+    margin-bottom: 12px;
+}
+.doctor-form-modal-content .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.doctor-form-modal-content .form-group label {
+    font-size: 0.875em;
+    font-weight: 500;
+    color: var(--text-color-theme);
+    margin-bottom: 4px;
+    display: block;
+}
+
+.doctor-form-modal-content .form-control,
+.doctor-form-modal-content .form-control-sm {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.9rem;
+    width: 100%;
+    background-color: #fff;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.doctor-form-modal-content .form-control:focus {
+    border-color: var(--primary-color-theme);
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    background-color: #fff;
+}
+.doctor-form-modal-content textarea.form-control {
+    min-height: 70px;
+}
+
+.doctor-form-modal-content .form-check {
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+.doctor-form-modal-content .form-check-input {
+    margin-top: 0.2em;
+    margin-right: 0.5em;
+    float: left;
+}
+.doctor-form-modal-content .form-check-label {
+    font-size: 0.9em;
+    font-weight: normal;
+    padding-left: 1.5em;
+    display: block;
+}
+
+.doctor-form-modal-content .weekly-schedule-grid-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 12px;
+    padding: 10px;
+    border: 1px solid var(--border-color-theme);
+    border-radius: 4px;
+    background-color: var(--light-bg-theme);
+    max-height: 330px;
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+.doctor-form-modal-content .day-schedule-card-form {
+    border: 1px solid #d1d9e2;
+    padding: 10px 12px;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.doctor-form-modal-content .day-schedule-card-form h6 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    color: var(--text-color-theme);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color-theme);
+    padding-bottom: 6px;
+}
+.doctor-form-modal-content .day-schedule-card-form .form-check {
+    margin-bottom: 8px;
+}
+.doctor-form-modal-content .day-schedule-card-form .form-group {
+    margin-bottom: 6px;
+}
+.doctor-form-modal-content .day-schedule-card-form label:not(.form-check-label) {
+    font-size: 0.8em;
+    margin-bottom: 2px;
+    color: var(--light-text-color-theme);
+}
+.doctor-form-modal-content .day-schedule-card-form .form-control-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    height: auto;
+}
+
+.doctor-form-modal-content .break-times-section-form {
+    margin-top: 8px;
+}
+.doctor-form-modal-content .break-times-section-form label.small {
+    font-size: 0.8em;
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: block;
+}
+.doctor-form-modal-content .break-time-item-form.form-row {
+    margin-bottom: 5px;
+    gap: 5px;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+}
+.doctor-form-modal-content .break-time-item-form .col {
+    padding-left: 0;
+    padding-right: 5px;
+}
+.doctor-form-modal-content .break-time-item-form .col:last-child {
+    padding-right: 0;
+}
+.doctor-form-modal-content .break-time-item-form .btn-xs {
+    padding: 1px 5px;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    color: var(--danger-color-theme);
+    border-color: var(--danger-color-theme);
+}
+.doctor-form-modal-content .break-time-item-form .btn-xs:hover {
+    background-color: var(--danger-color-theme);
+    color: white;
+}
+.doctor-form-modal-content .btn-outline-secondary.btn-xs {
+    padding: 2px 6px;
+    font-size: 0.8rem;
+}
+
+.doctor-form-modal-content .overrides-list-form {
+    margin-top: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+.doctor-form-modal-content .override-card-form.card {
+    margin-bottom: 8px !important;
+    background-color: #fdfdfd;
+    border: 1px solid var(--border-color-theme);
+}
+.doctor-form-modal-content .overrides-list-form .override-card-form .card-body.p-2 {
+    padding: 8px 10px !important;
+}
+.doctor-form-modal-content .override-card-form .form-row {
+    align-items: center;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+.doctor-form-modal-content .override-card-form .form-row > [class*="col-"] {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 0;
+}
+.doctor-form-modal-content .override-card-form .form-group {
+    margin-bottom: 0 !important;
+}
+.doctor-form-modal-content .override-card-form .form-check-input {
+    margin-top: 0;
+}
+.doctor-form-modal-content .override-card-form .form-check-label.ml-1 {
+    margin-left: 0.25rem !important;
+    font-size: 0.875em;
+}
+.doctor-form-modal-content .override-card-form .btn-sm {
+    padding: 0.2rem 0.5rem;
+}
+.doctor-form-modal-content .btn-success.btn-sm.mt-2 {
+    font-size: 0.875em;
+}
+
+.doctor-form-modal-content .invalid-feedback {
+    display: block;
+    font-size: 0.75em;
+    color: var(--danger-color-theme);
+    margin-top: 2px;
+}
+.doctor-form-modal-content .form-control.is-invalid,
+.ng-invalid.ng-touched .form-control {
+    border-color: var(--danger-color-theme);
+}
+.doctor-form-modal-content .ng-invalid.ng-touched .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+
+.doctor-form-modal-content .alert.alert-danger {
+    padding: 8px 12px;
+    font-size: 0.85em;
+    margin-top: 10px; /* Ensure some space if it appears */
+    margin-bottom: 0; /* If it's just before form-actions */
+}
+
 .doctor-form-modal-content .form-actions {
-  display: flex; /* Align buttons */
-  justify-content: flex-end; /* Push buttons to the right */
-  padding-top: 15px;
-  border-top: 1px solid var(--border-color, #eee);
-  margin-top: 20px;
+    text-align: right;
+    padding: 12px 20px;
+    background-color: var(--light-bg-theme);
+    border-top: 1px solid var(--border-color-theme);
+    flex-shrink: 0; /* Prevent footer from shrinking */
+    margin-top: auto; /* Pushes to the bottom if form is the flex container and card-body is not scrolling it */
+                    /* If card-body scrolls, this is part of the scroll content */
 }
 .doctor-form-modal-content .form-actions .btn {
-  margin-left: 10px;
+    min-width: 90px;
+    font-size: 0.9rem;
+    padding: 0.4rem 1rem;
 }
 .doctor-form-modal-content .form-actions .btn-secondary {
-  background-color: var(--secondary-color, #6c757d);
-  color: var(--white-color, #fff);
+    background-color: red;
+    border-color: var(--secondary-color-theme);
+    color: white;
+    margin-right: 8px;
+}
+.doctor-form-modal-content .form-actions .btn-secondary:hover {
+    background-color: var(--secondary-hover-color-theme); /* CORRECTED */
+    border-color: var(--secondary-hover-color-theme); /* Added for consistency */
+}
+.doctor-form-modal-content .form-actions .btn-primary {
+    background-color: rgb(0, 72, 255);
+    border-color: var(--primary-color-theme);
+    color: white;
+}
+.doctor-form-modal-content .form-actions .btn-primary:hover {
+    background-color: var(--primary-hover-color-theme);
+    border-color: var(--primary-hover-color-theme);
+}
+.doctor-form-modal-content .form-actions .btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+.doctor-form-modal-content .spinner-border-sm {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-width: .18em;
+    vertical-align: -0.1em;
+    margin-right: 0.3em;
 }
 
-
-/* Styles for Availability Schedule within the Doctor Form */
-.weekly-schedule-grid-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 15px;
-}
-.day-schedule-card-form {
-  background-color: var(--light-bg-color, #f9f9f9);
-  padding: 12px;
-  border: 1px solid var(--border-color-light, #e9ecef);
-  border-radius: 4px;
-}
-.day-schedule-card-form h6 {
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: var(--text-color, #343a40);
-}
-.break-times-section-form {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px dashed var(--border-color-light, #e9ecef);
-}
-.break-times-section-form label.small {
-  font-size: 0.8em;
-  font-weight: normal;
-  color: var(--text-color-muted, #6c757d);
-}
-.break-time-item-form {
-  background-color: var(--white-color, #fff); /* Slightly different background for break item */
-  padding: 8px;
-  border-radius: 4px;
-  margin-bottom: 6px !important;
-}
-.btn-xs { /* Extra small buttons */
-  padding: .1rem .3rem;
-  font-size: .75rem;
-  line-height: 1.2;
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .doctor-form-modal-content.card {
+        width: 90%;
+    }
+    .doctor-form-modal-content .weekly-schedule-grid-form {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
 }
 
-
-/* Styles for Date Overrides within the Doctor Form */
-.overrides-list-form .override-card-form.card {
-  margin-bottom: 15px !important;
-  background-color: var(--light-bg-color, #f9f9f9);
-  border: 1px solid var(--border-color-light, #e9ecef);
-}
-.overrides-list-form .override-card-form .card-body {
-  padding: 15px !important; /* Override card-body default padding */
-}
-.overrides-list-form .form-row.align-items-center .form-group {
-  margin-bottom: 5px; /* Reduce margin for compact override header row */
-}
-
-.invalid-feedback { /* Ensure visibility */
-  display: none; color: var(--danger-color, #dc3545); font-size: 0.8em; margin-top: 0.2rem;
-}
-.form-control.ng-invalid.ng-touched + .invalid-feedback,
-.form-control.ng-invalid.ng-dirty + .invalid-feedback { display: block; }
-.ng-invalid.ng-touched:not(form) { border-color: var(--danger-color, #dc3545) !important; }
-
-/* Responsive adjustments for modal form if needed */
-@media (max-width: 767px) {
-  .doctor-form-modal-content.card {
-    max-width: 95%; /* Allow more width on small screens */
-    margin: 10px; /* Some margin */
-  }
-  .doctor-form-modal-content .card-body {
-    padding: 15px;
-  }
-  .weekly-schedule-grid-form {
-    grid-template-columns: 1fr; /* Stack day cards */
-  }
-  .form-row .form-group.col-md-6,
-  .form-row .form-group.col-md-4,
-  .form-row .form-group.col-md-3,
-  .form-row .form-group.col-md-2 {
-    flex-basis: 100%; max-width: 100%; margin-bottom: 10px;
-  }
-}
-
-/* Styling for action buttons in the table */
-.table td .btn { /* Target buttons within table cells */
-  display: inline-flex; /* Helps align icon and text if you add text later */
-  align-items: center;
-  justify-content: center;
-  padding: 0.3rem 0.5rem; /* Slightly adjust padding for icon buttons */
-  margin-right: 0.3rem; /* Default right margin for buttons in a group */
-  line-height: 1; /* Ensure icon is centered vertically */
-}
-
-.table td .btn:last-child {
-  margin-right: 0; /* No margin for the last button in a group */
+@media (max-width: 768px) {
+    .page-header h2 {
+        font-size: 2em;
+    }
+    .doctor-form-modal-overlay {
+        padding: 10px;
+    }
+    .doctor-form-modal-content.card {
+        width: 95%;
+        max-height: 95vh;
+    }
+    .doctor-form-modal-content .card-header .card-title {
+        font-size: 1.1rem;
+    }
+    .doctor-form-modal-content .card-body {
+        padding: 10px 15px 15px;
+    }
+    .doctor-form-modal-content fieldset {
+        padding: 10px 12px 12px;
+    }
+    .doctor-form-modal-content legend {
+        font-size: 0.95rem;
+    }
+    .doctor-form-modal-content .form-control,
+    .doctor-form-modal-content .form-control-sm,
+    .doctor-form-modal-content .form-check-label,
+    .doctor-form-modal-content .form-group label {
+        font-size: 0.85rem;
+    }
+    .doctor-form-modal-content .weekly-schedule-grid-form {
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        max-height: 280px;
+    }
+    .doctor-form-modal-content .day-schedule-card-form h6 {
+        font-size: 0.9em;
+    }
+    .doctor-form-modal-content .form-actions {
+        padding: 10px 15px;
+    }
+    .doctor-form-modal-content .form-actions .btn {
+        font-size: 0.85rem;
+        min-width: 80px;
+        padding: 0.35rem 0.8rem;
+    }
+    .table .btn-sm {
+        padding: 0.2rem 0.4rem;
+    }
+    .table .btn-sm mat-icon, .table .btn-sm .fas {
+        font-size: 1em;
+    }
 }
 
-/* Specific styling for Material Icons within these buttons */
-.table td .btn mat-icon {
-  font-size: 1.1rem; /* Adjust icon size as needed */
-  /* Material icons usually align well vertically by default */
-  /* No extra margin needed around mat-icon if button padding is sufficient */
+@media (max-width: 576px) {
+    .admin-manage-doctors-page {
+        padding: 10px;
+    }
+    .doctor-form-modal-overlay {
+        padding: 0;
+        align-items: flex-start;
+    }
+    .doctor-form-modal-content.card {
+        width: 100%;
+        height: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+    }
+    .doctor-form-modal-content .card-header,
+    .doctor-form-modal-content .form-actions {
+        border-radius: 0;
+    }
+    .doctor-form-modal-content .weekly-schedule-grid-form {
+        grid-template-columns: 1fr;
+        /* max-height: none; */ /* Let it take space, card-body scrolls */
+        /* overflow-y: visible; */
+    }
+    .doctor-form-modal-content .form-row > [class*="col-md-"] {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
 }
 
-/* Styles for btn-outline-primary (if not globally defined or needs tweaking) */
-.btn-outline-primary {
-  color: var(--primary-color, #007bff);
-  border-color: var(--primary-color, #007bff);
-  background-color: transparent;
-}
-.btn-outline-primary:hover {
-  color: var(--white-color, #fff);
-  background-color: var(--primary-color, #007bff);
-  border-color: var(--primary-color, #007bff);
-}
-
-/* Styles for btn-outline-danger (if not globally defined or needs tweaking) */
-.btn-outline-danger {
-  color: var(--danger-color, #dc3545);
-  border-color: var(--danger-color, #dc3545);
-  background-color: transparent;
-}
-.btn-outline-danger:hover {
-  color: var(--white-color, #fff);
-  background-color: var(--danger-color, #dc3545);
-  border-color: var(--danger-color, #dc3545);
+/* Close Button */
+.doctor-form-modal-content .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.75em; /* Increase size */
+    font-weight: bold;
+    line-height: 1;
+    opacity: 0.9; /* Slightly more opaque */
+    cursor: pointer;
+    padding: 0 0.5rem; /* Add padding for better click area */
+    transition: opacity 0.3s ease; /* Smooth transition for hover effect */
 }
 
-/* Ensure .mr-1 is defined if you're using it for margin, or handle spacing with gap/margin on .btn */
-.mr-1 {
-  margin-right: 0.25rem !important; /* From your HTML */
+.doctor-form-modal-content .close-btn:hover {
+    opacity: 1; /* Fully opaque on hover */
+    color: #ffcc00; /* Change color on hover for visibility */
+}
+
+/* Card Header */
+.doctor-form-modal-content .card-header {
+    background-color: var(--primary-color-theme);
+    color: #ffffff;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* Prevent header from shrinking */
 }

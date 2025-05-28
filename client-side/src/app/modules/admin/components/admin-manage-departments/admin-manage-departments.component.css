@@ -1,411 +1,271 @@
-/* src/app/modules/admin/components/admin-manage-departments/admin-manage-departments.component.css */
-:host {
-  display: block;
+/* Base Variables */
+:root {
+    --primary-color: #3498db;
+    --primary-color-dark: #2980b9;
+    --danger-color: #dc3545;
+    --danger-color-dark: #c82333;
+    --light-bg: #ffffff;
+    --overlay-bg: rgba(0, 0, 0, 0.5);
+    --border-radius: 8px;
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    --font-family: Arial, sans-serif;
 }
 
-.admin-manage-departments-page {
-  padding: 20px 25px;
-}
-
-/* Page Header Styling */
-.page-header {
-  text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color, #eee);
-}
-.page-header h2 {
-  font-size: 2em;
-  color: var(--primary-color-darker, #004085);
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-.page-header p {
-  font-size: 1em;
-  color: var(--text-color-muted, #6c757d);
-}
-
-
-/* Action Bar for "Add New" button */
-.actions-bar {
-  text-align: right;
-  margin-bottom: 20px; /* Adjusted from mb-3 to standard value */
-}
-.actions-bar .btn i { /* For Font Awesome or similar if used */
-  margin-right: 0.5rem;
-}
-
-/* Loading, Error, Success Messages */
-.loading-indicator, .no-data-message {
-  text-align: center;
-  padding: 20px;
-  font-size: 1.1em;
-  color: var(--text-color-muted, #6c757d);
-  margin-top: 20px;
-}
-.alert { /* Ensure global styling or define here */
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-}
-.alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
-.alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
-.alert-info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
-
-
-/* Departments Table Styling */
-.departments-table-container {
-  margin-top: 20px;
-  background-color: var(--white-color, #fff);
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-  overflow-x: auto; /* For table responsiveness */
-}
-.results-info {
-  padding: 10px 15px;
-  font-size: 0.9em;
-  color: var(--text-color-muted, #6c757d);
-  border-bottom: 1px solid var(--border-color, #eee);
-  background-color: var(--light-bg-color, #f9f9f9);
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-.table {
-  width: 100%;
-  margin-bottom: 0;
-}
-.table th, .table td {
-  padding: 0.8rem 1rem; /* Adjusted padding */
-  vertical-align: middle;
-  border-top: 1px solid var(--border-color, #dee2e6);
-  font-size: 0.9rem;
-}
-.table thead th {
-  background-color: var(--light-bg-color, #f8f9fa);
-  color: var(--primary-color-darker, #004085);
-  font-weight: 600;
-  text-align: left;
-  border-bottom-width: 2px;
-  white-space: nowrap; /* Prevent header text wrapping */
-}
-.table-hover tbody tr:hover { background-color: rgba(0,0,0,.035); }
-.table-striped tbody tr:nth-of-type(odd) { background-color: rgba(0,0,0,.015); }
-
-/* Action buttons in table using MatIcon */
-.table td .btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 0.3rem 0.5rem; margin: 0 0.125rem;
-  line-height: 1; vertical-align: middle;
-  min-width: 34px; min-height: 34px; /* Good tap targets */
-}
-.table td .btn:last-child { margin-right: 0; }
-.table td .btn mat-icon { font-size: 20px; width: 20px; height: 20px; }
-
-/* Outline button styles (if not globally defined) */
-.btn-outline-primary { color: var(--primary-color, #007bff); border-color: var(--primary-color, #007bff); background-color: transparent; }
-.btn-outline-primary:hover { color: var(--white-color, #fff); background-color: var(--primary-color, #007bff); border-color: var(--primary-color, #007bff); }
-.btn-outline-danger { color: var(--danger-color, #dc3545); border-color: var(--danger-color, #dc3545); background-color: transparent; }
-.btn-outline-danger:hover { color: var(--white-color, #fff); background-color: var(--danger-color, #dc3545); border-color: var(--danger-color, #dc3545); }
-.mr-1 { margin-right: 0.25rem !important; }
-
-
-.services-list-inline {
-  list-style: none; padding: 0; margin: 0; font-size: 0.8em;
-  display: flex; flex-wrap: wrap; gap: 4px;
-}
-.services-list-inline li {
-  background-color: var(--light-bg-color, #e9ecef);
-  color: var(--text-color-muted, #555);
-  padding: 2px 6px;
-  border-radius: 3px;
-  border: 1px solid var(--border-color-light, #ddd);
-}
-
-/* Pagination Styling (Shared/Global or defined here) */
-.pagination { /* ... styles from previous components ... */ }
-.justify-content-center { justify-content: center !important; }
-.mt-4 { margin-top: 1.5rem !important; }
-
-/* Department Add/Edit Form Modal Styling */
+/* Modal Overlay - dark translucent background */
 .department-form-modal-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); display: flex;
-  justify-content: center; align-items: center; z-index: 1050;
-  padding: 20px; /* Padding for smaller viewports */
-  box-sizing: border-box;
-}
-.department-form-modal-content.card {
-  width: 100%; max-width: 650px; max-height: 90vh;
-  display: flex; flex-direction: column;
-  background-color: var(--white-color, #fff); border-radius: 8px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-}
-.department-form-modal-content .card-header {
-  display: flex; justify-content: space-between; align-items: center;
-  background-color: var(--primary-color, #007bff); color: var(--white-color, #fff);
-  padding: 1rem 1.25rem; border-top-left-radius: 8px; border-top-right-radius: 8px;
-}
-.department-form-modal-content .card-header .card-title { color: inherit; font-size: 1.3em; margin:0; }
-.close-btn { background: none; border: none; font-size: 1.8rem; font-weight: bold; color: rgba(255,255,255,0.8); opacity: 0.9; padding: 0 .5rem; line-height: 1;}
-.close-btn:hover { opacity: 1; color: var(--white-color, #fff); }
-
-.department-form-modal-content .card-body { overflow-y: auto; padding: 20px 25px; flex-grow: 1; }
-.department-form-modal-content .form-group { margin-bottom: 1rem; }
-.department-form-modal-content .form-group label { font-weight: 500; font-size: 0.9em; margin-bottom: .4rem; }
-
-/* Services Offered FormArray Styling */
-.input-group.input-group-sm { display: flex; margin-bottom: 0.5rem !important; }
-.input-group.input-group-sm .form-control {
-  flex-grow: 1;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.input-group.input-group-sm .input-group-append .btn {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  padding: .25rem .5rem; /* Ensure consistent with form-control-sm */
-  line-height: 1.5;
-}
-.btn-outline-secondary.btn-sm { font-size: 0.875rem; } /* For "+ Add Service" */
-
-.form-actions { display: flex; justify-content: flex-end; padding-top: 15px; border-top: 1px solid var(--border-color, #eee); margin-top: 20px; }
-.form-actions .btn { margin-left: 10px; }
-.form-actions .btn-secondary { background-color: var(--secondary-color, #6c757d); color: var(--white-color, #fff); }
-
-.invalid-feedback { /* Shared style */ }
-.spinner-border-sm { /* Shared style */ }
-
-/* Responsive adjustments */
-@media (max-width: 767px) {
-  .admin-manage-departments-page { padding: 15px; }
-  .page-header h2 { font-size: 1.7em; }
-  .actions-bar { text-align: left; } /* Stack button left on mobile */
-  .actions-bar .btn { width: 100%; }
-
-  .department-form-modal-content.card { max-width: 95%; margin: 10px; }
-  .department-form-modal-content .card-body { padding: 15px; }
-  .form-actions { flex-direction: column-reverse; /* Stack buttons, primary on bottom */ }
-  .form-actions .btn { width: 100%; margin-left: 0; margin-bottom: 10px; }
-  .form-actions .btn:last-child { margin-bottom: 0; }
+    position: fixed;
+    inset: 0;
+    background-color: var(--overlay-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    padding: 1rem;
+    overflow-y: auto;
 }
 
-
-/* src/app/modules/admin/components/admin-manage-departments/admin-manage-departments.component.css */
-
-/* ... (Keep your existing styles for .admin-manage-departments-page, .page-header, table, etc.) ... */
-
-/* --- Department Add/Edit Form Modal Styling --- */
-.department-form-modal-overlay {
-  position: fixed; /* Cover the whole screen */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.65); /* Darker, more prominent overlay */
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Center the modal vertically */
-  z-index: 1050; /* Ensure it's above other content */
-  padding: 20px; /* Padding for smaller viewports so modal doesn't touch edges */
-  box-sizing: border-box;
-  opacity: 0; /* Start hidden for animation */
-  animation: fadeInOverlay 0.3s forwards;
+/* Modal Content - Main dialog box */
+.department-form-modal-content {
+    background-color: #dadbdc;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 90%;
+    max-width: 750px;
+    max-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: var(--font-family);
+    color: #333;
+    animation: modalFadeIn 0.3s ease forwards;
 }
 
-@keyframes fadeInOverlay {
-  to { opacity: 1; }
+/* Modal fade-in animation */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.department-form-modal-content.card {
-  width: 100%;
-  max-width: 600px; /* A good max-width for forms */
-  max-height: 90vh; /* Prevent modal from being taller than viewport */
-  display: flex;
-  flex-direction: column; /* Important for header/body/footer structure */
-  background-color: var(--white-color, #ffffff);
-  border-radius: 8px; /* Standard rounded corners */
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
-  transform: scale(0.95); /* Start slightly smaller for animation */
-  animation: scaleInModal 0.3s 0.1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Slight bounce-in */
-  border: none; /* Remove default card border if any */
+/* Card Header */
+.card-header {
+    background-color: var(--primary-color);
+    color: var(--light-bg);
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    user-select: none;
 }
 
-@keyframes scaleInModal {
-  to { transform: scale(1); }
-}
-
-.department-form-modal-content .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--primary-color, #007bff); /* Use primary theme color */
-  color: var(--white-color, #ffffff);
-  padding: 1rem 1.5rem; /* Slightly more padding */
-  border-bottom: 1px solid rgba(0,0,0,0.1); /* Subtle border */
-  border-top-left-radius: 8px; /* Match card radius */
-  border-top-right-radius: 8px;
-}
-
-.department-form-modal-content .card-header .card-title {
-  margin: 0;
-  font-size: 1.4em; /* Clear title size */
-  font-weight: 500;
-}
-
+/* Close Button */
 .close-btn {
-  background: none;
-  border: none;
-  font-size: 2rem; /* Larger close icon */
-  font-weight: 300; /* Lighter weight for '×' */
-  color: rgba(255,255,255,0.7); /* White with some transparency */
-  opacity: 0.8;
-  padding: 0;
-  line-height: 1;
-  text-shadow: none; /* Remove any default browser shadow */
-  transition: color 0.15s ease-in-out, transform 0.15s ease-in-out;
-}
-.close-btn:hover {
-  color: var(--white-color, #ffffff);
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.department-form-modal-content .card-body {
-  overflow-y: auto; /* Enable scrolling for long form content */
-  padding: 25px 30px; /* Good padding inside the form area */
-  flex-grow: 1; /* Allow body to take available space */
+    background: transparent;
+    border: none;
+    color: var(--danger-color);
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.3rem;
+    transition: color 0.25s ease;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.department-form-modal-content fieldset {
-  border: none; /* Remove fieldset border for a cleaner look inside modal */
-  padding: 0;
-  margin-bottom: 25px;
-}
-.department-form-modal-content fieldset legend {
-  font-size: 1.2em; /* Slightly smaller legend for form context */
-  font-weight: 600;
-  color: var(--primary-color-darker, #0056b3); /* Darker primary for legends */
-  padding-bottom: 8px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid var(--primary-color-light, #e0efff); /* Lighter underline */
-  width: 100%;
+.close-btn:hover,
+.close-btn:focus {
+    color: var(--danger-color-dark);
+    background-color: rgba(220, 53, 69, 0.15);
+    outline: none;
+    box-shadow: 0 0 4px rgba(220, 53, 69, 0.6);
 }
 
-.department-form-modal-content .form-group {
-  margin-bottom: 1.25rem; /* Consistent spacing */
-}
-.department-form-modal-content .form-group label {
-  font-weight: 500;
-  font-size: 0.9em;
-  color: var(--text-color-muted, #555);
-  margin-bottom: 0.4rem;
+/* Card Body */
+.card-body {
+    padding: 1.25rem 1.5rem;
+    overflow-y: auto;
+    flex-grow: 1;
 }
 
-/* Services Offered FormArray Styling within Modal */
-.department-form-modal-content .input-group.input-group-sm { /* Using Bootstrap-like classes */
-  display: flex;
-  align-items: center; /* Vertically align input and button */
-  margin-bottom: 0.5rem;
-}
-.department-form-modal-content .input-group.input-group-sm .form-control {
-  flex-grow: 1;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  font-size: 0.9rem; /* Slightly smaller inputs for services */
-}
-.department-form-modal-content .input-group.input-group-sm .input-group-append .btn {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  padding: .3rem .6rem; /* Adjust button padding */
-  font-size: 0.9rem;
-  line-height: 1.5; /* Ensure text/icon centers */
-  height: calc(1.5em + .6rem + 2px); /* Match input height */
-}
-.department-form-modal-content .btn-outline-secondary.btn-sm { /* For "+ Add Service" */
-  font-size: 0.85rem;
-  padding: 0.3rem 0.75rem;
-  margin-top: 5px; /* Space above add button */
+/* Form Elements */
+.form-group {
+    margin-bottom: 1rem;
 }
 
-/* Form Actions (Save, Cancel buttons) */
-.department-form-modal-content .form-actions {
-  display: flex;
-  justify-content: flex-end; /* Push buttons to the right */
-  padding-top: 20px;
-  border-top: 1px solid var(--border-color, #eee);
-  margin-top: 20px;
-}
-.department-form-modal-content .form-actions .btn {
-  margin-left: 10px; /* Space between buttons */
-  padding: 0.6rem 1.5rem; /* Standard button padding */
-  font-weight: 500;
-}
-.department-form-modal-content .form-actions .btn-secondary {
-  background-color: var(--secondary-color, #6c757d);
-  border-color: var(--secondary-color, #6c757d);
-  color: var(--white-color, #fff);
-}
-.department-form-modal-content .form-actions .btn-secondary:hover {
-  background-color: var(--secondary-color-darker, #5a6268);
-  border-color: var(--secondary-color-darker, #545b62);
+label {
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    display: block;
+    color: #444;
+    font-size: 0.95rem;
 }
 
-
-/* Invalid feedback (should be globally styled or shared) */
-.invalid-feedback {
-  display: none;
-  width: 100%;
-  margin-top: 0.25rem;
-  font-size: 0.8em;
-  color: var(--danger-color, #dc3545);
-}
-.form-control.ng-invalid.ng-touched + .invalid-feedback,
-.form-control.ng-invalid.ng-dirty + .invalid-feedback {
-  display: block;
-}
-.ng-invalid.ng-touched:not(form)  { /* Add red border to invalid touched fields */
-  border-color: var(--danger-color, #dc3545) !important;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* Optional: focus-like shadow for error */
-}
-.form-control:focus.ng-invalid.ng-touched:not(form) { /* Ensure focus style overrides error if focused */
-    border-color: var(--danger-color, #dc3545);
-    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
-}
-
-
-/* Responsive adjustments for the modal form */
-@media (max-width: 767px) {
-  .department-form-modal-content.card {
-    max-width: 95%; /* More width on small screens */
-    margin: 10px; /* Some margin */
-  }
-  .department-form-modal-content .card-header {
-    padding: 0.8rem 1rem;
-  }
-  .department-form-modal-content .card-header .card-title {
-    font-size: 1.2em;
-  }
-  .close-btn {
-    font-size: 1.6rem;
-  }
-  .department-form-modal-content .card-body {
-    padding: 20px; /* Slightly less padding on mobile */
-  }
-  .department-form-modal-content fieldset legend {
-    font-size: 1.1em;
-    margin-bottom: 15px;
-  }
-  .department-form-modal-content .form-actions {
-    flex-direction: column-reverse; /* Stack buttons, primary at bottom */
-  }
-  .department-form-modal-content .form-actions .btn {
+.form-control,
+.form-control-sm {
     width: 100%;
-    margin-left: 0;
-    margin-bottom: 10px;
-  }
-  .department-form-modal-content .form-actions .btn:last-child {
-    margin-bottom: 0;
-  }
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    box-sizing: border-box;
 }
+
+.form-control:focus,
+.form-control-sm:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+    outline: none;
+}
+
+/* Textarea specific */
+textarea.form-control {
+    min-height: 90px;
+    resize: vertical;
+}
+
+/* Validation Feedback */
+.invalid-feedback {
+    color: var(--danger-color);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Buttons container */
+.form-actions {
+    padding: 1rem 1.5rem;
+    background-color: #f7f9fb;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+/* Buttons */
+.btn {
+    font-weight: 600;
+    padding: 0.45rem 1.15rem;
+    border-radius: 5px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    min-width: 100px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Primary update/save button - Blue */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--light-bg);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--primary-color-dark);
+    border-color: var(--primary-color-dark);
+    outline: none;
+}
+
+/* Cancel and other secondary buttons */
+.btn-secondary {
+    background-color: #e2e6ea;
+    border-color: #ccd0d4;
+    color: #555;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background-color: #d6dadf;
+    border-color: #bfc3c8;
+    color: #222;
+    outline: none;
+}
+
+/* Disabled button styling */
+.btn:disabled,
+.btn[disabled] {
+    background-color: #bbb;
+    border-color: #999;
+    cursor: not-allowed;
+    color: #666;
+}
+
+/* Spinner inside button */
+.spinner-border {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+    margin-right: 0.5rem;
+    vertical-align: text-bottom;
+    border-color: var(--light-bg) transparent transparent transparent;
+    border-style: solid;
+    border-radius: 50%;
+    animation: spinnerRotate 0.75s linear infinite;
+}
+
+@keyframes spinnerRotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .department-form-modal-content {
+        max-width: 95%;
+        height: 80vh;
+    }
+
+    .form-actions {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .btn {
+        min-width: 140px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    .close-btn {
+        align-self: flex-end;
+        margin-top: -0.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
+

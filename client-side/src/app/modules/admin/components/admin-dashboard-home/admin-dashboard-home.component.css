@@ -1,148 +1,184 @@
-/* src/app/modules/admin/components/admin-dashboard-home/admin-dashboard-home.component.css */
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fa; /* Light background for contrast */
+    color: #333;
+}
+
 .admin-dashboard-overview {
-  padding: 20px 25px;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.dashboard-header { /* Consistent with other dashboard headers */
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color, #eee);
+/* Header Styles */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 20px;
 }
+
 .dashboard-header h1 {
-  font-size: 2em;
-  color: var(--primary-color-darker, #004085);
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-.dashboard-header .dashboard-subtitle {
-  font-size: 1em;
-  color: var(--text-color-muted, #6c757d);
+    font-size: 2.5em;
+    color: #2c3e50; /* Darker blue */
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Quick Actions Styling */
+.dashboard-header p.dashboard-subtitle {
+    font-size: 1.2em;
+    color: #7f8c8d; /* Muted text color */
+}
+
+/* Quick Actions Styles */
 .quick-actions {
-  margin-bottom: 35px;
+    margin-bottom: 30px;
 }
+
 .quick-actions h2 {
-  font-size: 1.6em;
-  color: var(--primary-color, #007bff);
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--primary-color-light, #a0cfff);
-  font-weight: 500;
+    font-size: 2em;
+    color: #2980b9; /* Bright blue */
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db; /* Lighter blue */
 }
-.actions-grid { /* Copied from PatientDashboardHome, can be shared */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust for more items */
-  gap: 20px;
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
 }
-.action-card { /* Copied from PatientDashboardHome, can be shared */
-  background-color: var(--white-color, #ffffff);
-  padding: 20px 15px;
-  border-radius: 8px;
-  text-align: center;
-  text-decoration: none;
-  color: var(--text-color, #343a40);
-  border: 1px solid var(--border-color, #e0e0e0);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  font-weight: 500;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  min-height: 130px; /* Slightly taller for admin actions */
+
+.action-card {
+    background-color: #ecf0f1; /* Light gray */
+    padding: 25px 20px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: #34495e; /* Dark gray */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+    font-weight: 500;
 }
+
 .action-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
-  color: var(--primary-color-darker, #0056b3);
-  border-color: var(--primary-color-light, #a0cfff);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    background-color: #3498db; /* Blue on hover */
+    color: #ffffff; /* White text on hover */
 }
-.action-card .action-icon { font-size: 2em; margin-bottom: 12px; color: var(--primary-color, #007bff); }
-.action-card .action-icon i { line-height: 1; }
-.action-card span { font-size: 0.95em; }
 
+.action-card .action-icon {
+    font-size: 2.5em; /* Placeholder for icon */
+    margin-bottom: 10px;
+    color: #2980b9; /* Bright blue */
+}
 
-/* Statistics and Summary Sections (Cards) */
-.patient-summary-section.card,
-.doctor-summary-section.card {
-  margin-bottom: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+/* Patient Summary Section Styles */
+.patient-summary-section, .doctor-summary-section {
+    margin-top: 30px;
+    background-color: #f9f9f9; /* Light background for sections */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.card-header { /* Assuming global or shared styling for card headers */
-  background-color: var(--light-bg-color, #f8f9fa);
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--border-color, #e9ecef);
+
+.card-header {
+    background-color: #3498db; /* Blue header */
+    color: #ffffff; /* White text */
+    padding: 15px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
-.card-header h3 {
-  margin: 0;
-  font-size: 1.3em;
-  color: var(--primary-color, #007bff);
-  font-weight: 500;
-}
-.card-header h3 i { margin-right: 8px; } /* Icon spacing */
 
 .card-body {
-  padding: 20px;
+    padding: 20px;
 }
 
-/* Patient Statistics Grid */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  text-align: center;
-}
-.stat-item {
-  background-color: var(--white-color, #fdfdfd);
-  padding: 20px 15px;
-  border-radius: 6px;
-  border: 1px solid var(--border-color-light, #f0f0f0);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-}
-.stat-item .stat-value {
-  display: block;
-  font-size: 2.5em;
-  font-weight: 700;
-  color: var(--primary-color-darker, #004085);
-  margin-bottom: 5px;
-}
-.stat-item .stat-label {
-  font-size: 0.95em;
-  color: var(--text-color-muted, #6c757d);
-}
-
-/* Doctor Summary Table */
-.table-responsive {
-  margin-top: 10px;
-}
-.table { /* Assuming global or shared table styles */
-  width: 100%;
-  font-size: 0.9em; /* Slightly smaller table text for density */
-}
-.table th, .table td {
-  padding: 0.6rem 0.75rem; /* Adjust padding */
-}
-.table thead th {
-  background-color: var(--light-bg-color, #f8f9fa);
-  color: var(--primary-color-darker, #004085);
-  font-weight: 600;
-}
-
-/* Loading, Error, No-Data Messages */
 .loading-indicator, .no-data-message {
-  padding: 20px; text-align: center; color: var(--text-color-muted, #6c757d);
-}
-.alert-warning { /* For data loading errors */
-  color: #664d03; background-color: #fff3cd; border-color: #ffecb5;
+    text-align: center;
+    color: #7f8c8d; /* Muted text color */
+    font-style: italic;
 }
 
-/* Responsive adjustments */
-@media (max-width: 767px) {
-  .dashboard-header h1 { font-size: 1.7em; }
-  .quick-actions h2, .patient-summary-section h3, .doctor-summary-section h3 { font-size: 1.3em; }
-  .actions-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-  .stats-grid { grid-template-columns: 1fr; } /* Stack stats on mobile */
+/* Alert Styles */
+.alert {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f39c12; /* Warning color */
+    color: #ffffff; /* White text */
+}
+
+/* Stats Grid Styles */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-item {
+    background-color: #ffffff; /* White background for stats */
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+    font-size: 1.5em;
+    color: #2980b9; /* Bright blue */
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: #7f8c8d; /* Muted text color */
+}
+
+/* Doctor Summary Table Styles */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0; /* Light border */
+}
+
+.table th {
+    background-color: #3498db; /* Blue header */
+    color: #ffffff; /* White text */
+}
+
+.table tr:hover {
+    background-color: #f1f1f1; /* Light gray on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .actions-grid {
+        grid-template-columns: 1fr; /* Stack actions on smaller screens */
+    }
+
+    .dashboard-header h1 {
+        font-size: 2em;
+    }
+
+    .dashboard-header p.dashboard-subtitle {
+        font-size: 1em;
+    }
+
+    .stat-value {
+        font-size: 1.2em;
+    }
 }
