@@ -2,7 +2,10 @@
 
 ## Project Objective
 
-To develop a comprehensive Hospital Management System using the MEAN (MongoDB, Express.js, Angular, Node.js) stack. This project aims to enable seamless coordination in healthcare administration by providing essential features for managing appointments, doctors, patient records, and overall hospital operations through dedicated user portals for patients, doctors, and administrators. [cite: 1, 2]
+To develop a comprehensive Hospital Management System using the MEAN (MongoDB, Express.js, Angular, Node.js) stack. This project aims to enable seamless coordination in healthcare administration by providing essential features for managing appointments, doctors, patient records, and overall hospital operations through dedicated user portals for patients, doctors, and administrators. 
+
+## 🎥 Demo Video
+Watch the full demo of the  Hospital Management System here:  https://drive.google.com/file/d/1pOEhZtU8nbxnGMYong0gHB3XkM5q4eh6/view?usp=sharing
 
 ## Technology Stack
 
