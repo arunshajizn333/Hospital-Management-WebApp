@@ -10,7 +10,7 @@ import { FooterComponent } from './components/layout/footer/footer.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { PatientRegisterComponent } from './components/auth/patient-register/patient-register.component';
 import { HomeComponent } from './components/public/home/home.component';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi  } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi  } from '@angular/common/http';
 import { CallbackFormComponent } from './components/public/callback-form/callback-form.component'; // Import this
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContactInfoComponent } from './components/public/contact-info/contact-info.component';
@@ -22,6 +22,8 @@ import { DoctorLoginComponent } from './components/auth/doctor-login/doctor-logi
 import { AdminLoginComponent } from './components/auth/admin-login/admin-login.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { CommonModule } from '@angular/common';
+import { HttpLoadingInterceptor } from './core/interceptors/http-loading.interceptor';
+import { DelayInterceptor } from './core/interceptors/delay.interceptor';
 
 
 @NgModule({
@@ -52,11 +54,15 @@ import { CommonModule } from '@angular/common';
   ],
   providers: [
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withInterceptorsFromDi()),
-    // Provide the AuthInterceptor
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    // Provide the AuthInterceptor,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpLoadingInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: DelayInterceptor, multi: true }
+
    
   ],
+  
   bootstrap: [AppComponent]
 })
 export class AppModule { }

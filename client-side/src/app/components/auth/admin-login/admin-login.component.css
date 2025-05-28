@@ -1,71 +1,162 @@
-/* src/app/components/auth/admin-login/admin-login.component.css */
-/* Uses styles from doctor-login.component.css or global styles for .dedicated-login-page */
-/* You can add specific overrides for .admin-login-container if needed */
+/* General Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #007bff, #00c6ff); /* Gradient background */
+}
 
-.dedicated-login-page { /* Copied from doctor-login for consistency */
+/* Dedicated Login Page */
+.dedicated-login-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 120px);
+  min-height: 100vh; /* Full height */
   padding: 20px;
-  background-color: var(--body-bg-color, #f0f2f5);
+   background-color: #f6d9d9;
 }
 
-.login-form-container { /* Copied from doctor-login */
+/* Login Form Container */
+.login-form-container {
   width: 100%;
   max-width: 420px;
   padding: 30px 35px;
-  background-color: var(--white-color, #ffffff);
+  background-color: #ffffff; /* White background for the form */
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+  transition: transform 0.3s ease; /* Smooth transition */
 }
 
-.admin-login-container h2 { /* Specific title styling */
-  color: var(--danger-color, #dc3545); /* Example: Using danger color for Admin portal title */
+/* Hover Effect on Form Container */
+.login-form-container:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+}
+
+/* Title Styling */
+.admin-login-container h2 {
+  color: #dc3545; /* Danger color for Admin portal title */
   text-align: center;
   margin-bottom: 15px;
-  font-size: 1.8em;
+  font-size: 2em; /* Increased font size */
 }
 
-.admin-login-container .login-description { /* Copied from doctor-login */
+/* Description Styling */
+.admin-login-container .login-description {
   text-align: center;
   margin-bottom: 25px;
-  color: var(--text-color-muted, #6c757d);
-  font-size: 0.95em;
+  color: #6c757d; /* Muted text color */
+  font-size: 1em; /* Slightly larger font size */
 }
 
-/* Re-use form-group, label, form-control styles from doctor-login or global */
-.login-form .form-group { margin-bottom: 20px; }
-.login-form label { display: block; margin-bottom: 8px; font-weight: 500; color: #495057; }
+/* Form Group Styles */
+.login-form .form-group {
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #495057;
+}
+
 .login-form .form-control {
-  width: 100%; padding: 12px; border: 1px solid var(--border-color, #ced4da);
-  border-radius: 4px; box-sizing: border-box; font-size: 1em;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da; /* Border color */
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1em;
+  transition: border-color 0.2s ease; /* Smooth border transition */
 }
+
 .login-form .form-control:focus {
-  border-color: var(--primary-color, #007bff);
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-color: #007bff; /* Primary color on focus */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Focus shadow */
 }
 
-
-.login-error-message.alert-danger { margin-top: 15px; margin-bottom: 15px; }
-
-.btn-submit-login { /* Copied from doctor-login, maybe change color */
-  width: 100%; padding: 12px; background-color: var(--danger-color, #dc3545); /* Admin login button color */
-  color: white; border: none; border-radius: 4px; font-size: 1.05em;
-  font-weight: 500; cursor: pointer; transition: background-color 0.2s ease;
+/* Error Message Styles */
+.login-error-message.alert-danger {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
-.btn-submit-login:hover { background-color: #c82333; /* Darker red */ } /* Adjust hover color */
-.btn-submit-login:disabled { background-color: #ccc; cursor: not-allowed; }
 
+/* Submit Button Styles */
+.btn-submit-login {
+  width: 100%;
+  padding: 12px;
+  background-color: #dc3545; /* Admin login button color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1em; /* Slightly larger font size */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth transition */
+}
 
-/* Validation Feedback and Spinner (copied from doctor-login) */
-.invalid-feedback { display: none; width: 100%; margin-top: 0.25rem; font-size: 0.875em; color: var(--danger-color, #dc3545); }
+.btn-submit-login:hover {
+  background-color: #c82333; /* Darker red on hover */
+  transform: translateY(-2px); /* Lift effect on hover */
+}
+
+.btn-submit-login:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Validation Feedback */
+.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545; /* Danger color */
+}
+
 .form-control.ng-invalid.ng-touched + .invalid-feedback,
-.form-control.ng-invalid.ng-dirty + .invalid-feedback { display: block; }
-.ng-invalid.ng-touched:not(form)  { border-color: var(--danger-color, #dc3545); }
-.spinner-border-sm { /* ... same spinner styles ... */
-  width: 1rem; height: 1rem; border-width: .2em; vertical-align: -0.125em;
-  margin-right: 0.5em; border: .2em solid currentColor; border-right-color: transparent;
-  border-radius: 50%; display: inline-block; animation: spinner-border .75s linear infinite;
+.form-control.ng-invalid.ng-dirty + .invalid-feedback {
+  display: block; /* Show feedback when invalid */
 }
-@keyframes spinner-border { to { transform: rotate(360deg); } }
+
+.ng-invalid.ng-touched:not(form) {
+  border-color: #dc3545; /* Red border for invalid fields */
+}
+
+/* Spinner Styles */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: .2em;
+  vertical-align: -0.125em;
+  margin-right: 0.5em;
+  border: .2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spinner-border .75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 480px) {
+  .login-form-container {
+    padding: 20px; /* Reduce padding on smaller screens */
+  }
+
+  .admin-login-container h2 {
+    font-size: 1.5em; /* Smaller title on mobile */
+  }
+
+  .admin-login-container .login-description {
+    font-size: 0.85em; /* Smaller description on mobile */
+  }
+
+  .btn-submit-login {
+    font-size: 1em; /* Smaller button text on mobile */
+  }
+}

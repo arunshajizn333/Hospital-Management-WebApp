@@ -1,21 +1,45 @@
+<app-loading-overlay></app-loading-overlay>
+
 <div class="app">
   <app-public-navbar *ngIf="isPublicPage"></app-public-navbar>
+
   <main class="main-content-area" [class.no-public-navbar]="!isPublicPage">
     <router-outlet></router-outlet>
   </main>
 
-  <div *ngIf="modalManagerService.showLoginModal$ | async" class="modal-overlay" (click)="modalManagerService.closeLoginModal()">
+  <div
+    *ngIf="modalManagerService.showLoginModal$ | async"
+    class="modal-overlay"
+    (click)="modalManagerService.closeLoginModal()"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <button class="modal-close-button" (click)="modalManagerService.closeLoginModal()" aria-label="Close login modal">&times;</button>
+      <button
+        class="modal-close-button"
+        (click)="modalManagerService.closeLoginModal()"
+        aria-label="Close login modal"
+      >
+        &times;
+      </button>
       <app-login></app-login>
     </div>
   </div>
 
-  <div *ngIf="modalManagerService.showRegisterModal$ | async" class="modal-overlay" (click)="modalManagerService.closeRegisterModal()">
+  <div
+    *ngIf="modalManagerService.showRegisterModal$ | async"
+    class="modal-overlay"
+    (click)="modalManagerService.closeRegisterModal()"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <button class="modal-close-button" (click)="modalManagerService.closeRegisterModal()" aria-label="Close registration modal">&times;</button>
+      <button
+        class="modal-close-button"
+        (click)="modalManagerService.closeRegisterModal()"
+        aria-label="Close registration modal"
+      >
+        &times;
+      </button>
       <app-patient-register></app-patient-register>
     </div>
   </div>
 
-  <app-footer *ngIf="isPublicPage"></app-footer> </div>
+  <app-footer *ngIf="isPublicPage"></app-footer>
+</div>

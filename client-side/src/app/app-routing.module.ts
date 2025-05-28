@@ -8,12 +8,9 @@ import { DepartmentListPageComponent } from './components/public/department-list
 import { DoctorLoginComponent } from './components/auth/doctor-login/doctor-login.component';
 import { AdminLoginComponent } from './components/auth/admin-login/admin-login.component';
 
-// import { NotFoundComponent } from './components/layout/not-found/not-found.component';
-
-// Define separate login page routes for Doctor and Admin
-// import { DoctorLoginComponent } from './components/auth/doctor-login/doctor-login.component'; // Create this
-// import { AdminLoginComponent } from './components/auth/admin-login/admin-login.component';   // Create this
-
+// Guards (ensure these are created and paths are correct)
+import { AuthGuard } from './core/guards/auth.guard';
+import { RoleGuard } from './core/guards/role.guard';
 
 const routes: Routes = [
   // Publicly accessible routes

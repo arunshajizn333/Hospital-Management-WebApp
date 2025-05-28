@@ -1,35 +1,36 @@
-<nav class="public-navbar-emc"> 
-  
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-brand">
+      <a routerLink="/" (click)="closeNavbar()">
+       <h4>Kerala Mission Hospital</h4>
+      </a>
+    </div>
+    <button
+      class="navbar-toggler"
+      (click)="toggleNavbar()"
+      [attr.aria-expanded]="navbarOpen"
+      aria-controls="navbarContent">
+      <span class="navbar-toggler-icon">&#9776;</span>
+    </button>
 
-  <div class="navbar-main">
-    <div class="container main-nav-content">
-      <div class="navbar-brand-emc">
-        <a routerLink="/" (click)="closeNavbar()">
-          <img src="/images/logo.png" alt="Sacred Mission Hospital Logo" class="logo-img">
-          </a>
-      </div>
+    <div class="navbar-collapse" [ngClass]="{ 'active': navbarOpen }" id="navbarContent">
+      <ul class="navbar-links">
+        <li><a routerLink="/" routerLinkActive="active" (click)="closeNavbar()">Home</a></li>
+        <li><a routerLink="/departments" (click)="closeNavbar()">Departments</a></li>
+        <li><a routerLink="/doctors" (click)="closeNavbar()">Doctors</a></li>
+        <li><a routerLink="/about" (click)="closeNavbar()">About Us</a></li>
+      </ul>
 
-      <button class="navbar-toggler-emc" type="button" (click)="toggleNavbar()" [attr.aria-expanded]="navbarOpen" aria-controls="navbarCollapsibleContent">
-        <span>&#9776;</span> </button>
-
-      <div class="navbar-collapse-emc" [class.active]="navbarOpen" id="navbarCollapsibleContent">
-        <ul class="navbar-links-emc">
-          <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" (click)="closeNavbar()">Home</a></li>
-          <li><a routerLink="/departments" routerLinkActive="active-link" (click)="closeNavbar()">Departments</a></li>
-          <li><a routerLink="/find-doctor" routerLinkActive="active-link" (click)="closeNavbar()">Doctors</a></li>
-          <li><a routerLink="/about-us" routerLinkActive="active-link" (click)="closeNavbar()">About Us</a></li>
-          </ul>
-        <div class="navbar-actions-emc">
-          <button type="button" class="btn btn-emc-primary" (click)="openLogin()">
-            <i class="fas fa-calendar-check"></i> Book An Appointment
-          </button>
-          <div class="emergency-contact-emc">
-            <i class="fas fa-ambulance"></i>
-            <div>
-              <span>24x7 Emergency</span>
-              <strong>(555) 911-0000</strong> </div>
+      <div class="navbar-actions">
+        <button class="btn btn-primary" (click)="openLogin()">
+          <i class="fas fa-calendar-check"></i> Book An Appointment
+        </button>
+        <div class="emergency-contact">
+          <i class="fas fa-ambulance"></i>
+          <div>
+            <span>24x7 Emergency</span>
+            <strong>(555) 911-0000</strong>
           </div>
-         
         </div>
       </div>
     </div>
