@@ -19,19 +19,19 @@ interface PageLink {
   styleUrl: './contact-info.component.css'
 })
 export class ContactInfoComponent {
-  hospitalName = "Sacred Mission Hospital"; // Using the hospital name
+  hospitalName = "Kerala Mission Hospital"; // Using the hospital name
   address = "123 Health St, Wellness City, HC 45678";
   generalPhoneNumber = "(555) 123-4567";
   generalPhoneLink = "tel:+1-555-123-4567";
   emergencyPhoneNumber = "(555) 911-0000";
   emergencyPhoneLink = "tel:+1-555-911-0000";
-  generalEmail = "info@sacredmissionhospital.com";
+  generalEmail = "info@keralamissionhospital.com";
   generalEmailLink = `mailto:${this.generalEmail}`;
 
   socialMediaLinks: SocialLink[] = [
-    { name: 'Facebook', url: 'https://facebook.com/sacredmissionhospital', displayText: 'F' },
-    { name: 'Twitter', url: 'https://twitter.com/sacredmissionh', displayText: 'T' },
-    { name: 'WhatsApp', url: 'https://wa.me/15551234567', displayText: 'W' }
+    { name: 'Facebook', url: 'https://facebook.com/sacredmissionhospital', displayText: 'Facebook' },
+    { name: 'Twitter', url: 'https://twitter.com/sacredmissionh', displayText: 'Twitter' },
+    { name: 'WhatsApp', url: 'https://wa.me/15551234567', displayText: 'Whatsapp' }
     // Add more social links here
   ];
 

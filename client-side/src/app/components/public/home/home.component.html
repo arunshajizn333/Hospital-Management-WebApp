@@ -1,18 +1,31 @@
 <div class="home-page">
-
-  <section class="hero-section">
-     <div class="hero-content container">
-      <h1>Welcome to Sacred Mission Hospital!</h1>
-      <p>Your health, our priority. Access world-class medical services seamlessly.</p>
-      <button class="btn btn-primary btn-lg" (click)="openLogin()">Book an Appointment</button>
+  <section class="hero-section slider-height d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-7 col-lg-9 col-md-10 col-sm-11">
+          <div class="hero__caption">
+            <span>Your health, our priority.</span>
+            <h1 class="cd-headline letters scale">
+              Welcome to <br />
+              Kerala Mission Hospital! 
+            </h1>
+            <p data-animation="fadeInLeft" data-delay="0.1s">
+              Access world-class medical services seamlessly.
+            </p>
+            <button class="btn hero-btn" (click)="handleBookAppointmentClick()">
+              Book an Appointment
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-   <section class="featured-doctors-section container">
+  <section class="department-list-section container">
     <app-department-list-page></app-department-list-page>
   </section>
 
-    <section class="featured-doctors-section container">
+  <section class="featured-doctors-section container">
     <app-featured-doctors></app-featured-doctors>
   </section>
 
@@ -20,13 +33,19 @@
     <app-hospital-info-snippet></app-hospital-info-snippet>
   </section>
 
-  <section class="patient-testimonials-section container"> <app-testimonials></app-testimonials>
-  </section>
-  
-  <section class="request-callback-section container"> <app-callback-form></app-callback-form> 
+  <section class="patient-testimonials-section container">
+    <app-testimonials></app-testimonials>
   </section>
 
-  <section class="contact-info-display-section container"> <app-contact-info></app-contact-info>
-  </section>
+ <section class="callback-and-contact container">
+  <div class="callback-contact-wrapper">
+    <div class="left-section">
+      <app-callback-form></app-callback-form>
+    </div>
+    <div class="right-section">
+      <app-contact-info></app-contact-info>
+    </div>
+  </div>
+</section>
 
 </div>

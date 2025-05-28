@@ -2,14 +2,37 @@
   <h2>What Our Patients Say</h2>
   <div class="testimonials-grid" *ngIf="testimonials.length > 0">
     <div *ngFor="let testimonial of testimonials" class="testimonial-card">
-      <blockquote class="testimonial-quote">"{{ testimonial.quote }}"</blockquote>
+      <img
+        *ngIf="testimonial.imageUrl"
+        [src]="testimonial.imageUrl"
+        [alt]="testimonial.author"
+      />
+
+      <blockquote class="testimonial-quote">
+        "{{ testimonial.quote }}"
+      </blockquote>
+
       <div class="testimonial-author-info">
         <p class="author">- {{ testimonial.author }}</p>
-        <p *ngIf="testimonial.location" class="location">{{ testimonial.location }}</p>
+        <p *ngIf="testimonial.location" class="location">
+          {{ testimonial.location }}
+        </p>
       </div>
-      <div *ngIf="testimonial.rating && testimonial.rating > 0" class="star-rating">
-        <span *ngFor="let star of getStars(testimonial.rating)" class="star filled">&#9733;</span>
-        <span *ngFor="let star of getEmptyStars(testimonial.rating)" class="star empty">&#9734;</span>
+
+      <div
+        *ngIf="testimonial.rating && testimonial.rating > 0"
+        class="star-rating"
+      >
+        <span
+          *ngFor="let star of getStars(testimonial.rating)"
+          class="star filled"
+          >&#9733;</span
+        >
+        <span
+          *ngFor="let star of getEmptyStars(testimonial.rating)"
+          class="star empty"
+          >&#9734;</span
+        >
       </div>
     </div>
   </div>

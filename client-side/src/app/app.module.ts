@@ -20,7 +20,9 @@ import { FeaturedDoctorsComponent } from './components/public/featured-doctors/f
 import { HospitalInfoSnippetComponent } from './components/public/hospital-info-snippet/hospital-info-snippet.component';
 import { DoctorLoginComponent } from './components/auth/doctor-login/doctor-login.component';
 import { AdminLoginComponent } from './components/auth/admin-login/admin-login.component';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // Import your interceptor
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { CommonModule } from '@angular/common';
+
 
 @NgModule({
   declarations: [
@@ -38,11 +40,9 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // Impor
     HospitalInfoSnippetComponent,
     DoctorLoginComponent,
     AdminLoginComponent,
-
-   
-   
   ],
   imports: [
+   CommonModule,
     BrowserModule,
     AppRoutingModule,
     CoreModule,

@@ -4,7 +4,8 @@ interface Testimonial {
   quote: string;
   author: string;
   location?: string; // Optional, e.g., city or "Grateful Patient"
-  rating?: number;   // Optional, e.g., 1-5 stars
+  rating?: number; 
+  imageUrl : string  // Optional, e.g., 1-5 stars
 }
 
 @Component({
@@ -16,26 +17,35 @@ interface Testimonial {
 export class TestimonialsComponent implements OnInit {
 
   testimonials: Testimonial[] = [
-    {
-      quote: "The care I received at Sacred Mission Hospital was exceptional. The doctors and nurses were attentive and compassionate throughout my recovery.",
-      author: "John D.",
-      location: "Wellness City",
-      rating: 5
-    },
-    {
-      quote: "Booking appointments was so easy, and Dr. Emily Carter is fantastic. Highly recommend this hospital!",
-      author: "Sarah G.",
-      location: "Grateful Patient",
-      rating: 5
-    },
-    {
-      quote: "From the moment I walked in, I felt cared for. The facilities are top-notch and the staff truly professional.",
-      author: "Michael B.",
-      location: "Neighboring Town",
-      rating: 4
-    }
-    // Add more testimonials as needed
-  ];
+  {
+    quote: "The care I received at Sacred Mission Hospital was exceptional. The doctors and nurses were attentive and compassionate throughout my recovery.",
+    author: "John D.",
+    location: "Wellness City",
+    rating: 5,
+    imageUrl: "/images/testi/testi3.jpg"
+  },
+  {
+    quote: "Booking appointments was so easy, and Dr. Emily Carter is fantastic. Highly recommend this hospital!",
+    author: "Sarah G.",
+    location: "Grateful Patient",
+    rating: 5,
+     imageUrl: "/images/testi/testi2.jpg"
+  },
+  {
+    quote: "From the moment I walked in, I felt cared for. The facilities are top-notch and the staff truly professional.",
+    author: "Michael B.",
+    location: "Neighboring Town",
+    rating: 4,
+    imageUrl: "/images/testi/testi3.jpg"
+  },
+  {
+    quote: "I was nervous at first, but the warm atmosphere and expert treatment put me at ease instantly.",
+    author: "Anna R.",
+    location: "Metro Region",
+    rating: 5,
+     imageUrl: "/images/testi/testi1.jpg"
+  }
+];
 
   constructor() { }
 

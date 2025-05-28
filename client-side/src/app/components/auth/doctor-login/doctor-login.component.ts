@@ -56,7 +56,7 @@ export class DoctorLoginComponent implements OnInit {
       next: (user: User) => {
         this.isSubmitting = false;
         if (user.role === 'doctor') {
-          this.router.navigate(['/doctor/dashboard']); // Navigate to doctor dashboard
+          this.router.navigate(['/doctor']); // Navigate to doctor dashboard
         } else {
           this.loginError = 'Login successful, but role is not Doctor.';
           this.authService.logout(); // Log out if role mismatch

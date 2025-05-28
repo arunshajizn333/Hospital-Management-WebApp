@@ -65,7 +65,7 @@ export class AdminLoginComponent implements OnInit {
       next: (user: User) => {
         this.isSubmitting = false;
         if (user.role === 'admin') {
-          this.router.navigate(['/admin/dashboard']);
+          this.router.navigate(['/admin']);
         } else {
           this.loginError = 'Login successful, but role is not Admin.';
           this.authService.logout();

@@ -1,27 +1,45 @@
 /* src/styles.css */
 :root {
-  --primary-color: #007bff;       /* A clear, professional blue */
+  --primary-color: #007bff;       /* Professional Blue - EMC uses similar blues */
   --primary-color-darker: #0056b3;
-  --secondary-color: #6c757d;     /* A neutral grey */
+  --secondary-color: #6c757d;     /* Neutral Grey */
   --secondary-color-darker: #545b62;
-  --accent-color: #17a2b8;        /* A complementary accent (e.g., teal/cyan) */
+  --accent-color: #17a2b8;        /* Teal/Cyan - often seen in medical themes */
+  --accent-color-darker: #117a8b;
   --success-color: #28a745;
   --success-color-darker: #218838;
   --danger-color: #dc3545;
-  --warning-color: #ffc107;
-  --light-bg-color: #f8f9fa;
+  --warning-color: #ffc107; /* Gold/Yellow for stars or highlights */
+
   --white-color: #ffffff;
-  --text-color: #343a40;          /* Dark grey for text */
-  --text-color-muted: #6c757d;
+  --light-bg-color: #f8f9fa;    /* Very light grey for subtle section backgrounds or cards */
+  --body-bg-color: #eef1f5;     /* A soft, slightly off-white/light grey page background */
+  --text-color: #212529;          /* Dark grey for primary text, good contrast */
+  --text-color-muted: #6c757d;   /* Lighter grey for secondary text */
+  --text-color-light: #f8f9fa;   /* For text on dark backgrounds */
   --border-color: #dee2e6;
-  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-family-serif: Georgia, "Times New Roman", Times, serif; /* Optional for specific elements */
+  --border-color-light: #f1f1f1;
+
+  /* Fonts - Choose professional and readable sans-serif fonts.
+     Consider importing them from Google Fonts in index.html or here.
+     EMC Cochin appears to use fonts like Montserrat for headings and Open Sans/Roboto for body.
+  */
+  --font-family-sans-serif: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "Noto Sans", sans-serif;
+  --font-family-headings: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "Noto Sans", sans-serif;
+  --font-family-serif: Georgia, "Times New Roman", Times, serif;
+
+  --navbar-height: 60px; /* Example, adjust as needed */
+  --footer-height: 100px; /* Example */
+
+  --section-padding-vertical: 60px; /* Consistent vertical padding for sections */
+  --card-border-radius: 8px;
+  --button-border-radius: 5px;
 }
 
 html {
   box-sizing: border-box;
   scroll-behavior: smooth;
-  
+  font-size: 16px; /* Base font size for rem calculations */
 }
 
 *,
@@ -33,38 +51,108 @@ html {
 body {
   font-family: var(--font-family-sans-serif);
   color: var(--text-color);
-  background-color: #dae2e1;   
+  background-color: var(--body-bg-color); /* Overall page background */
   margin: 0;
   padding: 0;
   line-height: 1.6;
-  font-size: 16px; /* Base font size */
-    
+  -webkit-font-smoothing: antialiased; /* For smoother fonts */
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Ensure app-root and other main layout elements can manage full height */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main { /* If you use a <main> tag in app.component.html to wrap router-outlet */
+  flex-grow: 1; /* Allows main content to push footer down */
+}
+
+
+/* Headings - Define global heading styles for consistency */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-headings);
+  color: var(--primary-color-darker); /* Or var(--text-color) */
+  margin-top: 0;
+  margin-bottom: 0.75rem; /* Consistent bottom margin */
+  font-weight: 600; /* Bolder headings */
+  line-height: 1.3;
+}
+h1 { font-size: 2.8rem; } /* Example sizes, adjust for your design */
+h2 { font-size: 2.2rem; }
+h3 { font-size: 1.8rem; }
+h4 { font-size: 1.5rem; }
+/* ... and so on */
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none; /* Remove underline by default, add on hover if desired */
+  transition: color 0.2s ease-in-out;
+}
+a:hover {
+  color: var(--primary-color-darker);
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Updated .container class - this is for centering content *within* full-width sections */
 .container {
-  width: 95%;
-  max-width: 1200px; /* Max width for larger screens */
+   /* More responsive than fixed padding on sides */
+  /* Common max-width, EMC uses something similar */
   margin-left: auto;
   margin-right: auto;
-  padding-left: 10px;
-  padding-right: 10px;
+  /* padding-left: 15px;  Remove if sections handle their own internal padding
+     padding-right: 15px; or if using this container for text blocks */
 }
 
-/* General Button Styling (can be overridden by component styles) */
+/* Section base style for full-width sections */
+.section-full-width {
+  width: 100%;
+  padding-top: var(--section-padding-vertical);
+  padding-bottom: var(--section-padding-vertical);
+  /* Background colors/images will be applied to specific sections */
+}
+/* Example usage in a component's HTML:
+<section class="section-full-width specific-section-bg">
+  <div class="container">
+    <h2>Section Title</h2>
+    <p>Content here...</p>
+  </div>
+</section>
+*/
+
+
+/* General Button Styling */
 .btn {
   display: inline-block;
-  padding: 0.6rem 1.2rem;
+  padding: 0.75rem 1.5rem; /* Slightly larger padding */
   font-size: 1rem;
   font-weight: 500;
   text-align: center;
   text-decoration: none;
-  border-radius: 0.25rem;
+  border-radius: var(--button-border-radius);
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; /* Smoother transition */
   border: 1px solid transparent;
+  white-space: nowrap; /* Prevent button text from wrapping */
+}
+.btn-lg { /* Larger button variant */
+    padding: 0.85rem 1.8rem;
+    font-size: 1.1rem;
+}
+.btn-sm { /* Smaller button variant */
+    padding: 0.3rem 0.75rem;
+    font-size: 0.875rem;
 }
 
-.btn-primary {
+
+.btn-primary { /* Your existing primary button style is good */
   background-color: var(--primary-color);
   color: var(--white-color);
   border-color: var(--primary-color);
@@ -72,9 +160,11 @@ body {
 .btn-primary:hover {
   background-color: var(--primary-color-darker);
   border-color: var(--primary-color-darker);
+  transform: translateY(-2px); /* Subtle lift on hover */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.btn-secondary {
+.btn-secondary { /* Your existing secondary button style is good */
   background-color: var(--secondary-color);
   color: var(--white-color);
   border-color: var(--secondary-color);
@@ -82,9 +172,11 @@ body {
 .btn-secondary:hover {
   background-color: var(--secondary-color-darker);
   border-color: var(--secondary-color-darker);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.btn-success {
+.btn-success { /* Your existing success button style is good */
   background-color: var(--success-color);
   color: var(--white-color);
   border-color: var(--success-color);
@@ -92,26 +184,90 @@ body {
 .btn-success:hover {
   background-color: var(--success-color-darker);
   border-color: var(--success-color-darker);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-color: transparent;
+}
+.btn-outline-primary:hover {
+  color: var(--white-color);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+/* ... add other outline button variants as needed ... */
+
+
+/* Alert Styling (Your existing alert styles are a good base) */
 .alert {
-  padding: 0.75rem 1.25rem;
+  padding: 1rem 1.25rem; /* Increased padding */
   margin-bottom: 1rem;
   border: 1px solid transparent;
-  border-radius: 0.25rem;
+  border-radius: var(--button-border-radius); /* Consistent radius */
 }
 .alert-danger {
-  color: #721c24;
+  color: #661d22; /* Darker text for better contrast */
   background-color: #f8d7da;
   border-color: #f5c6cb;
 }
 .alert-success {
-  color: #155724;
-  background-color: #d4edda;
-  border-color: #c3e6cb;
+  color: #0c5425; /* Darker text */
+  background-color: #d1e7dd;
+  border-color: #badbcc;
+}
+.alert-info {
+  color: #055160;
+  background-color: #cff4fc;
+  border-color: #b6effb;
+}
+.alert-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
 }
 
-/* Utility classes */
+
+/* Form Control Styling (basic) */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: .75rem 1rem; /* More padding */
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: var(--white-color);
+  background-clip: padding-box;
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-border-radius);
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  box-sizing: border-box;
+}
+.form-control:focus {
+  color: var(--text-color);
+  background-color: var(--white-color);
+  border-color: var(--primary-color-light, #86b7fe); /* Lighter primary for focus */
+  outline: 0;
+  box-shadow: 0 0 0 .25rem rgba(var(--primary-color-rgb, 13,110,253),.25); /* Use RGB version of primary color */
+}
+/* Define --primary-color-rgb in :root e.g., --primary-color-rgb: 13,110,253; */
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+.form-group label {
+    display: inline-block;
+    margin-bottom: .5rem;
+    font-weight: 500;
+}
+.invalid-feedback { /* ... your existing styles are good ... */ }
+.form-control.ng-invalid.ng-touched { /* ... your existing styles are good ... */ }
+
+
+/* Utility classes (your existing ones are good) */
 .mt-1 { margin-top: 0.25rem !important; }
 .mt-2 { margin-top: 0.5rem !important; }
 .mt-3 { margin-top: 1rem !important; }
@@ -121,5 +277,3 @@ body {
 .mb-3 { margin-bottom: 1rem !important; }
 .mb-4 { margin-bottom: 1.5rem !important; }
 .text-center { text-align: center !important; }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

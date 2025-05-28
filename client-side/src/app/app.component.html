@@ -1,18 +1,41 @@
-<app-public-navbar></app-public-navbar>
+<div class="app">
+  <app-public-navbar></app-public-navbar>
 
-<main class="container mt-4 mb-4">
-  <router-outlet></router-outlet>
-</main>
+  <main class="container mt-4 mb-4">
+    <router-outlet></router-outlet>
+  </main>
 
-<div *ngIf="modalManagerService.showLoginModal$ | async" class="modal-overlay" (click)="modalManagerService.closeLoginModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <button class="modal-close-button" (click)="modalManagerService.closeLoginModal()" aria-label="Close login modal">&times;</button>
-    <app-login></app-login>
+  <div
+    *ngIf="modalManagerService.showLoginModal$ | async"
+    class="modal-overlay"
+    (click)="modalManagerService.closeLoginModal()"
+  >
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button
+        class="modal-close-button"
+        (click)="modalManagerService.closeLoginModal()"
+        aria-label="Close login modal"
+      >
+        &times;
+      </button>
+      <app-login></app-login>
+    </div>
   </div>
+  <div
+    *ngIf="modalManagerService.showRegisterModal$ | async"
+    class="modal-overlay"
+    (click)="modalManagerService.closeRegisterModal()"
+  >
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button
+        class="modal-close-button"
+        (click)="modalManagerService.closeRegisterModal()"
+        aria-label="Close registration modal"
+      >
+        &times;
+      </button>
+      <app-patient-register></app-patient-register>
+    </div>
+  </div>
+  <app-footer></app-footer>
 </div>
-<div *ngIf="modalManagerService.showRegisterModal$ | async" class="modal-overlay" (click)="modalManagerService.closeRegisterModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <button class="modal-close-button" (click)="modalManagerService.closeRegisterModal()" aria-label="Close registration modal">&times;</button>
-    <app-patient-register></app-patient-register> </div>
-</div>
-<app-footer></app-footer>

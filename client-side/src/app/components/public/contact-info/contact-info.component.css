@@ -1,93 +1,112 @@
-/* src/app/components/public/contact-info/contact-info.component.css */
 .contact-info-section {
-  padding: 40px 20px;
-  background-color: #f4f7f6; /* A slightly different, calm background */
-  text-align: center;
+  width: 100%;
+  padding: 48px 32px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  transition: all 0.3s ease;
+  margin-top: 40px;
+  color: #1f2937;
+}
+
+.contact-info-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .contact-info-section h2 {
-  margin-bottom: 30px;
-  color: #333;
+  font-size: 2rem;
+  margin-bottom: 32px;
+  text-align: left;
+  font-weight: 600;
+  color: #111827;
 }
 
 .contact-layout {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
-  justify-content: space-around;
-  text-align: left;
-  max-width: 1100px;
-  margin: 0 auto;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
 }
 
 .contact-details,
 .dedicated-page-links {
-  flex: 1;
-  min-width: 300px; /* Ensure they don't get too squished */
-  padding: 20px;
-  margin: 10px;
+  flex: 1 1 350px;
+  padding: 16px;
 }
 
 .contact-details h3,
 .dedicated-page-links h3 {
-  color: #007bff; /* Primary theme color for subheadings */
-  margin-bottom: 15px;
-  border-bottom: 2px solid #007bff;
-  padding-bottom: 5px;
-  display: inline-block;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  color: #1e293b;
+  font-weight: 600;
 }
 
-.contact-details p {
-  margin-bottom: 10px;
-  line-height: 1.6;
-  color: #555;
+.contact-details p,
+.contact-details a,
+.dedicated-page-links a {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  text-align: left;
+  color: #374151;
 }
 
-.contact-details p strong {
-  color: #333;
+.contact-details strong {
+  color: #0f172a;
 }
 
-.contact-details a {
-  color: #0056b3; /* Darker blue for links */
+.contact-details a,
+.dedicated-page-links a {
   text-decoration: none;
+  color: #2563eb;
+  transition: color 0.2s ease;
 }
 
-.contact-details a:hover {
+.contact-details a:hover,
+.dedicated-page-links a:hover {
+  color: #1d4ed8;
   text-decoration: underline;
 }
 
-.social-media-links {
-  margin-top: 20px;
-}
-
 .social-media-links h4 {
-    font-size: 1.1em;
-    margin-bottom: 10px;
-    color: #333;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #1e40af;
+  font-weight: 500;
 }
 
 .social-media-links a {
-  margin-right: 15px;
-  font-size: 1.8em; /* Adjust for icon size */
-  color: #007bff;
-  /* Replace with actual icon styles if using an icon font/SVG */
+  margin-right: 14px;
+  font-size: 1.1rem;
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+.social-media-links a:hover {
+  color: #0c4a6e;
+  text-decoration: underline;
 }
 
 .dedicated-page-links ul {
   list-style: none;
-  padding: 0;
+  padding-left: 0;
 }
 
-.dedicated-page-links ul li {
-  margin-bottom: 10px;
+.dedicated-page-links li {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
 }
 
-.dedicated-page-links ul li a {
-  color: #0056b3;
-  text-decoration: none;
-  font-weight: 500;
-}
+@media (max-width: 768px) {
+  .contact-layout {
+    flex-direction: column;
+  }
 
-.dedicated-page-links ul li a:hover {
-  text-decoration: underline;
-  color: #007bff;
+  .contact-info-section {
+    padding: 32px 20px;
+  }
+
+  .contact-info-section h2 {
+    text-align: left;
+  }
 }

@@ -1,135 +1,106 @@
-/* src/app/components/public/home/home.component.css (or featured-doctors.component.css) */
-
-/* Styles for the "Featured Doctors" section wrapper */
 .featured-doctors-preview {
-  /* Uses general section styling from home.component.css for background, padding etc. */
-  /* If it's its own component, it would need its own section-level padding and background */
+  padding: 60px 20px;
+  background: linear-gradient(to bottom right, #a9cdf0, #ffffff);
+  text-align: center;
+  height: 100vh;
 }
 
-.featured-doctors-preview h2 { /* Already styled by .home-page h2 */
-  /* Specific adjustments if needed */
+.featured-doctors-preview h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #102039;
+  font-weight: 700;
 }
 
-/* Grid layout for doctor cards */
+/* Status messages */
+.loading-indicator,
+.error-message,
+.no-data-message {
+  font-size: 1.1rem;
+  color: #333;
+  margin-top: 20px;
+}
+
+/* Doctor List Grid */
 .doctor-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsive grid */
-  gap: 30px; /* Space between cards */
-  margin-top: 20px; /* Space below section title */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center-align cards */
+  gap: 30px;
 }
 
-/* Individual doctor card styling */
+/* Individual Card */
 .doctor-card {
-  background-color: var(--white-color, #ffffff);
-  border-radius: 10px; /* Softer corners */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Subtle shadow */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #ffffff;
+  border: 1px solid #d0d0d0;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  width: 280px;
   display: flex;
   flex-direction: column;
-  text-align: center; /* Center content within the card */
-  overflow: hidden; /* To respect border-radius of child elements like images */
+  align-items: center;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .doctor-card:hover {
-  transform: translateY(-7px); /* Lift effect on hover */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12); /* Enhanced shadow on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
+/* Doctor Image */
 .doctor-photo {
-  width: 140px; /* Size of the circular photo */
-  height: 140px;
-  border-radius: 50%; /* Make it circular */
-  object-fit: cover; /* Ensures image covers the area well */
-  margin: 25px auto 15px auto; /* Top margin, auto L/R for centering, bottom margin */
-  border: 5px solid var(--white-color, #fff); /* Optional white border */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Slight shadow for the photo itself */
-}
-
-.doctor-card .card-content {
-  padding: 0 20px 20px 20px; /* Padding for the text content, no top padding if photo is there */
-  flex-grow: 1; /* Allows content to fill space */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Pushes button to bottom if present */
-}
-
-.doctor-card h3 {
-  margin-top: 0;
-  margin-bottom: 5px;
-  font-size: 1.35em; /* Clear name size */
-  color: var(--text-color, #343a40);
-  font-weight: 600;
-}
-
-.doctor-card .specialization {
-  font-size: 1em;
-  color: var(--primary-color, #007bff);
-  margin-bottom: 8px;
-  font-weight: 500; /* Slightly less bold than name */
-  min-height: 1.2em; /* Ensure space even if specialization is short */
-}
-
-.doctor-card .department-name {
-  font-size: 0.85em;
-  color: var(--text-color-muted, #6c757d);
-  margin-bottom: 12px;
-  min-height: 1em;
-}
-
-.doctor-card .doctor-bio {
-  font-size: 0.9em;
-  color: #555;
-  line-height: 1.5;
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 12px;
+  background-color: #e0e0e0;
   margin-bottom: 15px;
-  min-height: 60px; /* Approx 3-4 lines of text, adjust as needed */
-  /* For text overflow with ellipsis if you want to strictly limit lines:
-  display: -webkit-box;
-  -webkit-line-clamp: 3; 
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  */
+  border: 1px solid #ccc;
 }
 
-/* Styling for a "View Profile" button if you add it back */
-.doctor-card .btn-outline-primary {
-  color: var(--primary-color, #007bff);
-  border-color: var(--primary-color, #007bff);
-  padding: 0.4rem 0.8rem;
-  font-size: 0.9em;
-  margin-top: auto; /* Pushes button to the bottom of the card */
+/* Text Styles */
+.doctor-card h3 {
+  font-size: 1.4rem;
+  color: #0f61ee;
+  margin-bottom: 10px;
 }
 
-.doctor-card .btn-outline-primary:hover {
-  background-color: var(--primary-color, #007bff);
-  color: var(--white-color, #fff);
+.specialization {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #102039;
+  margin-bottom: 6px;
 }
 
-/* Loading, error, no-data messages (assuming these are globally styled or from home.component.css) */
-.loading-indicator p,
-.no-data-message {
-  /* Ensure these are styled to be readable */
-}
-.error-message.alert {
-  /* Ensure these are styled */
+.department-name {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 8px;
 }
 
-/* Responsive adjustments from home.component.css would also apply if these are within that scope */
-@media (max-width: 767px) {
-  .doctor-list {
-    grid-template-columns: 1fr; /* Stack cards */
+.doctor-bio {
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Responsive Fix */
+@media (max-width: 480px) {
+  .doctor-card {
+    padding: 15px;
+    width: 100%;
+    max-width: 90%;
   }
+
   .doctor-photo {
-    width: 120px;
-    height: 120px;
+    height: 220px;
   }
-  .doctor-card h3 {
-    font-size: 1.2em;
-  }
-  .doctor-card .specialization {
-    font-size: 0.95em;
-  }
-  .doctor-card .doctor-bio {
-    min-height: auto; /* Allow bio to flow naturally on mobile */
+
+  .featured-doctors-preview h2 {
+    font-size: 2rem;
   }
 }

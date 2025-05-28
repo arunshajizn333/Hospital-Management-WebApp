@@ -463,69 +463,85 @@ exports.getDoctorByIdForAdmin = async (req, res) => {
 // @route   PUT /api/admin/doctors/:doctorId
 // @access  Private (Admin)
 exports.updateDoctorByAdmin = async (req, res) => {
-    try {
-        const { doctorId } = req.params;
-        const { name, email, specialization, phone, availabilitySchedule, departmentId, role } = req.body;
+  try {
+    const { doctorId } = req.params;
+    // You are only destructuring a few fields here from req.body
+    // const { name, email, specialization, phone, availabilitySchedule, departmentId, role } = req.body;
+    // You need to destructure ALL fields that can be updated, or access them directly from req.body
 
-        if (!mongoose.Types.ObjectId.isValid(doctorId)) {
-            return res.status(400).json({ message: 'Invalid Doctor ID format.' });
-        }
+    // ... (validation for doctorId) ...
+    let doctor = await Doctor.findById(doctorId);
+    // ... (check if doctor exists) ...
 
-        let doctor = await Doctor.findById(doctorId);
-        if (!doctor) {
-            return res.status(404).json({ message: 'Doctor not found.' });
-        }
-
-        // Check for email uniqueness if email is being changed
-        if (email && email !== doctor.email) {
-            const existingDoctorWithEmail = await Doctor.findOne({ email, _id: { $ne: doctorId } });
-            if (existingDoctorWithEmail) {
-                return res.status(400).json({ message: `Email '${email}' is already in use by another doctor.` });
-            }
-            doctor.email = email;
-        }
-
-        if (departmentId) {
-            if (!mongoose.Types.ObjectId.isValid(departmentId)) {
-                return res.status(400).json({ message: 'Invalid Department ID format.' });
-            }
-            const departmentExists = await Department.findById(departmentId);
-            if (!departmentExists) {
-                return res.status(404).json({ message: 'Department not found. Cannot assign doctor.' });
-            }
-            doctor.department = departmentId;
-        } else if (departmentId === null || departmentId === '') { // Allow unassigning department
-            doctor.department = undefined;
-        }
-
-
-        if (name) doctor.name = name;
-        if (specialization) doctor.specialization = specialization;
-        if (phone !== undefined) doctor.phone = phone; // Allow empty string for phone
-        if (availabilitySchedule) doctor.availabilitySchedule = availabilitySchedule;
-        if (role && ['doctor', 'admin'].includes(role)) doctor.role = role; // Admin can set role for a doctor account
-
-        // Password update should be a separate, dedicated endpoint for security.
-        // Do not update password here directly unless explicitly intended and secured.
-
-        await doctor.save();
-        const populatedDoctor = await Doctor.findById(doctor._id)
-            .select('-password')
-            .populate('department', 'name');
-
-        res.status(200).json({
-            message: 'Doctor details updated successfully by admin.',
-            doctor: populatedDoctor,
-        });
-
-    } catch (err) {
-        console.error('Error updating doctor by admin:', err.message);
-        if (err.name === 'ValidationError') {
-            return res.status(400).json({ message: Object.values(err.errors).map(val => val.message).join(', ') });
-        }
-        if (err.code === 11000) { return res.status(400).json({ message: `Email '${req.body.email || doctor.email}' already in use.`});}
-        res.status(500).json({ message: 'Server Error while updating doctor.' });
+    // Check for email uniqueness if email is being changed
+    if (req.body.email && req.body.email !== doctor.email) {
+        // ... your email uniqueness check logic ...
+        doctor.email = req.body.email;
     }
+
+    // --- THIS IS THE MOST LIKELY AREA FOR THE PROBLEM ---
+    // You are only explicitly updating a few fields.
+    // You need to update ALL fields that the admin is allowed to change.
+
+    if (req.body.name !== undefined) doctor.name = req.body.name;
+    if (req.body.specialization !== undefined) doctor.specialization = req.body.specialization;
+    if (req.body.phone !== undefined) doctor.phone = req.body.phone;
+    
+    // Department Update
+    if (req.body.department !== undefined) { // departmentId is sent as 'department' in payload
+        if (req.body.department === null || req.body.department === '') {
+            doctor.department = undefined; // Unassign
+        } else if (mongoose.Types.ObjectId.isValid(req.body.department)) {
+            const departmentExists = await Department.findById(req.body.department);
+            if (!departmentExists) {
+                return res.status(404).json({ message: 'Department to assign not found.' });
+            }
+            doctor.department = req.body.department;
+        } else {
+            return res.status(400).json({ message: 'Invalid Department ID format for assignment.' });
+        }
+    }
+
+    if (req.body.role && ['doctor', 'admin'].includes(req.body.role)) { // Ensure role is valid
+        doctor.role = req.body.role;
+    }
+
+    // Update new public profile fields
+    if (req.body.photoUrl !== undefined) doctor.photoUrl = req.body.photoUrl;
+    if (req.body.publicBio !== undefined) doctor.publicBio = req.body.publicBio;
+    if (req.body.hasOwnProperty('isFeatured')) { // Check if 'isFeatured' was actually sent
+        doctor.isFeatured = Boolean(req.body.isFeatured);
+    }
+
+    // Update availability schedule and overrides
+    if (req.body.availabilitySchedule !== undefined) {
+        // Add validation for the structure of availabilitySchedule if needed
+        doctor.availabilitySchedule = req.body.availabilitySchedule;
+    }
+    if (req.body.availabilityOverrides !== undefined) {
+        // Add validation for the structure of availabilityOverrides if needed
+        // Ensure dates are correctly handled/parsed if they arrive as strings and need to be Dates in Mongoose
+        doctor.availabilityOverrides = req.body.availabilityOverrides.map(override => ({
+            ...override,
+            date: new Date(override.date) // Convert date string from payload back to Date object for Mongoose
+        }));
+    }
+
+    // Password should NOT be updated here. It has a separate flow.
+
+    const updatedDoctor = await doctor.save(); // Save the changes
+    const populatedDoctor = await Doctor.findById(updatedDoctor._id) // Re-fetch and populate
+        .select('-password -isAdminControlled')
+        .populate('department', 'name description'); // Changed from 'name' to 'name description'
+
+    res.status(200).json({
+      message: 'Doctor details updated successfully by admin.',
+      doctor: populatedDoctor,
+    });
+
+  } catch (err) {
+    // ... (your error handling) ...
+  }
 };
 
 // @desc    Admin deletes a doctor

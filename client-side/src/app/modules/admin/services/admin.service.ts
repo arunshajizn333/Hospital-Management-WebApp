@@ -151,10 +151,13 @@ export class AdminService {
 
   updateDoctor(id: string, doctorData: Partial<AdminDoctorPayload>): Observable<Doctor> {
     const requestUrl = `${this.adminApiUrl}/doctors/${id}`;
+    // Ensure backend returns { message: string, doctor: Doctor } for this map to work
     return this.http.put<{message: string, doctor: Doctor}>(requestUrl, doctorData)
-      .pipe(map(res => res.doctor), catchError(this.handleError));
+      .pipe(
+        map(res => res.doctor), // This expects the backend to return an object with a 'doctor' property
+        catchError(this.handleError)
+      );
   }
-
   deleteDoctor(id: string): Observable<any> {
     const requestUrl = `${this.adminApiUrl}/doctors/${id}`;
     return this.http.delete<any>(requestUrl)

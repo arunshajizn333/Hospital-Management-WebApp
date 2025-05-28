@@ -1,327 +1,310 @@
 /* src/app/components/layout/public-navbar/public-navbar.component.css */
-.public-navbar {
-  display: flex;
-  justify-content: space-between; /* Keeps Brand left, (Links+Auth) right */
-  align-items: center;
-  padding: 0.8rem 2rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e7e7e7;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+/* Make sure to use your global CSS variables from styles.css */
+
+.public-navbar-emc {
+  width: 100%;
   position: sticky;
   top: 0;
-  z-index: 1000;
-}
-
-
-/* src/app/components/layout/public-navbar/public-navbar.component.css */
-
-/* ... (existing styles for .public-navbar, .navbar-brand, .navbar-links, etc.) ... */
-
-.public-navbar .navbar-auth-links {
-  display: flex; /* Align buttons in a row */
-  align-items: center; /* Vertically align if they have different heights */
-}
-
-/* Styling for individual auth buttons */
-.public-navbar .navbar-auth-links .btn { /* Generic button class if you add it */
-  text-decoration: none;
-  padding: 0.5rem 1rem; /* Adjust padding as needed */
-  border-radius: 5px;  /* Standard border radius */
-  margin-left: 0.8rem; /* Space between buttons */
-  font-weight: 500;
-  font-size: 0.95em; /* Slightly smaller than main nav links perhaps */
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-  line-height: normal; /* Ensure text is centered in button */
-  white-space: nowrap; /* Prevent text wrapping */
-}
-
-.public-navbar .navbar-auth-links .btn-login {
-  color: var(--primary-color, #007bff);
-  background-color: var(--white-color, #ffffff);
-  border: 1px solid var(--primary-color, #007bff);
-}
-
-.public-navbar .navbar-auth-links .btn-login:hover {
-  background-color: var(--primary-color, #007bff);
-  color: var(--white-color, #ffffff);
-}
-
-.public-navbar .navbar-auth-links .btn-register {
-  background-color: var(--success-color, #28a745); /* Using success color for register */
-  color: var(--white-color, #ffffff);
-  border: 1px solid var(--success-color, #28a745);
-}
-
-.public-navbar .navbar-auth-links .btn-register:hover {
-  background-color: var(--success-color-darker, #218838); /* Darker shade on hover */
-  border-color: var(--success-color-darker, #218838);
-}
-
-
-/* Responsive adjustments for the auth links within the collapsed mobile menu */
-@media (max-width: 991px) { /* Same breakpoint as your navbar collapse */
-  .public-navbar .navbar-collapse.active .navbar-auth-links { /* Target when menu is open */
-    flex-direction: column; /* Stack buttons vertically */
-    width: 100%;
-    margin-top: 1rem;      /* Space above the auth buttons block */
-    border-top: 1px solid var(--border-color, #eee); /* Separator line */
-    padding-top: 1rem;     /* Padding above the first button */
-  }
-
-  .public-navbar .navbar-collapse.active .navbar-auth-links .btn {
-    width: 100%; /* Make buttons full width in mobile menu */
-    margin-left: 0;  /* Reset left margin */
-    margin-bottom: 0.75rem; /* Space between stacked buttons */
-    text-align: center; /* Center text in buttons */
-  }
-
-  .public-navbar .navbar-collapse.active .navbar-auth-links .btn:last-child {
-    margin-bottom: 0; /* No bottom margin for the last button */
-  }
-}
-
-.public-navbar .navbar-brand a {
-  font-weight: bold;
-  color: #0056b3;
-  text-decoration: none;
-  font-size: 1.6rem;
-  margin-right: auto; /* Push other items away from brand */
-}
-
-/* This div will now act as a container for both main links and auth links on desktop */
-.navbar-collapse {
+  z-index: 1030; /* High z-index for sticky navbar */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-end; /* Align this whole block to the right initially */
-  flex-grow: 1; /* Allows this to take space */
 }
 
-.public-navbar .navbar-links {
+/* Main Navigation Bar Styling */
+.navbar-main {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  width: 95%;
+  border-radius: 1.5rem;
+  background-color: #ffffff;
+}
+
+.main-nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--navbar-height, 70px);
+  padding: 0 15px;
+}
+
+.navbar-brand-emc .logo-img {
+  max-height: 45px;
+  width: auto;
+  vertical-align: middle;
+}
+
+.navbar-brand-emc a {
+  font-weight: 700;
+  color: var(--primary-color-darker, #004085);
+  text-decoration: none;
+  font-size: 2rem;
+}
+
+.navbar-brand-emc img {
+  width: 50px;
+  height: 20rem; /* This will make the image very tall and narrow. If unintended, consider adjusting. */
+}
+
+.navbar-links-emc {
   list-style: none;
   display: flex;
   align-items: center;
-  margin: 0 auto; /* This will center the links within the available space */
+  margin: 0;
   padding: 0;
-  position: absolute; /* Position it absolutely to center it in the navbar */
-  left: 50%;
-  transform: translateX(-50%); /* The classic centering trick */
 }
 
-.public-navbar .navbar-links li {
-  margin: 0 1rem;
+.navbar-links-emc li {
+  margin: 0 12px;
 }
 
-.public-navbar .navbar-links a {
+.navbar-links-emc a {
   text-decoration: none;
-  color: #333;
+  color: var(--text-color, #333);
   font-weight: 500;
-  padding: 0.5rem 0;
+  font-size: 1rem;
+  padding: 8px 5px;
   position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   transition: color 0.2s ease-in-out;
 }
 
-.public-navbar .navbar-links a:hover,
-.public-navbar .navbar-links a.active-link {
-  color: #007bff;
+.navbar-links-emc a:hover,
+.navbar-links-emc a.active-link {
+  color: var(--primary-color, #007bff);
 }
 
-.public-navbar .navbar-links a.active-link::after {
+.navbar-links-emc a.active-link::after {
   content: '';
   position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
+  bottom: 0;
+  left: 5px;
+  right: 5px;
   height: 2px;
-  background-color: #007bff;
+  background-color: var(--primary-color, #007bff);
 }
 
-.public-navbar .navbar-auth-links {
+/* Action Buttons Area */
+.navbar-actions-emc {
   display: flex;
   align-items: center;
-  /* No margin-left: auto needed here as navbar-collapse handles the right alignment */
+  gap: 15px;
 }
 
-.public-navbar .navbar-auth-links a {
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  margin-left: 0.8rem;
-  font-weight: 500;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+.btn-emc-primary {
+  background-color: var(--accent-color, #17a2b8);
+  color: var(--white-color, #fff);
+  border: none;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--button-border-radius, 5px);
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
-.public-navbar .navbar-auth-links .btn-login {
-  color: #007bff;
-  border: 1px solid #007bff;
+.btn-emc-primary i {
+  margin-right: 8px;
 }
 
-.public-navbar .navbar-auth-links .btn-login:hover {
-  background-color: #007bff;
-  color: white;
+.btn-emc-primary:hover {
+  background-color: var(--accent-color-darker, #117a8b);
 }
 
-.public-navbar .navbar-auth-links .btn-register {
-  background-color: #28a745;
-  color: white;
-  border: 1px solid #28a745;
+.emergency-contact-emc {
+  display: flex;
+  align-items: center;
+  color: var(--danger-color, #dc3545);
+  font-weight: 600;
 }
 
-.public-navbar .navbar-auth-links .btn-register:hover {
-  background-color: #218838;
+.emergency-contact-emc i {
+  font-size: 1.8em;
+  margin-right: 8px;
 }
 
-.navbar-toggler {
+.emergency-contact-emc div span {
+  display: block;
+  font-size: 0.75em;
+  line-height: 1.2;
+}
+
+.emergency-contact-emc div strong {
+  font-size: 1em;
+  line-height: 1.2;
+}
+
+.btn-emc-secondary {
+  background-color: transparent;
+  color: var(--primary-color, #007bff);
+  border: 1px solid var(--primary-color, #007bff);
+  padding: 9px 18px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--button-border-radius, 5px);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-emc-secondary:hover {
+  background-color: var(--primary-color, #007bff);
+  color: var(--white-color, #fff);
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.navbar-toggler-emc {
   display: none;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  color: var(--primary-color, #007bff);
   cursor: pointer;
   padding: 0.5rem;
 }
 
-/* Responsive Styles for smaller screens - keep these as they were for the hamburger menu */
-@media (max-width: 991px) {
-  .public-navbar .navbar-brand a {
-    margin-right: 0; /* Reset for mobile */
+.navbar-collapse-emc {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .emergency-contact-emc {
+    display: none;
   }
 
-  .public-navbar .navbar-links {
-    position: static; /* Reset absolute positioning for mobile */
-    transform: none;  /* Reset transform */
-    margin: 0; /* Reset auto margins for mobile stacking */
-    flex-direction: column;
-    width: 100%;
-    align-items: flex-start;
+  .navbar-links-emc a {
+    font-size: 0.85rem;
+    padding: 7px 4px;
+    letter-spacing: 0.3px;
   }
 
-  .public-navbar .navbar-toggler {
+  .navbar-links-emc li {
+    margin: 0 8px;
+  }
+
+  .btn-emc-primary,
+  .btn-emc-secondary {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  .btn-emc-primary i {
+    margin-right: 6px;
+  }
+
+  .navbar-actions-emc {
+    gap: 10px;
+  }
+
+  .navbar-brand-emc a {
+    font-size: 1.6rem;
+  }
+
+  .navbar-brand-emc .logo-img {
+    max-height: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-top-bar {
+    display: none;
+  }
+
+  .main-nav-content {
+    height: auto;
+    min-height: var(--navbar-height, 60px);
+  }
+
+  .navbar-toggler-emc {
     display: block;
   }
 
-  .public-navbar .navbar-collapse {
+  .navbar-collapse-emc {
     display: none;
     flex-direction: column;
     width: 100%;
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #ffffff;
+    background-color: var(--white-color, #fff);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-top: 1px solid #e7e7e7;
-    padding: 1rem;
+    border-top: 1px solid var(--border-color, #e7e7e7);
+    padding: 15px;
     align-items: flex-start;
-    justify-content: flex-start; /* Reset from space-between/flex-end */
   }
 
-  .public-navbar .navbar-collapse.active {
+  .navbar-collapse-emc.active {
     display: flex;
   }
 
-  .public-navbar .navbar-links li {
-    margin: 0.5rem 0;
-    width: 100%;
-  }
-  
-  .public-navbar .navbar-links a,
-  .public-navbar .navbar-auth-links a {
-    display: block;
-    text-align: left;
-    padding: 0.8rem 1rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .public-navbar .navbar-links a.active-link::after {
-    display: none; 
-  }
-  .public-navbar .navbar-links a.active-link {
-    background-color: #f0f0f0;
-    border-radius: 4px;
-  }
-
-  .public-navbar .navbar-auth-links {
-    flex-direction: column; /* Stack auth links in mobile menu */
-    width: 100%;
-    align-items: flex-start; /* Align them left */
-    margin-top: 1rem; 
-    border-top: 1px solid #eee;
-    padding-top: 1rem;
-  }
-
-  .public-navbar .navbar-auth-links a {
-      margin-left: 0;
-      margin-bottom: 0.5rem;
-  }
-  .public-navbar .navbar-auth-links a:last-child {
-      margin-bottom: 0;
-  }
-}
-
-/* Responsive Styles for smaller screens */
-@media (max-width: 991px) { /* Your chosen breakpoint */
-  .public-navbar .navbar-toggler {
-    display: block;
-  }
-
-  .public-navbar .navbar-collapse {
-    display: none; /* Hidden by default on mobile */
-    flex-direction: column; /* Stack items vertically in mobile menu */
-    width: 100%;
-    position: absolute;
-    top: 100%; /* Below the main navbar bar */
-    left: 0;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-top: 1px solid #e7e7e7;
-    padding: 1rem;
-    align-items: flex-start; /* Align items to the start (left) in vertical menu */
-  }
-
-  .public-navbar .navbar-collapse.active {
-    display: flex; /* Show when toggled */
-  }
-
-  .public-navbar .navbar-links,
-  .public-navbar .navbar-auth-links {
+  .navbar-links-emc {
     flex-direction: column;
     width: 100%;
-    align-items: flex-start; /* Align text to left */
+    align-items: flex-start;
+    margin: 0;
   }
 
-  .public-navbar .navbar-links li {
-    margin: 0.5rem 0;
+  .navbar-links-emc li {
+    margin: 0;
     width: 100%;
   }
-  
-  .public-navbar .navbar-links a,
-  .public-navbar .navbar-auth-links a {
+
+  .navbar-links-emc a {
     display: block;
-    text-align: left;
-    padding: 0.8rem 1rem; /* Uniform padding */
+    padding: 12px 15px;
     width: 100%;
     box-sizing: border-box;
+    border-bottom: 1px solid var(--border-color-light, #f0f0f0);
   }
 
-  .public-navbar .navbar-links a.active-link::after {
-    display: none; 
+  .navbar-links-emc li:last-child a {
+    border-bottom: none;
   }
-  .public-navbar .navbar-links a.active-link {
-    background-color: #f0f0f0;
+
+  .navbar-links-emc a.active-link::after {
+    display: none;
+  }
+
+  .navbar-links-emc a.active-link {
+    background-color: var(--light-bg-color, #f0f0f0);
+    color: var(--primary-color, #007bff);
+  }
+
+  .navbar-actions-emc {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color, #eee);
+    gap: 0;
+  }
+
+  .navbar-actions-emc .btn-emc-primary,
+  .navbar-actions-emc .btn-emc-secondary,
+  .navbar-actions-emc .emergency-contact-emc {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .navbar-actions-emc .emergency-contact-emc {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    border: 1px dashed var(--danger-color, #dc3545);
     border-radius: 4px;
   }
 
-  .public-navbar .navbar-auth-links {
-    margin-top: 1rem; 
-    border-top: 1px solid #eee;
-    padding-top: 1rem;
-  }
-
-  .public-navbar .navbar-auth-links a {
-      margin-left: 0; /* Reset margin for vertical layout */
-      margin-bottom: 0.5rem;
-  }
-  .public-navbar .navbar-auth-links a:last-child {
-      margin-bottom: 0;
+  .navbar-actions-emc .btn:last-child,
+  .navbar-actions-emc > *:last-child {
+    margin-bottom: 0;
   }
 }

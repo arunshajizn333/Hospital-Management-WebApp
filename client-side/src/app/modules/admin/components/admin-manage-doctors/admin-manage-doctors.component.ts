@@ -236,21 +236,22 @@ export class AdminManageDoctorsComponent implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-    const formValues = this.doctorForm.getRawValue();
+     this.isSubmitting = true;
+    const formValues = this.doctorForm.getRawValue(); 
 
-    const payload: AdminDoctorPayload = {
+    const payload: AdminDoctorPayload = { // Ensure AdminDoctorPayload interface matches all these fields
       name: formValues.name,
-      email: formValues.email,
+      email: formValues.email, // Make sure backend doesn't try to change this if it's unique and not meant to be updated
       specialization: formValues.specialization,
       phone: formValues.phone,
-      department: formValues.department,
+      department: formValues.department, // This should be the departmentId string
       photoUrl: formValues.photoUrl,
       publicBio: formValues.publicBio,
       isFeatured: formValues.isFeatured,
       role: formValues.role,
       availabilitySchedule: formValues.availabilitySchedule.map((day: DailyAvailability) => ({
         ...day,
+        // Ensure undefined is handled by backend if isAvailable is false
         startTime: day.isAvailable ? day.startTime : undefined,
         endTime: day.isAvailable ? day.endTime : undefined,
         slotDurationMinutes: day.isAvailable ? day.slotDurationMinutes : undefined,
@@ -258,7 +259,7 @@ export class AdminManageDoctorsComponent implements OnInit {
       })),
       availabilityOverrides: formValues.availabilityOverrides.map((override: DateOverride) => ({
         ...override,
-        date: new Date(override.date).toISOString(), // Ensure date is correctly formatted
+        date: new Date(override.date).toISOString(), // Good: ensure ISO string
         startTime: override.isAvailable ? override.startTime : undefined,
         endTime: override.isAvailable ? override.endTime : undefined,
         slotDurationMinutes: override.isAvailable ? override.slotDurationMinutes : undefined,

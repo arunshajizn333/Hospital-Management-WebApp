@@ -1,173 +1,217 @@
 /* src/app/components/public/department-list-page/department-list-page.component.css */
 
-/* Main container for the page */
-.department-list-page-container {
-  max-width: 1200px; /* Max width of the content area */
-  margin: 0 auto; /* Center the content on the page */
-  padding: 30px 15px; /* Vertical and horizontal padding */
-  background-color: var(--page-bg-color, #f9f9f9); /* Light background for the page itself */
+/* Define some local CSS variables if not globally available, or use your global theme variables */
+:host {
+  --page-header-title-color: var(--primary-color-darker, #0056b3); /* Darker blue for titles */
+  --page-header-text-color: var(--text-color-muted, #5a6268);
+  --card-bg-color: var(--white-color, #ffffff);
+  --card-border-color: var(--light-gray-color, #eef2f7); /* Softer border */
+  --card-shadow-color: rgba(0, 0, 0, 0.08);
+  --card-hover-shadow-color: rgba(0, 0, 0, 0.12);
+  --department-name-color: var(--primary-color, #007bff);
+  --department-description-color: var(--text-color, #343a40);
+  --services-list-strong-color: var(--text-color-dark, #212529);
+  --services-list-item-color: var(--text-color-muted, #6c757d);
+  --loading-text-color: var(--text-color-muted, #6c757d);
+  --no-data-text-color: var(--text-color-muted, #6c757d);
+
+  display: block; /* Ensures the component takes up block-level space */
 }
 
-/* Header section for the page title and subtitle */
+.main{
+    background: linear-gradient(to bottom right, #c7c8c8, #ffffff);
+    width: 100%;
+   
+}
+
+.department-list-page-container {
+  padding: 20px 15px; /* Overall padding for the page content within the component */
+  max-width: 1200px; /* Max width for content, centered */
+  margin: 0 auto;
+  
+}
+
+/* Page Header Styling */
 .page-header {
   text-align: center;
-  margin-bottom: 40px; /* Increased space below header */
+  margin-bottom: 40px;
   padding-bottom: 20px;
-  border-bottom: 2px solid var(--primary-color, #007bff); /* Accent border */
+  border-bottom: 1px solid var(--card-border-color, #eef2f7);
 }
 
 .page-header h1 {
-  font-size: 2.5em; /* Larger page title */
-  color: var(--primary-color-darker, #004085); /* Use a darker primary color */
-  margin-bottom: 8px;
+  font-size: 2.8rem;
   font-weight: 700;
+  color: var(--page-header-title-color);
+  margin-bottom: 10px;
 }
 
 .page-header p {
-  font-size: 1.15em;
-  color: var(--text-color-muted, #6c757d);
-  max-width: 700px; /* Keep subtitle readable */
-  margin: 0 auto; /* Center subtitle */
+  font-size: 1.1rem;
+  color: var(--page-header-text-color);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
-/* Styles for loading, error, and no-data messages */
+/* Loading, Error, and No Data Messages */
 .loading-indicator,
-.error-message,
 .no-data-message {
   text-align: center;
-  padding: 30px 20px; /* More padding */
-  font-size: 1.1em;
-  margin-top: 20px;
+  font-size: 1.1rem;
+  color: var(--loading-text-color);
+  padding: 40px 20px;
+  min-height: 150px; /* Ensure it takes some space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.error-message {
-  color: var(--danger-color, #721c24);
-  background-color: #f8d7da;
-  border: 1px solid var(--danger-color-border, #f5c6cb);
-  border-radius: 5px; /* Softer radius */
+.error-message.alert { /* Bootstrap alert styling will apply */
+  margin: 20px auto;
+  max-width: 800px;
+  text-align: center;
+}
+.error-message p {
+    margin-bottom: 0;
 }
 
-.no-data-message {
-  color: var(--text-color-muted, #6c757d);
-  font-style: italic;
-}
-
-/* Grid layout for department cards */
+/* Departments Grid Layout */
 .departments-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid columns */
-  gap: 30px; /* Increased gap for better spacing */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px; /* Space between cards */
 }
 
-/* Individual department card styling */
+/* Individual Department Card Styling */
 .department-item-card {
-  border: 1px solid var(--border-color, #e0e0e0);
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--card-border-color);
   border-radius: 10px; /* Softer corners */
-  overflow: hidden; /* Ensures image corners match card radius */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Softer, more modern shadow */
+  box-shadow: 0 4px 12px var(--card-shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  background-color: var(--white-color, #fff);
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+  overflow: hidden; /* Ensures image corners also adhere to border-radius */
 }
 
 .department-item-card:hover {
-  transform: translateY(-7px); /* Lift card slightly on hover */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12); /* Enhanced shadow on hover */
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px var(--card-hover-shadow-color);
 }
 
 .department-item-image {
   width: 100%;
-  height: 220px; /* Slightly taller image area */
-  object-fit: cover; /* Ensures image covers area without distortion */
+  height: 200px; /* Fixed height for images */
+  object-fit: cover; /* Ensures image covers the area without distortion */
+  /* border-bottom: 1px solid var(--card-border-color); */ /* Optional: line below image */
 }
 
-/* Content area within each card */
 .department-item-content {
-  padding: 25px; /* Increased padding */
-  flex-grow: 1; /* Allows content to fill available space */
+  padding: 25px;
   display: flex;
   flex-direction: column;
+  flex-grow: 1; /* Allows content to fill card height if cards are in a row and vary in content */
 }
 
 .department-item-content h3 {
-  margin-top: 0;
-  margin-bottom: 12px; /* More space below title */
-  color: var(--primary-color, #007bff);
-  font-size: 1.6em; /* Larger department name */
+  font-size: 1.6rem;
   font-weight: 600;
+  color: var(--department-name-color);
+  margin-top: 0;
+  margin-bottom: 12px;
 }
 
 .department-item-content .department-description {
-  font-size: 0.95em;
-  color: var(--text-color, #555);
+  font-size: 0.95rem;
+  color: var(--department-description-color);
   line-height: 1.6;
-  margin-bottom: 18px; /* More space below description */
-  flex-grow: 1; /* Allows description to push services list down */
+  margin-bottom: 20px;
+  flex-grow: 1; /* Allows description to take available space */
 }
 
-.department-item-content .services-list {
-  font-size: 0.9em;
-  color: var(--text-color-muted, #666);
-  margin-top: auto; /* Pushes services to the bottom if description is short */
+.services-list {
+  margin-top: auto; /* Pushes this to the bottom of the card content */
+  padding-top: 15px;
+  border-top: 1px dashed var(--card-border-color); /* Subtle separator */
 }
 
-.department-item-content .services-list strong {
+.services-list strong {
   display: block;
-  margin-bottom: 8px; /* More space for "Key Services" title */
-  color: var(--text-color, #444);
+  font-size: 0.9rem;
   font-weight: 600;
+  color: var(--services-list-strong-color);
+  margin-bottom: 8px;
 }
 
-.department-item-content .services-list ul {
-  list-style: none; /* Remove default bullets */
+.services-list ul {
+  list-style: none;
   padding-left: 0;
   margin-bottom: 0;
 }
 
-.department-item-content .services-list li {
-  margin-bottom: 6px; /* Space between service items */
-  padding-left: 18px; /* Space for custom bullet */
+.services-list ul li {
+  font-size: 0.9rem;
+  color: var(--services-list-item-color);
+  margin-bottom: 6px;
+  line-height: 1.5;
+  padding-left: 20px; /* Space for custom bullet */
   position: relative;
 }
 
-/* Custom bullet for service list items */
-.department-item-content .services-list li::before {
-  content: '✓'; /* Checkmark or other suitable character/icon */
-  color: var(--accent-color, #17a2b8); /* Use an accent color */
+.services-list ul li::before {
+  content: '✓'; /* Unicode checkmark or use an icon font */
   position: absolute;
   left: 0;
+  color: var(--primary-color, #007bff); /* Use theme color for the checkmark */
   font-weight: bold;
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 767px) {
-  .department-list-page-container {
-    padding: 20px 10px; /* Reduce padding on mobile */
-  }
-
-  .page-header h1 {
-    font-size: 2em; /* Adjust title size for mobile */
-  }
-
-  .page-header p {
-    font-size: 1em; /* Adjust subtitle size for mobile */
-  }
-
+/* Responsive Adjustments */
+@media (max-width: 991px) { /* Tablets */
   .departments-grid {
-    grid-template-columns: 1fr; /* Stack cards in a single column on mobile */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+  }
+  .page-header h1 {
+    font-size: 2.4rem;
+  }
+  .page-header p {
+    font-size: 1rem;
+  }
+  .department-item-content h3 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 767px) { /* Mobile devices */
+  .department-list-page-container {
+    padding: 15px 10px;
+  }
+  .departments-grid {
+    grid-template-columns: 1fr; /* Single column on mobile */
     gap: 20px;
   }
-
-  .department-item-card {
-    margin-bottom: 0; /* Grid gap handles spacing */
+  .page-header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
   }
-
+  .page-header h1 {
+    font-size: 2rem;
+  }
+  .page-header p {
+    font-size: 0.95rem;
+  }
+  .department-item-content {
+    padding: 20px;
+  }
   .department-item-content h3 {
-    font-size: 1.4em;
+    font-size: 1.3rem;
   }
-
   .department-item-content .department-description {
-    font-size: 0.9em;
+    font-size: 0.9rem;
+  }
+  .services-list ul li {
+    font-size: 0.85rem;
   }
 }
